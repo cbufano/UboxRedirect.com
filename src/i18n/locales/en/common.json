@@ -569,6 +569,26 @@
           "As soon as a package arrives, you'll see it in your dashboard with a photo and its weight."
         ]
       }
+    },
+    "inbox": {
+      "title": "Inbox",
+      "subtitle": "All the packages we've received on your behalf. Select the ones you'd like to combine into a single shipment.",
+      "empty": "No packages yet. Once a store ships to your US address, it will show up here.",
+      "table": {
+        "photo": "Photo",
+        "store": "Store",
+        "description": "Description",
+        "weight": "Weight",
+        "received": "Received",
+        "status": "Status"
+      },
+      "noPhoto": "No photo",
+      "selectPackage": "Select package from {{store}}",
+      "packageStatus": {
+        "in_box": "In your box",
+        "ready": "Ready to ship"
+      },
+      "consolidate": "Consolidate selected ({{count}})"
     }
   },
   "privacy": {

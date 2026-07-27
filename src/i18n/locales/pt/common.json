@@ -569,6 +569,26 @@
           "Assim que um pacote chegar, você verá no seu painel com foto e peso."
         ]
       }
+    },
+    "inbox": {
+      "title": "Caixa de entrada",
+      "subtitle": "Todos os pacotes que recebemos em seu nome. Selecione os que deseja combinar em um único envio.",
+      "empty": "Ainda não há pacotes. Assim que uma loja enviar para o seu endereço nos EUA, ele aparecerá aqui.",
+      "table": {
+        "photo": "Foto",
+        "store": "Loja",
+        "description": "Descrição",
+        "weight": "Peso",
+        "received": "Recebido em",
+        "status": "Status"
+      },
+      "noPhoto": "Sem foto",
+      "selectPackage": "Selecionar pacote da {{store}}",
+      "packageStatus": {
+        "in_box": "Na sua caixa",
+        "ready": "Pronto para envio"
+      },
+      "consolidate": "Consolidar selecionados ({{count}})"
     }
   },
   "privacy": {

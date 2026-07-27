@@ -18,6 +18,7 @@ import Forgot from './pages/auth/Forgot'
 import Verify from './pages/auth/Verify'
 import Overview from './pages/dashboard/Overview'
 import Address from './pages/dashboard/Address'
+import Inbox from './pages/dashboard/Inbox'
 
 export function AppRoutes() {
   return (
@@ -42,6 +43,7 @@ export function AppRoutes() {
       <Route path="/app" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
         <Route index element={<Overview />} />
         <Route path="address" element={<Address />} />
+        <Route path="inbox" element={<Inbox />} />
         {/* /app/* child routes added as their tasks complete */}
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

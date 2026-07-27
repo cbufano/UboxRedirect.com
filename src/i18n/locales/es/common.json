@@ -569,6 +569,26 @@
           "En cuanto llegue un paquete, lo verás en tu panel con una foto y su peso."
         ]
       }
+    },
+    "inbox": {
+      "title": "Bandeja de entrada",
+      "subtitle": "Todos los paquetes que recibimos en tu nombre. Selecciona los que quieras combinar en un solo envío.",
+      "empty": "Todavía no hay paquetes. En cuanto una tienda envíe a tu dirección en EE. UU., aparecerá aquí.",
+      "table": {
+        "photo": "Foto",
+        "store": "Tienda",
+        "description": "Descripción",
+        "weight": "Peso",
+        "received": "Recibido",
+        "status": "Estado"
+      },
+      "noPhoto": "Sin foto",
+      "selectPackage": "Seleccionar paquete de {{store}}",
+      "packageStatus": {
+        "in_box": "En tu caja",
+        "ready": "Listo para enviar"
+      },
+      "consolidate": "Consolidar seleccionados ({{count}})"
     }
   },
   "privacy": {
