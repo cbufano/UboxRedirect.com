@@ -6,7 +6,7 @@
 
 **Architecture:** Vite + React + TypeScript SPA. Public pages and an auth-guarded dashboard share layouts. All "backend" behavior lives behind two isolated services (`authService`, `shippingEstimator`) so a real API swaps in without touching UI. i18n via react-i18next with per-page namespaces.
 
-**Tech Stack:** Vite, React 18, TypeScript, Tailwind CSS, React Router v6, react-i18next, react-hook-form, zod, Vitest + React Testing Library, lucide-react (icons).
+**Tech Stack (actual, as scaffolded):** Vite 8, React 19, TypeScript 6, **Tailwind CSS v4** (CSS-first via `@tailwindcss/vite` plugin — no `tailwind.config.js`), React Router v7, react-i18next v17 / i18next v26, react-hook-form v7, zod v4, Vitest v4 + React Testing Library, lucide-react (icons), oxlint. All APIs used in this plan are compatible across these versions.
 
 **Plan conventions:**
 - **Logic/infra tasks** (services, i18n, guards, calculator) include full code and strict TDD steps.
@@ -54,58 +54,64 @@ git commit -m "chore: scaffold Vite + React + TS project"
 
 ---
 
-### Task 2: Configure Tailwind + design tokens
+### Task 2: Configure Tailwind v4 + design tokens (CSS-first)
+
+Tailwind v4 is CSS-first: **no `tailwind.config.js`**, no `npx tailwindcss init`. For Vite, use the official `@tailwindcss/vite` plugin and define the theme with `@theme` inside the CSS entry. Custom `--color-*` tokens automatically become utilities (e.g. `--color-navy` → `bg-navy`, `text-navy`, `border-navy`).
 
 **Files:**
-- Create: `tailwind.config.js`, `postcss.config.js`
-- Modify: `src/index.css`
+- Modify: `vite.config.ts`, `src/index.css`
+- Install: `@tailwindcss/vite`
 
-- [ ] **Step 1: Init Tailwind**
+- [ ] **Step 1: Install the Vite plugin**
 
-Run: `npx tailwindcss init -p`
+Run: `npm install -D @tailwindcss/vite`
+(`autoprefixer`/`postcss` from Task 1 are unused with this plugin and may be left installed; do not add a `postcss.config.js`.)
 
-- [ ] **Step 2: Configure `tailwind.config.js`**
+- [ ] **Step 2: Register the plugin in `vite.config.ts`**
 
-```js
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ['./index.html', './src/**/*.{ts,tsx}'],
-  theme: {
-    extend: {
-      colors: {
-        navy: '#0B1F3A',
-        brand: '#1E88E5',
-        offwhite: '#F5F7FA',
-        slate: '#0F172A',
-        success: '#16A34A',
-      },
-      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-    },
-  },
-  plugins: [],
-}
+```ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+})
 ```
+(Keep any existing options; just add `tailwindcss()` to `plugins`. The Vitest `test` block is added in Task 3.)
 
-- [ ] **Step 3: Replace `src/index.css`**
+- [ ] **Step 3: Replace `src/index.css`** (remove Vite's default template CSS)
 
 ```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #0B1F3A;
+  --color-brand: #1E88E5;
+  --color-offwhite: #F5F7FA;
+  --color-slate: #0F172A;
+  --color-success: #16A34A;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
 
 :root { color-scheme: light; }
-body { @apply bg-white text-slate antialiased; }
+body { @apply bg-white text-slate antialiased font-sans; }
 ```
 
-- [ ] **Step 4: Smoke-test a Tailwind class**
+- [ ] **Step 4: Remove leftover default styling**
 
-Temporarily set `src/App.tsx` root element to `<div className="text-brand p-8">Bufano</div>`, run `npm run dev`, confirm blue text. Revert.
+Delete `src/App.css` and the default markup in `src/App.tsx` (the Vite/React logo demo); replace `App.tsx` body with a minimal `<div className="text-brand p-8">Bufano</div>` placeholder. Remove now-unused imports/assets (`src/assets/react.svg` import etc.) so `npm run build` has no unused-import/type errors.
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 5: Verify build**
+
+Run: `npm run build`
+Expected: succeeds with no TypeScript errors. (Do not run `npm run dev` — it blocks.)
+
+- [ ] **Step 6: Commit**
 
 ```bash
 git add -A
-git commit -m "feat: configure Tailwind with brand design tokens"
+git commit -m "feat: configure Tailwind v4 with brand design tokens"
 ```
 
 ---
