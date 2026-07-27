@@ -589,6 +589,61 @@
         "ready": "Pronto para envio"
       },
       "consolidate": "Consolidar selecionados ({{count}})"
+    },
+    "ship": {
+      "title": "Consolidar e Enviar",
+      "subtitle": "Revise sua caixa consolidada, escolha um destino e uma transportadora, declare o conteúdo e finalize seu pedido.",
+      "summary": {
+        "title": "Pacotes selecionados",
+        "table": {
+          "store": "Loja",
+          "description": "Descrição",
+          "weight": "Peso"
+        },
+        "totalWeight": "Peso real total: {{weight}} kg"
+      },
+      "destination": {
+        "title": "Destino e transportadora",
+        "countryLabel": "País de destino",
+        "countries": {
+          "BR": "Brasil",
+          "US": "Estados Unidos",
+          "PT": "Portugal",
+          "ES": "Espanha",
+          "MX": "México",
+          "AR": "Argentina",
+          "GB": "Reino Unido",
+          "OTHER": "Outro"
+        },
+        "boxNote": "A estimativa considera uma caixa consolidada de 40 x 40 x 40 cm. As dimensões reais são confirmadas assim que sua caixa for embalada.",
+        "chargeableWeight": "Peso taxável: {{weight}} kg",
+        "eta": "Prazo: {{days}} dias",
+        "cost": "${{cost}}"
+      },
+      "customs": {
+        "title": "Declaração alfandegária",
+        "contentsLabel": "Descrição do conteúdo",
+        "valueLabel": "Valor declarado (USD)",
+        "errors": {
+          "contentsRequired": "Descreva o conteúdo (pelo menos 3 caracteres)",
+          "valuePositive": "Informe um valor maior que zero"
+        }
+      },
+      "costSummary": {
+        "title": "Resumo de custos",
+        "chargeableWeight": "Peso taxável",
+        "carrier": "Transportadora",
+        "total": "Custo total"
+      },
+      "placeOrder": "Finalizar pedido",
+      "confirmation": {
+        "title": "Pedido realizado!",
+        "reference": "Referência do envio: {{reference}}",
+        "destination": "Destino: {{country}}",
+        "carrier": "Transportadora: {{carrier}}",
+        "cost": "Custo total: ${{cost}}"
+      },
+      "empty": "Nenhum pacote para enviar. Adicione pacotes à sua caixa de entrada primeiro."
     }
   },
   "privacy": {

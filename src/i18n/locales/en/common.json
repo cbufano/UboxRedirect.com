@@ -589,6 +589,61 @@
         "ready": "Ready to ship"
       },
       "consolidate": "Consolidate selected ({{count}})"
+    },
+    "ship": {
+      "title": "Consolidate & Ship",
+      "subtitle": "Review your consolidated box, pick a destination and carrier, declare its contents, and place your order.",
+      "summary": {
+        "title": "Selected packages",
+        "table": {
+          "store": "Store",
+          "description": "Description",
+          "weight": "Weight"
+        },
+        "totalWeight": "Total actual weight: {{weight}} kg"
+      },
+      "destination": {
+        "title": "Destination & carrier",
+        "countryLabel": "Destination country",
+        "countries": {
+          "BR": "Brazil",
+          "US": "United States",
+          "PT": "Portugal",
+          "ES": "Spain",
+          "MX": "Mexico",
+          "AR": "Argentina",
+          "GB": "United Kingdom",
+          "OTHER": "Other"
+        },
+        "boxNote": "Estimate assumes a consolidated box of 40 x 40 x 40 cm. Actual dimensions are confirmed once your box is packed.",
+        "chargeableWeight": "Chargeable weight: {{weight}} kg",
+        "eta": "ETA: {{days}} days",
+        "cost": "${{cost}}"
+      },
+      "customs": {
+        "title": "Customs declaration",
+        "contentsLabel": "Contents description",
+        "valueLabel": "Declared value (USD)",
+        "errors": {
+          "contentsRequired": "Describe the contents (at least 3 characters)",
+          "valuePositive": "Enter a value greater than zero"
+        }
+      },
+      "costSummary": {
+        "title": "Cost summary",
+        "chargeableWeight": "Chargeable weight",
+        "carrier": "Carrier",
+        "total": "Total cost"
+      },
+      "placeOrder": "Place order",
+      "confirmation": {
+        "title": "Order placed!",
+        "reference": "Shipment reference: {{reference}}",
+        "destination": "Destination: {{country}}",
+        "carrier": "Carrier: {{carrier}}",
+        "cost": "Total cost: ${{cost}}"
+      },
+      "empty": "No packages to ship. Add packages to your inbox first."
     }
   },
   "privacy": {
