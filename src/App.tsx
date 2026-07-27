@@ -1,5 +1,5 @@
-function App() {
-  return <div className="text-brand p-8">Bufano</div>
-}
+import { AppRoutes } from './routes'
 
-export default App
+export default function App() {
+  return <AppRoutes />
+}
