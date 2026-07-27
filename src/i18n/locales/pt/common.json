@@ -203,5 +203,40 @@
         { "service": "Proteção de valor", "fee": "2% do valor declarado" }
       ]
     }
+  },
+  "services": {
+    "title": "Nossos serviços",
+    "subtitle": "Tudo o que você precisa para comprar nos EUA e receber seus pacotes com segurança, pelo menor custo possível.",
+    "items": [
+      {
+        "title": "Consolidação",
+        "text": "Combinamos vários pacotes em uma única caixa, para você pagar por um envio em vez de vários."
+      },
+      {
+        "title": "Reembalagem",
+        "text": "Removemos a embalagem volumosa das lojas e reembalamos seus itens na caixa menor e mais leve possível."
+      },
+      {
+        "title": "Fotos dos pacotes",
+        "text": "Cada pacote é fotografado na chegada, então você sempre sabe exatamente o que está no seu depósito."
+      },
+      {
+        "title": "Personal shopper",
+        "text": "Não consegue comprar direto de uma loja dos EUA? Nossa equipe compra os itens por você e envia para o seu endereço."
+      },
+      {
+        "title": "Proteção de valor",
+        "text": "Adicione um seguro opcional para proteger seu envio contra perda ou dano durante o transporte."
+      },
+      {
+        "title": "Armazenamento estendido",
+        "text": "Mantenha seus pacotes guardados com segurança no nosso depósito por semanas enquanto planeja sua próxima consolidação."
+      }
+    ],
+    "cta": {
+      "title": "Pronto para aproveitar esses serviços?",
+      "subtitle": "Crie sua conta grátis e receba seu endereço nos EUA em segundos.",
+      "button": "Criar conta grátis"
+    }
   }
 }

@@ -203,5 +203,40 @@
         { "service": "Value protection", "fee": "2% of declared value" }
       ]
     }
+  },
+  "services": {
+    "title": "Our services",
+    "subtitle": "Everything you need to shop the US and get your packages home safely, at the lowest possible cost.",
+    "items": [
+      {
+        "title": "Consolidation",
+        "text": "We combine multiple packages into a single box, so you pay for one shipment instead of several."
+      },
+      {
+        "title": "Repackaging",
+        "text": "We remove bulky retail packaging and repack your items in the smallest, lightest box possible."
+      },
+      {
+        "title": "Package photos",
+        "text": "Every package is photographed on arrival, so you always know exactly what's waiting in your warehouse."
+      },
+      {
+        "title": "Personal shopper",
+        "text": "Can't buy directly from a US store? Our team purchases the items for you and ships them to your address."
+      },
+      {
+        "title": "Value protection",
+        "text": "Add optional insurance to protect your shipment against loss or damage while in transit."
+      },
+      {
+        "title": "Extended storage",
+        "text": "Keep your packages safely stored in our warehouse for weeks while you plan your next consolidation."
+      }
+    ],
+    "cta": {
+      "title": "Ready to put these services to work?",
+      "subtitle": "Create your free account and get your US address in seconds.",
+      "button": "Create free account"
+    }
   }
 }
