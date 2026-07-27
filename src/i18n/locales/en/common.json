@@ -493,6 +493,19 @@
       "passwordMismatch": "Passwords do not match.",
       "haveAccount": "Already have an account?",
       "loginLink": "Sign in"
+    },
+    "forgot": {
+      "title": "Forgot your password?",
+      "subtitle": "Enter your email and we'll send you a link to reset your password.",
+      "email": "Email",
+      "submit": "Send reset link",
+      "success": "If an account exists for that email, we've sent a reset link. Check your inbox.",
+      "backToLogin": "Back to sign in"
+    },
+    "verify": {
+      "title": "Email verified",
+      "body": "Your email address has been successfully verified. You can now access your dashboard.",
+      "cta": "Continue to dashboard"
     }
   },
   "privacy": {

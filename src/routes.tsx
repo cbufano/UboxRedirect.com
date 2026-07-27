@@ -12,6 +12,8 @@ import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
 import Login from './pages/auth/Login'
 import Signup from './pages/auth/Signup'
+import Forgot from './pages/auth/Forgot'
+import Verify from './pages/auth/Verify'
 
 export function AppRoutes() {
   return (
@@ -29,6 +31,8 @@ export function AppRoutes() {
         <Route path="privacy" element={<Privacy />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
+        <Route path="forgot" element={<Forgot />} />
+        <Route path="verify" element={<Verify />} />
         {/* public routes added as their tasks complete */}
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

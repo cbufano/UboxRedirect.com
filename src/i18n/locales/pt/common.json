@@ -493,6 +493,19 @@
       "passwordMismatch": "As senhas não coincidem.",
       "haveAccount": "Já tem uma conta?",
       "loginLink": "Entrar"
+    },
+    "forgot": {
+      "title": "Esqueceu sua senha?",
+      "subtitle": "Informe seu e-mail e enviaremos um link para redefinir sua senha.",
+      "email": "E-mail",
+      "submit": "Enviar link de redefinição",
+      "success": "Se existir uma conta com este e-mail, enviamos um link de redefinição. Confira sua caixa de entrada.",
+      "backToLogin": "Voltar para o login"
+    },
+    "verify": {
+      "title": "E-mail verificado",
+      "body": "Seu endereço de e-mail foi verificado com sucesso. Agora você pode acessar seu painel.",
+      "cta": "Ir para o painel"
     }
   },
   "privacy": {

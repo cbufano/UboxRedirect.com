@@ -493,6 +493,19 @@
       "passwordMismatch": "Las contraseñas no coinciden.",
       "haveAccount": "¿Ya tienes una cuenta?",
       "loginLink": "Iniciar sesión"
+    },
+    "forgot": {
+      "title": "¿Olvidaste tu contraseña?",
+      "subtitle": "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+      "email": "Correo electrónico",
+      "submit": "Enviar enlace de restablecimiento",
+      "success": "Si existe una cuenta con ese correo electrónico, te enviamos un enlace de restablecimiento. Revisa tu bandeja de entrada.",
+      "backToLogin": "Volver a iniciar sesión"
+    },
+    "verify": {
+      "title": "Correo verificado",
+      "body": "Tu dirección de correo electrónico se verificó correctamente. Ahora puedes acceder a tu panel.",
+      "cta": "Continuar al panel"
     }
   },
   "privacy": {
