@@ -77,22 +77,23 @@ export default function Contact() {
                 </div>
 
                 <div className="mt-4">
-                  <input
-                    id="email"
-                    type="email"
-                    autoComplete="email"
-                    aria-label={t('contact.form.emailLabel')}
-                    placeholder={t('contact.form.emailLabel')}
-                    className={[
-                      'mt-1 w-full rounded-lg border border-slate/20 px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand',
-                      errors.email ? 'border-red-500' : undefined,
-                    ]
-                      .filter(Boolean)
-                      .join(' ')}
-                    aria-invalid={errors.email ? true : undefined}
-                    aria-describedby={errors.email ? 'email-error' : undefined}
-                    {...register('email')}
-                  />
+                  <label htmlFor="email" className="block">
+                    {t('contact.form.emailLabel')}
+                    <input
+                      id="email"
+                      type="email"
+                      autoComplete="email"
+                      className={[
+                        'mt-1 w-full rounded-lg border border-slate/20 px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand',
+                        errors.email ? 'border-red-500' : undefined,
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                      aria-invalid={errors.email ? true : undefined}
+                      aria-describedby={errors.email ? 'email-error' : undefined}
+                      {...register('email')}
+                    />
+                  </label>
                   {errors.email && (
                     <p id="email-error" className="mt-1 text-sm text-red-600">
                       {errors.email.message}

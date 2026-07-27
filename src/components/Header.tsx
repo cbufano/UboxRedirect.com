@@ -16,7 +16,7 @@ const NAV_ITEMS = [
 ] as const
 
 const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
-  `text-sm font-medium transition ${isActive ? 'text-brand' : 'text-white/80 hover:text-white'}`
+  `rounded text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-navy ${isActive ? 'text-brand' : 'text-white/80 hover:text-white'}`
 
 export function Header() {
   const { t } = useTranslation()
@@ -27,7 +27,10 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-navy text-white">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <Link to="/" className="text-lg font-bold">
+        <Link
+          to="/"
+          className="rounded text-lg font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+        >
           {t('brand')}
         </Link>
 

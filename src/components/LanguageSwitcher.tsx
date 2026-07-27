@@ -10,7 +10,7 @@ export function LanguageSwitcher() {
       aria-label="Language"
       value={i18n.resolvedLanguage ?? 'en'}
       onChange={(e) => i18n.changeLanguage(e.target.value)}
-      className="rounded border border-white/20 bg-transparent px-2 py-1 text-sm"
+      className="rounded border border-white/20 bg-transparent px-2 py-1 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
     >
       {SUPPORTED_LANGUAGES.map((lng) => (
         <option key={lng} value={lng} className="text-slate">{LABELS[lng]}</option>

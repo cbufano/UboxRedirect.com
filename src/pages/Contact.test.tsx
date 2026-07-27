@@ -14,7 +14,7 @@ it('shows a validation error for an invalid email', async () => {
   await userEvent.type(screen.getByLabelText(/email/i), 'not-an-email')
   await userEvent.type(screen.getByLabelText(/message/i), 'Hello, I have a question about shipping.')
   await userEvent.click(screen.getByRole('button', { name: /send|submit/i }))
-  expect(await screen.findByText(/valid email|email.*valid|e-?mail/i)).toBeInTheDocument()
+  expect(await screen.findByText(/valid email|email.*valid/i)).toBeInTheDocument()
 })
 
 it('shows a success confirmation after a valid submit', async () => {

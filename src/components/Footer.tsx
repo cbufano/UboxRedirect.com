@@ -17,22 +17,22 @@ export function Footer() {
             <p className="text-sm font-semibold text-white">{t('footer.company')}</p>
             <ul className="mt-3 space-y-2">
               <li>
-                <Link to="/about" className="text-sm text-white/70 hover:text-brand transition">
+                <Link to="/about" className="rounded text-sm text-white/70 transition hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-navy">
                   {t('nav.about')}
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-sm text-white/70 hover:text-brand transition">
+                <Link to="/contact" className="rounded text-sm text-white/70 transition hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-navy">
                   {t('nav.contact')}
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="text-sm text-white/70 hover:text-brand transition">
+                <Link to="/faq" className="rounded text-sm text-white/70 transition hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-navy">
                   {t('nav.faq')}
                 </Link>
               </li>
               <li>
-                <Link to="/how" className="text-sm text-white/70 hover:text-brand transition">
+                <Link to="/how" className="rounded text-sm text-white/70 transition hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-navy">
                   {t('nav.how')}
                 </Link>
               </li>
@@ -43,12 +43,12 @@ export function Footer() {
             <p className="text-sm font-semibold text-white">{t('footer.legal')}</p>
             <ul className="mt-3 space-y-2">
               <li>
-                <Link to="/terms" className="text-sm text-white/70 hover:text-brand transition">
+                <Link to="/terms" className="rounded text-sm text-white/70 transition hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-navy">
                   {t('footer.terms')}
                 </Link>
               </li>
               <li>
-                <Link to="/privacy" className="text-sm text-white/70 hover:text-brand transition">
+                <Link to="/privacy" className="rounded text-sm text-white/70 transition hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-navy">
                   {t('footer.privacy')}
                 </Link>
               </li>
@@ -61,7 +61,7 @@ export function Footer() {
               <li>
                 <a
                   href="mailto:support@bufanoredirect.com"
-                  className="text-sm text-white/70 hover:text-brand transition"
+                  className="rounded text-sm text-white/70 transition hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
                 >
                   support@bufanoredirect.com
                 </a>

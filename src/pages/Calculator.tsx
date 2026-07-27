@@ -68,7 +68,7 @@ export default function Calculator() {
       </section>
 
       <Section>
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-2xl">
           <Card>
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
               <div className="block">

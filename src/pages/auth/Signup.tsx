@@ -156,7 +156,7 @@ export default function Signup() {
             <input
               type="checkbox"
               id="terms"
-              className="mt-1"
+              className="mt-1 h-4 w-4 rounded border-slate/30 text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
               aria-invalid={errors.terms ? true : undefined}
               {...register('terms')}
             />
@@ -164,7 +164,12 @@ export default function Signup() {
               <Trans
                 i18nKey="auth.signup.terms"
                 components={{
-                  termsLink: <Link to="/terms" className="font-medium text-brand hover:underline" />,
+                  termsLink: (
+                    <Link
+                      to="/terms"
+                      className="rounded font-medium text-brand hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                    />
+                  ),
                 }}
               />
             </label>
