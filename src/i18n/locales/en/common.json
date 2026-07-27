@@ -10,5 +10,16 @@
     "contact": "Contact",
     "login": "Sign in",
     "signup": "Create free account"
+  },
+  "footer": {
+    "pitch": "Your US address to shop American stores and ship worldwide.",
+    "company": "Company",
+    "legal": "Legal",
+    "resources": "Resources",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy",
+    "contactTitle": "Contact",
+    "hours": "Mon–Fri, 9am–5pm (EST)",
+    "rights": "All rights reserved."
   }
 }

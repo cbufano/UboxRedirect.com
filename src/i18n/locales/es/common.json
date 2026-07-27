@@ -10,5 +10,16 @@
     "contact": "Contacto",
     "login": "Iniciar sesión",
     "signup": "Crear cuenta gratis"
+  },
+  "footer": {
+    "pitch": "Tu dirección en EE. UU. para comprar en tiendas americanas y enviar a todo el mundo.",
+    "company": "Empresa",
+    "legal": "Legal",
+    "resources": "Recursos",
+    "terms": "Términos de uso",
+    "privacy": "Política de privacidad",
+    "contactTitle": "Contacto",
+    "hours": "Lun–Vie, 9:00–17:00 (EST)",
+    "rights": "Todos los derechos reservados."
   }
 }
