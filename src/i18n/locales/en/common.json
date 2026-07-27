@@ -508,6 +508,18 @@
       "cta": "Continue to dashboard"
     }
   },
+  "dashboard": {
+    "nav": {
+      "overview": "Overview",
+      "address": "US Address",
+      "inbox": "Inbox",
+      "ship": "Consolidate & Ship",
+      "shipments": "Shipments",
+      "shopper": "Personal Shopper",
+      "account": "Account"
+    },
+    "signOut": "Sign out"
+  },
   "privacy": {
     "title": "Privacy Policy",
     "updated": "Last updated: July 2026",

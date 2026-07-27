@@ -508,6 +508,18 @@
       "cta": "Continuar al panel"
     }
   },
+  "dashboard": {
+    "nav": {
+      "overview": "Resumen",
+      "address": "Dirección en EE. UU.",
+      "inbox": "Bandeja de entrada",
+      "ship": "Consolidar y enviar",
+      "shipments": "Envíos",
+      "shopper": "Personal shopper",
+      "account": "Cuenta"
+    },
+    "signOut": "Cerrar sesión"
+  },
   "privacy": {
     "title": "Política de Privacidad",
     "updated": "Última actualización: julio de 2026",

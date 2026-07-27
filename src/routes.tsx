@@ -1,5 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { PublicLayout } from './layouts/PublicLayout'
+import { DashboardLayout } from './layouts/DashboardLayout'
+import { ProtectedRoute } from './components/ProtectedRoute'
 import Home from './pages/Home'
 import HowItWorks from './pages/HowItWorks'
 import Pricing from './pages/Pricing'
@@ -14,6 +16,7 @@ import Login from './pages/auth/Login'
 import Signup from './pages/auth/Signup'
 import Forgot from './pages/auth/Forgot'
 import Verify from './pages/auth/Verify'
+import Overview from './pages/dashboard/Overview'
 
 export function AppRoutes() {
   return (
@@ -34,6 +37,10 @@ export function AppRoutes() {
         <Route path="forgot" element={<Forgot />} />
         <Route path="verify" element={<Verify />} />
         {/* public routes added as their tasks complete */}
+      </Route>
+      <Route path="/app" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+        <Route index element={<Overview />} />
+        {/* /app/* child routes added as their tasks complete */}
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

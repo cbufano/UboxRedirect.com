@@ -508,6 +508,18 @@
       "cta": "Ir para o painel"
     }
   },
+  "dashboard": {
+    "nav": {
+      "overview": "Visão geral",
+      "address": "Endereço nos EUA",
+      "inbox": "Caixa de entrada",
+      "ship": "Consolidar e enviar",
+      "shipments": "Envios",
+      "shopper": "Personal shopper",
+      "account": "Conta"
+    },
+    "signOut": "Sair"
+  },
   "privacy": {
     "title": "Política de Privacidade",
     "updated": "Última atualização: julho de 2026",
