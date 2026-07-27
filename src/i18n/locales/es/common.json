@@ -518,7 +518,58 @@
       "shopper": "Personal shopper",
       "account": "Cuenta"
     },
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "overview": {
+      "title": "Resumen",
+      "welcome": "¡Bienvenido(a) de nuevo, {{name}}!",
+      "address": {
+        "title": "Tu dirección en EE. UU.",
+        "note": "Incluye siempre tu número de suite para que podamos vincular los paquetes a tu cuenta.",
+        "copyFull": "Copiar dirección completa",
+        "fullAddressLabel": "dirección en EE. UU.",
+        "copied": "Copiado"
+      },
+      "stats": {
+        "inBox": "En tu caja",
+        "inTransit": "En tránsito",
+        "delivered": "Entregados"
+      },
+      "activity": {
+        "title": "Actividad reciente",
+        "empty": "Todavía no hay paquetes. Empieza a comprar y aparecerán aquí."
+      },
+      "packageStatus": {
+        "in_box": "En tu caja",
+        "ready": "Listo para enviar"
+      }
+    },
+    "address": {
+      "title": "Mi Dirección en EE. UU.",
+      "subtitle": "Usa esta dirección al pagar en cualquier tienda de EE. UU. Vinculamos los paquetes que recibimos a tu cuenta mediante tu número de suite, así que nunca lo omitas.",
+      "labels": {
+        "recipient": "Destinatario",
+        "line1": "Dirección línea 1",
+        "city": "Ciudad",
+        "state": "Estado",
+        "zip": "Código postal",
+        "country": "País",
+        "suite": "Suite / Unidad"
+      },
+      "copyFull": "Copiar dirección completa",
+      "fullAddressLabel": "dirección completa",
+      "copied": "Copiado",
+      "suiteNote": "Este es el número exclusivo de tu suite. Inclúyelo siempre — sin él, no podemos vincular tus paquetes a tu cuenta.",
+      "instructions": {
+        "title": "Cómo usar tu dirección al comprar",
+        "items": [
+          "Escribe siempre tu nombre completo más tu número de suite en la línea de dirección — así vinculamos los paquetes a tu cuenta.",
+          "Usa esta dirección tanto como dirección de envío como, cuando la tienda lo pida, dirección de facturación.",
+          "Revisa el número de suite después del autocompletado. Algunos formularios de pago eliminan el campo de apartamento/suite por defecto.",
+          "Los pedidos suelen llegar a nuestro almacén entre 3 y 7 días hábiles después de que la tienda los envía.",
+          "En cuanto llegue un paquete, lo verás en tu panel con una foto y su peso."
+        ]
+      }
+    }
   },
   "privacy": {
     "title": "Política de Privacidad",

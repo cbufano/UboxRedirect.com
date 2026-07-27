@@ -518,7 +518,58 @@
       "shopper": "Personal Shopper",
       "account": "Account"
     },
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "overview": {
+      "title": "Overview",
+      "welcome": "Welcome back, {{name}}!",
+      "address": {
+        "title": "Your US address",
+        "note": "Always include your suite number so we can match packages to your account.",
+        "copyFull": "Copy full address",
+        "fullAddressLabel": "US address",
+        "copied": "Copied"
+      },
+      "stats": {
+        "inBox": "In your box",
+        "inTransit": "In transit",
+        "delivered": "Delivered"
+      },
+      "activity": {
+        "title": "Recent activity",
+        "empty": "No packages yet. Start shopping and they'll show up here."
+      },
+      "packageStatus": {
+        "in_box": "In your box",
+        "ready": "Ready to ship"
+      }
+    },
+    "address": {
+      "title": "My US Address",
+      "subtitle": "Use this address at checkout on any US store. We match incoming packages to your account using your suite number, so never leave it out.",
+      "labels": {
+        "recipient": "Recipient",
+        "line1": "Address line 1",
+        "city": "City",
+        "state": "State",
+        "zip": "ZIP code",
+        "country": "Country",
+        "suite": "Suite / Unit"
+      },
+      "copyFull": "Copy full address",
+      "fullAddressLabel": "full address",
+      "copied": "Copied",
+      "suiteNote": "This is your unique suite number. Always include it — without it, we can't match your packages to your account.",
+      "instructions": {
+        "title": "How to use your address when shopping",
+        "items": [
+          "Always enter your full name plus your suite number on the address line — it's how we match packages to your account.",
+          "Use this address as both the shipping address and, when a store asks for one, the billing address.",
+          "Double-check the suite number after autofill. Some checkout forms drop the apartment/suite field by default.",
+          "Orders typically arrive at our warehouse within 3-7 business days after the store ships them.",
+          "As soon as a package arrives, you'll see it in your dashboard with a photo and its weight."
+        ]
+      }
+    }
   },
   "privacy": {
     "title": "Privacy Policy",

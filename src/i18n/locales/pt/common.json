@@ -518,7 +518,58 @@
       "shopper": "Personal shopper",
       "account": "Conta"
     },
-    "signOut": "Sair"
+    "signOut": "Sair",
+    "overview": {
+      "title": "Visão geral",
+      "welcome": "Bem-vindo(a) de volta, {{name}}!",
+      "address": {
+        "title": "Seu endereço nos EUA",
+        "note": "Sempre inclua o número da sua suite para que possamos vincular os pacotes à sua conta.",
+        "copyFull": "Copiar endereço completo",
+        "fullAddressLabel": "endereço nos EUA",
+        "copied": "Copiado"
+      },
+      "stats": {
+        "inBox": "Na sua caixa",
+        "inTransit": "Em trânsito",
+        "delivered": "Entregues"
+      },
+      "activity": {
+        "title": "Atividade recente",
+        "empty": "Ainda não há pacotes. Comece a comprar e eles aparecerão aqui."
+      },
+      "packageStatus": {
+        "in_box": "Na sua caixa",
+        "ready": "Pronto para envio"
+      }
+    },
+    "address": {
+      "title": "Meu Endereço nos EUA",
+      "subtitle": "Use este endereço no checkout de qualquer loja dos EUA. Vinculamos os pacotes recebidos à sua conta pelo número da sua suite, então nunca o deixe de fora.",
+      "labels": {
+        "recipient": "Destinatário",
+        "line1": "Endereço linha 1",
+        "city": "Cidade",
+        "state": "Estado",
+        "zip": "CEP",
+        "country": "País",
+        "suite": "Suite / Unidade"
+      },
+      "copyFull": "Copiar endereço completo",
+      "fullAddressLabel": "endereço completo",
+      "copied": "Copiado",
+      "suiteNote": "Este é o número exclusivo da sua suite. Sempre inclua-o — sem ele, não conseguimos vincular seus pacotes à sua conta.",
+      "instructions": {
+        "title": "Como usar seu endereço nas compras",
+        "items": [
+          "Sempre informe seu nome completo mais o número da sua suite na linha de endereço — é assim que vinculamos os pacotes à sua conta.",
+          "Use este endereço tanto como endereço de entrega quanto, quando a loja pedir, como endereço de cobrança.",
+          "Confira o número da suite depois do preenchimento automático. Alguns formulários de checkout descartam o campo de apartamento/suite por padrão.",
+          "Os pedidos costumam chegar ao nosso depósito de 3 a 7 dias úteis depois de a loja enviá-los.",
+          "Assim que um pacote chegar, você verá no seu painel com foto e peso."
+        ]
+      }
+    }
   },
   "privacy": {
     "title": "Política de Privacidade",
