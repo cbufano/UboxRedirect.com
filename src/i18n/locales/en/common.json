@@ -1,0 +1,805 @@
+{
+  "brand": "Bufano Redirect",
+  "meta": {
+    "description": "Get a free US address, shop American stores, and ship your consolidated packages worldwide for less with Bufano Redirect.",
+    "home": "Your US Address",
+    "how": "How It Works",
+    "pricing": "Pricing & Plans",
+    "services": "Our Services",
+    "calculator": "Shipping Calculator",
+    "faq": "FAQ",
+    "about": "About Us",
+    "contact": "Contact Us",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy",
+    "login": "Sign In",
+    "signup": "Create Account",
+    "forgot": "Reset Password",
+    "verify": "Email Verified",
+    "dashboard": "Dashboard",
+    "address": "My US Address",
+    "inbox": "Inbox",
+    "ship": "Consolidate & Ship",
+    "shipments": "Shipments",
+    "shopper": "Personal Shopper",
+    "account": "Account"
+  },
+  "nav": {
+    "how": "How it works",
+    "pricing": "Pricing",
+    "services": "Services",
+    "calculator": "Calculator",
+    "faq": "FAQ",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Sign in",
+    "signup": "Create free account"
+  },
+  "footer": {
+    "pitch": "Your US address to shop American stores and ship worldwide.",
+    "company": "Company",
+    "legal": "Legal",
+    "resources": "Resources",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy",
+    "contactTitle": "Contact",
+    "hours": "Mon–Fri, 9am–5pm (EST)",
+    "rights": "All rights reserved."
+  },
+  "home": {
+    "hero": {
+      "title": "Your US address. Shop, consolidate, ship worldwide.",
+      "subtitle": "Bufano Redirect gives you a free personal US address so you can buy from your favorite American stores and have everything shipped to your door — for less.",
+      "ctaPrimary": "Create free account",
+      "ctaSecondary": "How it works"
+    },
+    "steps": {
+      "title": "How it works",
+      "items": [
+        {
+          "title": "Get your US address",
+          "text": "Sign up free and receive a personal US shipping address in seconds."
+        },
+        {
+          "title": "Shop your favorite stores",
+          "text": "Buy from Amazon, eBay, Walmart and hundreds of other US retailers."
+        },
+        {
+          "title": "We receive your packages",
+          "text": "Your orders arrive safely at our secure warehouse, ready for pickup."
+        },
+        {
+          "title": "Consolidate to save",
+          "text": "We combine multiple packages into one box to cut your shipping costs."
+        },
+        {
+          "title": "Ship worldwide",
+          "text": "Choose your carrier and we send your consolidated package anywhere in the world."
+        }
+      ]
+    },
+    "benefits": {
+      "title": "Why ship with Bufano Redirect",
+      "items": [
+        {
+          "title": "Save up to 80%",
+          "text": "Consolidating packages into a single shipment dramatically reduces your shipping costs."
+        },
+        {
+          "title": "Package photos",
+          "text": "We photograph every package on arrival so you always know what is in your warehouse."
+        },
+        {
+          "title": "Extended storage",
+          "text": "Keep your packages safely stored for weeks while you decide when to consolidate."
+        },
+        {
+          "title": "Worldwide shipping",
+          "text": "We deliver to more than 200 countries through trusted international carriers."
+        },
+        {
+          "title": "Personal shopper",
+          "text": "Can't buy directly? Our team can purchase items on your behalf."
+        },
+        {
+          "title": "Value protection",
+          "text": "Optional insurance protects your shipment against loss or damage in transit."
+        }
+      ]
+    },
+    "stores": {
+      "title": "Shop your favorite US stores"
+    },
+    "savings": {
+      "title": "See how much you can save",
+      "separate": {
+        "title": "Shipping separately",
+        "desc": "3 orders from 3 different stores, each shipped on its own.",
+        "amount": "$135"
+      },
+      "consolidated": {
+        "title": "Consolidated with Bufano Redirect",
+        "desc": "The same 3 orders combined into a single box before shipping.",
+        "amount": "$52"
+      },
+      "savingsLabel": "Total savings",
+      "savingsAmount": "$83 (61%)",
+      "note": "Illustrative example. Actual savings vary by weight, destination and carrier."
+    },
+    "testimonials": {
+      "title": "What our customers say",
+      "items": [
+        {
+          "quote": "I finally have access to US-only stores. My packages arrived consolidated and I paid way less than I expected.",
+          "name": "Marina Costa",
+          "country": "Brazil"
+        },
+        {
+          "quote": "The photos of every package gave me peace of mind, and support answered every question fast.",
+          "name": "Diego Fernandez",
+          "country": "Argentina"
+        },
+        {
+          "quote": "Consolidating four orders into one shipment cut my shipping cost by more than half.",
+          "name": "Laura Gomez",
+          "country": "Mexico"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to start shopping in the US?",
+      "subtitle": "Create your free account today and get your US address in seconds.",
+      "button": "Create free account"
+    }
+  },
+  "how": {
+    "title": "How Bufano Redirect works",
+    "subtitle": "From your free US address to a consolidated box at your door — here is exactly what happens at every step.",
+    "steps": [
+      {
+        "title": "Get your US address",
+        "text": "Sign up for free in a couple of minutes and receive a personal US shipping address tied to your account. There are no setup fees and no commitment — you can start using it right away for any store that ships within the US."
+      },
+      {
+        "title": "Shop US stores and ship to it",
+        "text": "Use your new address at checkout on Amazon, eBay, Walmart, Target, Best Buy and hundreds of other US retailers, exactly like a local shopper would. Buy from as many stores as you like — every order will arrive at the same place."
+      },
+      {
+        "title": "Your packages arrive at our warehouse",
+        "text": "As soon as a package reaches our facility, we scan it in, photograph its condition and label it to your account. You get an email notification and can see the photos and details in your dashboard right away."
+      },
+      {
+        "title": "We consolidate and repackage",
+        "text": "Once your orders have arrived, request a consolidation. Our team removes unnecessary packaging, combines everything into the smallest possible box and lets you know the new weight and dimensions before you pay for shipping."
+      },
+      {
+        "title": "We ship worldwide",
+        "text": "Choose the carrier and speed that fit your budget, pay online and track your box from our warehouse to your door. We deliver to more than 200 countries with trusted international carriers."
+      }
+    ],
+    "cta": {
+      "title": "Ready to get your free US address?",
+      "subtitle": "Create your account in minutes and start shopping US stores today.",
+      "button": "Create free account"
+    },
+    "faqTeaser": "Have more questions about customs, fees or delivery times? Our FAQ covers the details.",
+    "faqButton": "See FAQ"
+  },
+  "pricing": {
+    "title": "Pricing & Plans",
+    "subtitle": "Simple, transparent pricing. Start at no cost, upgrade any time you want more storage and savings.",
+    "free": {
+      "name": "Free",
+      "priceNote": "No monthly fee",
+      "features": [
+        "Personal US shipping address",
+        "7-day package storage included",
+        "Basic package consolidation",
+        "Email notifications on arrival",
+        "Access to all supported carriers"
+      ],
+      "cta": "Get started"
+    },
+    "premium": {
+      "name": "Premium",
+      "badge": "Recommended",
+      "price": "$9/mo",
+      "priceNote": "Illustrative price, billed monthly",
+      "features": [
+        "45 to 90 days of package storage",
+        "Photos of every package at no extra cost",
+        "Priority receiving and handling",
+        "Discounted consolidation and shipping rates",
+        "Optional value protection included"
+      ],
+      "cta": "Upgrade now"
+    },
+    "fees": {
+      "title": "Service fees",
+      "serviceLabel": "Service",
+      "feeLabel": "Fee",
+      "note": "Estimates — final charges calculated at checkout.",
+      "rows": [
+        { "service": "Consolidation (per package)", "fee": "$2.00" },
+        { "service": "Extra photos", "fee": "$0.50 each" },
+        { "service": "Repackaging", "fee": "$3.00" },
+        { "service": "Storage (per day beyond included period)", "fee": "$0.15" },
+        { "service": "Value protection", "fee": "2% of declared value" }
+      ]
+    }
+  },
+  "services": {
+    "title": "Our services",
+    "subtitle": "Everything you need to shop the US and get your packages home safely, at the lowest possible cost.",
+    "items": [
+      {
+        "title": "Consolidation",
+        "text": "We combine multiple packages into a single box, so you pay for one shipment instead of several."
+      },
+      {
+        "title": "Repackaging",
+        "text": "We remove bulky retail packaging and repack your items in the smallest, lightest box possible."
+      },
+      {
+        "title": "Package photos",
+        "text": "Every package is photographed on arrival, so you always know exactly what's waiting in your warehouse."
+      },
+      {
+        "title": "Personal shopper",
+        "text": "Can't buy directly from a US store? Our team purchases the items for you and ships them to your address."
+      },
+      {
+        "title": "Value protection",
+        "text": "Add optional insurance to protect your shipment against loss or damage while in transit."
+      },
+      {
+        "title": "Extended storage",
+        "text": "Keep your packages safely stored in our warehouse for weeks while you plan your next consolidation."
+      }
+    ],
+    "cta": {
+      "title": "Ready to put these services to work?",
+      "subtitle": "Create your free account and get your US address in seconds.",
+      "button": "Create free account"
+    }
+  },
+  "calculator": {
+    "title": "Shipping Calculator",
+    "subtitle": "Estimate the cost and delivery time to consolidate and ship your packages anywhere in the world.",
+    "form": {
+      "countryLabel": "Destination country",
+      "countryPlaceholder": "Select a country",
+      "countries": {
+        "BR": "Brazil",
+        "US": "United States",
+        "PT": "Portugal",
+        "ES": "Spain",
+        "MX": "Mexico",
+        "AR": "Argentina",
+        "GB": "United Kingdom",
+        "OTHER": "Other"
+      },
+      "weightLabel": "Weight (kg)",
+      "lengthLabel": "Length (cm)",
+      "widthLabel": "Width (cm)",
+      "heightLabel": "Height (cm)",
+      "submit": "Calculate",
+      "errors": {
+        "country": "Please select a destination country",
+        "positive": "Enter a value greater than zero"
+      }
+    },
+    "result": {
+      "title": "Your estimate",
+      "chargeable": "Chargeable weight: {{weight}} kg",
+      "carrier": "Carrier",
+      "eta": "ETA (days)",
+      "cost": "Cost (USD)",
+      "note": "This is only an estimate. Final shipping cost is calculated at checkout based on the actual weight and dimensions of your consolidated package.",
+      "error": "We couldn't calculate an estimate. Please check the values and try again."
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Everything you need to know about your US address, shipping, storage and your account. Can't find an answer? Reach out to our support team.",
+    "categories": [
+      {
+        "name": "Getting started",
+        "items": [
+          {
+            "q": "What is Bufano Redirect?",
+            "a": "Bufano Redirect is a package forwarding service that gives you a free personal US address, so you can shop at American stores that don't ship internationally and have your orders consolidated and forwarded to your door anywhere in the world."
+          },
+          {
+            "q": "How do I get my US address?",
+            "a": "Create a free account and your personal US shipping address is generated instantly. You can start using it at checkout on any US store right away."
+          },
+          {
+            "q": "Is signup free?",
+            "a": "Yes. Creating an account and receiving your US address costs nothing. You only pay for the services you actually use, like consolidation, storage beyond the free period, and shipping."
+          },
+          {
+            "q": "How long does setup take?",
+            "a": "Signup takes just a couple of minutes. As soon as you confirm your email, your US address is ready to use for shopping."
+          }
+        ]
+      },
+      {
+        "name": "Shipping & customs",
+        "items": [
+          {
+            "q": "Which countries do you ship to?",
+            "a": "We ship to more than 200 countries worldwide through trusted international carriers. You can check delivery estimates for your destination on the shipping calculator page."
+          },
+          {
+            "q": "How are duties and taxes handled?",
+            "a": "Import duties and taxes are set by your country's customs authority and are not included in our shipping fees. They are typically charged by the carrier or customs office upon arrival, based on the declared value of your package."
+          },
+          {
+            "q": "Can I track my shipment?",
+            "a": "Yes. Once your consolidated package ships, you receive a tracking number and can follow its journey from our warehouse to your door directly from your dashboard."
+          },
+          {
+            "q": "Are there prohibited items?",
+            "a": "Some items, such as flammable liquids, weapons, and certain batteries, cannot be shipped internationally due to carrier and customs regulations. Check our shipping policy or contact support if you're unsure about a specific item."
+          }
+        ]
+      },
+      {
+        "name": "Storage & fees",
+        "items": [
+          {
+            "q": "How long can my packages be stored?",
+            "a": "Free accounts include 7 days of storage per package. Premium members enjoy extended storage of 45 to 90 days, giving you more time to wait for multiple orders before consolidating."
+          },
+          {
+            "q": "How much can I save by consolidating?",
+            "a": "Consolidating multiple packages into a single shipment can cut your shipping cost by up to 80%, since you pay one shipping fee instead of several. Use our calculator to estimate your savings."
+          },
+          {
+            "q": "Do extra photos cost anything?",
+            "a": "Free accounts pay a small fee per additional photo beyond the first. Premium members receive photos of every package at no extra cost."
+          },
+          {
+            "q": "What is repackaging and does it cost extra?",
+            "a": "Repackaging means removing bulky retail boxes and combining your items into the smallest possible box to reduce weight and dimensions. It's available for a small fee and often pays for itself in shipping savings."
+          }
+        ]
+      },
+      {
+        "name": "Account & support",
+        "items": [
+          {
+            "q": "Can I change my plan later?",
+            "a": "Yes, you can upgrade from Free to Premium, or adjust your plan at any time from your account settings. Changes take effect immediately."
+          },
+          {
+            "q": "How do I contact support?",
+            "a": "Our support team is available by email and through the contact form on our website, Monday to Friday, 9am to 5pm (EST). We aim to respond within one business day."
+          },
+          {
+            "q": "Is my personal information secure?",
+            "a": "Yes. We use industry-standard encryption to protect your data and never share your personal information with third parties without your consent."
+          },
+          {
+            "q": "Can I cancel my account at any time?",
+            "a": "Absolutely. You can cancel your account at any time from your account settings with no cancellation fees. Any packages in storage should be shipped or picked up beforehand."
+          }
+        ]
+      }
+    ],
+    "cta": {
+      "title": "Still have questions?",
+      "subtitle": "Our support team is happy to help with anything not covered here.",
+      "button": "Contact us"
+    }
+  },
+  "contact": {
+    "title": "Contact us",
+    "subtitle": "Have a question about your US address, shipping or your account? Send us a message and our support team will get back to you within one business day.",
+    "form": {
+      "nameLabel": "Name",
+      "emailLabel": "Email",
+      "messageLabel": "Message",
+      "submit": "Send message",
+      "errors": {
+        "name": "Please enter your name.",
+        "email": "Please enter a valid email.",
+        "message": "Please enter a message with at least 10 characters."
+      },
+      "success": "Thanks for reaching out! We've received your message and will reply within one business day."
+    },
+    "info": {
+      "title": "Get in touch",
+      "hoursLabel": "Business hours",
+      "hours": "Mon–Fri, 9am–5pm (EST)",
+      "addressLabel": "Address",
+      "address": "1234 Warehouse Ave, Suite 100, Miami, FL 33101, USA"
+    }
+  },
+  "about": {
+    "title": "About Bufano Redirect",
+    "subtitle": "We help shoppers around the world access American stores by giving them a real US address and a simpler, cheaper way to ship their purchases home.",
+    "mission": [
+      "Bufano Redirect was built for the millions of shoppers who find a product they love on a US store, only to discover it doesn't ship to their country. We solve that by giving every customer a free, personal US shipping address in minutes.",
+      "Once your packages arrive at our warehouse, we photograph them, hold them safely, and consolidate multiple orders into a single box before shipping worldwide. That means you shop as many US stores as you like and pay for one shipment instead of many.",
+      "Our goal is simple: make shopping in the US feel local, no matter where you live, while keeping the process transparent, affordable, and easy to trust."
+    ],
+    "values": [
+      {
+        "title": "Transparency",
+        "text": "Clear pricing and package photos at every step, so you always know what you're paying for and what's in your warehouse."
+      },
+      {
+        "title": "Reliability",
+        "text": "Your packages are received, scanned, and stored securely from the moment they arrive until the day they ship."
+      },
+      {
+        "title": "Savings",
+        "text": "Consolidation and repackaging are built into our process, so you never pay more shipping than you need to."
+      },
+      {
+        "title": "Global reach",
+        "text": "We deliver to hundreds of countries through trusted international carriers, wherever you call home."
+      }
+    ],
+    "stats": [
+      { "value": "220+", "label": "Countries served" },
+      { "value": "80%", "label": "Average shipping savings" },
+      { "value": "10k+", "label": "Packages shipped" },
+      { "value": "9am–5pm", "label": "Support hours (EST)" }
+    ],
+    "cta": "Create your free account"
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "updated": "Last updated: July 2026",
+    "draftNotice": "Draft — placeholder legal text, replace with reviewed copy before launch.",
+    "sections": [
+      {
+        "heading": "1. Acceptance of terms",
+        "body": "By creating an account or using Bufano Redirect's website and services, you agree to be bound by these Terms of Use. If you do not agree with any part of these terms, please do not use our services."
+      },
+      {
+        "heading": "2. Description of service",
+        "body": "Bufano Redirect provides customers with a personal US shipping address, package receiving, consolidation, repackaging, and international forwarding services. Features and availability may change over time as we improve our platform."
+      },
+      {
+        "heading": "3. Account registration",
+        "body": "To use our services you must create an account with accurate, current information. You are responsible for maintaining the confidentiality of your login credentials and for all activity that occurs under your account."
+      },
+      {
+        "heading": "4. Prohibited items",
+        "body": "Certain items, including flammable liquids, weapons, and specific batteries, cannot be accepted or shipped due to carrier and customs regulations. We reserve the right to refuse, hold, or dispose of any package that violates this policy."
+      },
+      {
+        "heading": "5. Fees and payment",
+        "body": "Consolidation, storage beyond the included period, repackaging, and shipping are billed according to our published fee schedule. Prices are estimates until checkout, when final charges are calculated based on actual weight and dimensions."
+      },
+      {
+        "heading": "6. Shipping and liability",
+        "body": "We ship packages using trusted third-party carriers and are not responsible for delays, customs seizures, or duties imposed by destination countries. Optional value protection is available to cover loss or damage during transit."
+      },
+      {
+        "heading": "7. Limitation of liability",
+        "body": "To the fullest extent permitted by law, Bufano Redirect's liability for any claim related to our services is limited to the fees you paid for the specific shipment in question. We are not liable for indirect or consequential damages."
+      },
+      {
+        "heading": "8. Changes to terms",
+        "body": "We may update these Terms of Use from time to time. Continued use of our services after changes are posted constitutes acceptance of the revised terms. We recommend checking this page periodically."
+      }
+    ]
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in to your account",
+      "subtitle": "Access your dashboard to manage packages and shipments.",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "error": "Invalid email or password.",
+      "forgot": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "signupLink": "Sign up"
+    },
+    "signup": {
+      "title": "Create your account",
+      "subtitle": "Sign up to start managing your packages and shipments.",
+      "name": "Name",
+      "email": "Email",
+      "country": "Country",
+      "password": "Password",
+      "passwordHint": "At least 8 characters",
+      "confirmPassword": "Confirm password",
+      "terms": "I accept the <termsLink>Terms of Use</termsLink>",
+      "submit": "Create account",
+      "error": "An account with this email already exists.",
+      "passwordMismatch": "Passwords do not match.",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Sign in"
+    },
+    "forgot": {
+      "title": "Forgot your password?",
+      "subtitle": "Enter your email and we'll send you a link to reset your password.",
+      "email": "Email",
+      "submit": "Send reset link",
+      "success": "If an account exists for that email, we've sent a reset link. Check your inbox.",
+      "backToLogin": "Back to sign in"
+    },
+    "verify": {
+      "title": "Email verified",
+      "body": "Your email address has been successfully verified. You can now access your dashboard.",
+      "cta": "Continue to dashboard"
+    }
+  },
+  "dashboard": {
+    "nav": {
+      "overview": "Overview",
+      "address": "US Address",
+      "inbox": "Inbox",
+      "ship": "Consolidate & Ship",
+      "shipments": "Shipments",
+      "shopper": "Personal Shopper",
+      "account": "Account"
+    },
+    "signOut": "Sign out",
+    "overview": {
+      "title": "Overview",
+      "welcome": "Welcome back, {{name}}!",
+      "address": {
+        "title": "Your US address",
+        "note": "Always include your suite number so we can match packages to your account.",
+        "copyFull": "Copy full address",
+        "fullAddressLabel": "US address",
+        "copied": "Copied"
+      },
+      "stats": {
+        "inBox": "In your box",
+        "inTransit": "In transit",
+        "delivered": "Delivered"
+      },
+      "activity": {
+        "title": "Recent activity",
+        "empty": "No packages yet. Start shopping and they'll show up here."
+      },
+      "packageStatus": {
+        "in_box": "In your box",
+        "ready": "Ready to ship"
+      }
+    },
+    "address": {
+      "title": "My US Address",
+      "subtitle": "Use this address at checkout on any US store. We match incoming packages to your account using your suite number, so never leave it out.",
+      "labels": {
+        "recipient": "Recipient",
+        "line1": "Address line 1",
+        "city": "City",
+        "state": "State",
+        "zip": "ZIP code",
+        "country": "Country",
+        "suite": "Suite / Unit"
+      },
+      "copyFull": "Copy full address",
+      "fullAddressLabel": "full address",
+      "copied": "Copied",
+      "suiteNote": "This is your unique suite number. Always include it — without it, we can't match your packages to your account.",
+      "instructions": {
+        "title": "How to use your address when shopping",
+        "items": [
+          "Always enter your full name plus your suite number on the address line — it's how we match packages to your account.",
+          "Use this address as both the shipping address and, when a store asks for one, the billing address.",
+          "Double-check the suite number after autofill. Some checkout forms drop the apartment/suite field by default.",
+          "Orders typically arrive at our warehouse within 3-7 business days after the store ships them.",
+          "As soon as a package arrives, you'll see it in your dashboard with a photo and its weight."
+        ]
+      }
+    },
+    "inbox": {
+      "title": "Inbox",
+      "subtitle": "All the packages we've received on your behalf. Select the ones you'd like to combine into a single shipment.",
+      "empty": "No packages yet. Once a store ships to your US address, it will show up here.",
+      "table": {
+        "photo": "Photo",
+        "store": "Store",
+        "description": "Description",
+        "weight": "Weight",
+        "received": "Received",
+        "status": "Status"
+      },
+      "noPhoto": "No photo",
+      "selectPackage": "Select package from {{store}}",
+      "packageStatus": {
+        "in_box": "In your box",
+        "ready": "Ready to ship"
+      },
+      "consolidate": "Consolidate selected ({{count}})"
+    },
+    "ship": {
+      "title": "Consolidate & Ship",
+      "subtitle": "Review your consolidated box, pick a destination and carrier, declare its contents, and place your order.",
+      "summary": {
+        "title": "Selected packages",
+        "table": {
+          "store": "Store",
+          "description": "Description",
+          "weight": "Weight"
+        },
+        "totalWeight": "Total actual weight: {{weight}} kg"
+      },
+      "destination": {
+        "title": "Destination & carrier",
+        "countryLabel": "Destination country",
+        "countries": {
+          "BR": "Brazil",
+          "US": "United States",
+          "PT": "Portugal",
+          "ES": "Spain",
+          "MX": "Mexico",
+          "AR": "Argentina",
+          "GB": "United Kingdom",
+          "OTHER": "Other"
+        },
+        "boxNote": "Estimate assumes a consolidated box of 40 x 40 x 40 cm. Actual dimensions are confirmed once your box is packed.",
+        "chargeableWeight": "Chargeable weight: {{weight}} kg",
+        "eta": "ETA: {{days}} days",
+        "cost": "${{cost}}"
+      },
+      "customs": {
+        "title": "Customs declaration",
+        "contentsLabel": "Contents description",
+        "valueLabel": "Declared value (USD)",
+        "errors": {
+          "contentsRequired": "Describe the contents (at least 3 characters)",
+          "valuePositive": "Enter a value greater than zero"
+        }
+      },
+      "costSummary": {
+        "title": "Cost summary",
+        "chargeableWeight": "Chargeable weight",
+        "carrier": "Carrier",
+        "total": "Total cost"
+      },
+      "placeOrder": "Place order",
+      "confirmation": {
+        "title": "Order placed!",
+        "reference": "Shipment reference: {{reference}}",
+        "destination": "Destination: {{country}}",
+        "carrier": "Carrier: {{carrier}}",
+        "cost": "Total cost: ${{cost}}"
+      },
+      "empty": "No packages to ship. Add packages to your inbox first."
+    },
+    "shipments": {
+      "title": "Shipments",
+      "subtitle": "Track every shipment we've sent on your behalf, from processing to delivery.",
+      "empty": "No shipments yet. Once you place an order, it will show up here.",
+      "status": {
+        "processing": "Processing",
+        "in_transit": "In transit",
+        "delivered": "Delivered"
+      },
+      "table": {
+        "date": "Date",
+        "carrier": "Carrier",
+        "tracking": "Tracking code",
+        "items": "Items",
+        "cost": "Cost"
+      },
+      "copyTracking": "tracking code {{code}}",
+      "showDetails": "Show details",
+      "hideDetails": "Hide details",
+      "detailsLine": "{{count}} item(s) shipped via {{carrier}}"
+    },
+    "shopper": {
+      "title": "Personal Shopper",
+      "subtitle": "Found something only sold in the US? Send us the product link — we'll buy it for you and receive it at your US address, ready to ship.",
+      "form": {
+        "productUrl": "Product URL",
+        "productUrlPlaceholder": "https://store.com/product",
+        "quantity": "Quantity",
+        "maxBudget": "Max budget (USD)",
+        "notes": "Notes",
+        "notesPlaceholder": "Size, color, or any special instructions",
+        "submit": "Submit request",
+        "errors": {
+          "urlInvalid": "Enter a valid product URL",
+          "quantityPositive": "Enter a quantity of at least 1",
+          "budgetPositive": "Enter a budget greater than zero"
+        }
+      },
+      "confirmation": "Request received — our team will review it and get back to you.",
+      "requestsTitle": "Your requests",
+      "requestsEmpty": "No requests submitted yet.",
+      "requestItem": "{{quantity}}x — {{url}}"
+    },
+    "account": {
+      "title": "Account",
+      "subtitle": "Manage your profile, language, notifications and delivery addresses.",
+      "profile": {
+        "title": "Profile",
+        "name": "Name",
+        "email": "Email",
+        "country": "Country",
+        "countries": {
+          "BR": "Brazil",
+          "US": "United States",
+          "PT": "Portugal",
+          "ES": "Spain",
+          "MX": "Mexico",
+          "AR": "Argentina",
+          "GB": "United Kingdom",
+          "OTHER": "Other"
+        },
+        "submit": "Save changes",
+        "confirmation": "Profile updated.",
+        "errors": {
+          "name": "Please enter your name.",
+          "email": "Please enter a valid email.",
+          "country": "Please select a country."
+        }
+      },
+      "language": {
+        "title": "Language preference",
+        "label": "Language",
+        "options": {
+          "en": "English",
+          "pt": "Portuguese",
+          "es": "Spanish"
+        }
+      },
+      "notifications": {
+        "title": "Notifications",
+        "packageArrival": "Package arrival emails",
+        "shipmentUpdates": "Shipment status updates",
+        "promotions": "Promotions"
+      },
+      "addresses": {
+        "title": "Delivery addresses",
+        "label": "Delivery address",
+        "placeholder": "Street, city, postal code, country",
+        "add": "Add address",
+        "remove": "Remove address",
+        "empty": "No delivery addresses yet. Add one above."
+      }
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "updated": "Last updated: July 2026",
+    "draftNotice": "Draft — placeholder legal text, replace with reviewed copy before launch.",
+    "sections": [
+      {
+        "heading": "1. Information we collect",
+        "body": "We collect information you provide when creating an account, such as your name, email address, and shipping details, as well as information generated when you use our services, like package and shipment records."
+      },
+      {
+        "heading": "2. How we use information",
+        "body": "We use your information to provide and improve our services, process shipments, communicate with you about your packages, and respond to support requests. We do not use your data for purposes unrelated to these goals without your consent."
+      },
+      {
+        "heading": "3. Cookies",
+        "body": "Our website uses cookies and similar technologies to keep you signed in, remember your preferences, and understand how our site is used. You can control cookies through your browser settings."
+      },
+      {
+        "heading": "4. Data sharing",
+        "body": "We share information only with service providers who help us operate, such as shipping carriers and payment processors, and only to the extent necessary to deliver our services. We never sell your personal information."
+      },
+      {
+        "heading": "5. Data security",
+        "body": "We use industry-standard encryption and access controls to protect your data. While no system is completely secure, we continuously review our practices to reduce risk."
+      },
+      {
+        "heading": "6. Your rights",
+        "body": "Depending on where you live, you may have the right to access, correct, or delete your personal information. Contact our support team to exercise these rights, and we will respond within a reasonable time."
+      },
+      {
+        "heading": "7. International transfers",
+        "body": "Because we operate a worldwide shipping service, your information may be transferred to and processed in countries other than your own, including the United States, under appropriate safeguards."
+      },
+      {
+        "heading": "8. Contact us",
+        "body": "If you have questions about this Privacy Policy or how we handle your information, reach out to our support team through the contact page and we'll be happy to help."
+      }
+    ]
+  }
+}

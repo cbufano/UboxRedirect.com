@@ -1,0 +1,805 @@
+{
+  "brand": "Bufano Redirect",
+  "meta": {
+    "description": "Tenha um endereço grátis nos EUA, compre em lojas americanas e envie seus pacotes consolidados para o mundo todo pagando menos com a Bufano Redirect.",
+    "home": "Seu Endereço nos EUA",
+    "how": "Como Funciona",
+    "pricing": "Preços e Planos",
+    "services": "Nossos Serviços",
+    "calculator": "Calculadora de Frete",
+    "faq": "Perguntas Frequentes",
+    "about": "Sobre Nós",
+    "contact": "Fale Conosco",
+    "terms": "Termos de Uso",
+    "privacy": "Política de Privacidade",
+    "login": "Entrar",
+    "signup": "Criar Conta",
+    "forgot": "Redefinir Senha",
+    "verify": "E-mail Verificado",
+    "dashboard": "Painel",
+    "address": "Meu Endereço nos EUA",
+    "inbox": "Caixa de Entrada",
+    "ship": "Consolidar e Enviar",
+    "shipments": "Envios",
+    "shopper": "Personal Shopper",
+    "account": "Conta"
+  },
+  "nav": {
+    "how": "Como funciona",
+    "pricing": "Preços",
+    "services": "Serviços",
+    "calculator": "Calculadora",
+    "faq": "FAQ",
+    "about": "Sobre",
+    "contact": "Contato",
+    "login": "Entrar",
+    "signup": "Criar conta grátis"
+  },
+  "footer": {
+    "pitch": "Seu endereço nos EUA para comprar em lojas americanas e enviar para o mundo todo.",
+    "company": "Empresa",
+    "legal": "Legal",
+    "resources": "Recursos",
+    "terms": "Termos de Uso",
+    "privacy": "Política de Privacidade",
+    "contactTitle": "Contato",
+    "hours": "Seg–Sex, 9h–17h (EST)",
+    "rights": "Todos os direitos reservados."
+  },
+  "home": {
+    "hero": {
+      "title": "Seu endereço nos EUA. Compre, consolide, envie para o mundo.",
+      "subtitle": "A Bufano Redirect te dá um endereço pessoal grátis nos EUA para você comprar nas suas lojas americanas favoritas e receber tudo na sua porta — pagando menos.",
+      "ctaPrimary": "Criar conta grátis",
+      "ctaSecondary": "Como funciona"
+    },
+    "steps": {
+      "title": "Como funciona",
+      "items": [
+        {
+          "title": "Receba seu endereço nos EUA",
+          "text": "Cadastre-se grátis e receba um endereço pessoal de entrega nos EUA em segundos."
+        },
+        {
+          "title": "Compre nas suas lojas favoritas",
+          "text": "Compre na Amazon, eBay, Walmart e centenas de outras lojas americanas."
+        },
+        {
+          "title": "Recebemos seus pacotes",
+          "text": "Seus pedidos chegam com segurança ao nosso depósito, prontos para retirada."
+        },
+        {
+          "title": "Consolide para economizar",
+          "text": "Combinamos vários pacotes em uma única caixa para reduzir seu frete."
+        },
+        {
+          "title": "Envie para o mundo",
+          "text": "Escolha a transportadora e enviamos seu pacote consolidado para qualquer lugar do mundo."
+        }
+      ]
+    },
+    "benefits": {
+      "title": "Por que enviar com a Bufano Redirect",
+      "items": [
+        {
+          "title": "Economize até 80%",
+          "text": "Consolidar pacotes em um único envio reduz drasticamente o custo do frete."
+        },
+        {
+          "title": "Fotos dos pacotes",
+          "text": "Fotografamos cada pacote na chegada, então você sempre sabe o que está no depósito."
+        },
+        {
+          "title": "Armazenamento estendido",
+          "text": "Guarde seus pacotes com segurança por semanas enquanto decide quando consolidar."
+        },
+        {
+          "title": "Envio para o mundo todo",
+          "text": "Entregamos em mais de 200 países através de transportadoras internacionais confiáveis."
+        },
+        {
+          "title": "Personal shopper",
+          "text": "Não consegue comprar diretamente? Nossa equipe pode comprar os itens por você."
+        },
+        {
+          "title": "Proteção de valor",
+          "text": "Um seguro opcional protege seu envio contra perda ou dano no transporte."
+        }
+      ]
+    },
+    "stores": {
+      "title": "Compre nas suas lojas americanas favoritas"
+    },
+    "savings": {
+      "title": "Veja quanto você pode economizar",
+      "separate": {
+        "title": "Enviando separadamente",
+        "desc": "3 pedidos de 3 lojas diferentes, cada um enviado sozinho.",
+        "amount": "US$ 135"
+      },
+      "consolidated": {
+        "title": "Consolidado com a Bufano Redirect",
+        "desc": "Os mesmos 3 pedidos combinados em uma única caixa antes do envio.",
+        "amount": "US$ 52"
+      },
+      "savingsLabel": "Economia total",
+      "savingsAmount": "US$ 83 (61%)",
+      "note": "Exemplo ilustrativo. A economia real varia conforme peso, destino e transportadora."
+    },
+    "testimonials": {
+      "title": "O que nossos clientes dizem",
+      "items": [
+        {
+          "quote": "Finalmente tenho acesso a lojas exclusivas dos EUA. Meus pacotes chegaram consolidados e paguei bem menos do que esperava.",
+          "name": "Marina Costa",
+          "country": "Brasil"
+        },
+        {
+          "quote": "As fotos de cada pacote me deram tranquilidade, e o suporte respondeu todas as minhas dúvidas rapidamente.",
+          "name": "Diego Fernandez",
+          "country": "Argentina"
+        },
+        {
+          "quote": "Consolidar quatro pedidos em um único envio reduziu meu frete pela metade.",
+          "name": "Laura Gomez",
+          "country": "México"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Pronto para começar a comprar nos EUA?",
+      "subtitle": "Crie sua conta grátis hoje e receba seu endereço nos EUA em segundos.",
+      "button": "Criar conta grátis"
+    }
+  },
+  "how": {
+    "title": "Como funciona a Bufano Redirect",
+    "subtitle": "Do seu endereço grátis nos EUA até a caixa consolidada na sua porta — veja exatamente o que acontece em cada etapa.",
+    "steps": [
+      {
+        "title": "Receba seu endereço nos EUA",
+        "text": "Cadastre-se grátis em poucos minutos e receba um endereço pessoal de entrega nos EUA vinculado à sua conta. Não há taxa de adesão nem compromisso — você pode usá-lo imediatamente em qualquer loja que envie dentro dos EUA."
+      },
+      {
+        "title": "Compre nas lojas dos EUA e envie para o seu endereço",
+        "text": "Use seu novo endereço no checkout da Amazon, eBay, Walmart, Target, Best Buy e centenas de outras lojas americanas, exatamente como um comprador local faria. Compre em quantas lojas quiser — todos os pedidos chegarão no mesmo lugar."
+      },
+      {
+        "title": "Seus pacotes chegam ao nosso depósito",
+        "text": "Assim que um pacote chega às nossas instalações, nós o registramos, fotografamos sua condição e o vinculamos à sua conta. Você recebe uma notificação por e-mail e pode ver as fotos e detalhes no seu painel na hora."
+      },
+      {
+        "title": "Consolidamos e reembalamos",
+        "text": "Depois que seus pedidos chegarem, solicite a consolidação. Nossa equipe remove embalagens desnecessárias, combina tudo na menor caixa possível e informa o novo peso e as dimensões antes de você pagar pelo frete."
+      },
+      {
+        "title": "Enviamos para o mundo todo",
+        "text": "Escolha a transportadora e a velocidade que cabem no seu orçamento, pague online e acompanhe sua caixa do nosso depósito até a sua porta. Entregamos em mais de 200 países com transportadoras internacionais confiáveis."
+      }
+    ],
+    "cta": {
+      "title": "Pronto para receber seu endereço grátis nos EUA?",
+      "subtitle": "Crie sua conta em minutos e comece a comprar nas lojas dos EUA hoje mesmo.",
+      "button": "Criar conta grátis"
+    },
+    "faqTeaser": "Tem mais dúvidas sobre alfândega, taxas ou prazos de entrega? Nosso FAQ traz todos os detalhes.",
+    "faqButton": "Ver FAQ"
+  },
+  "pricing": {
+    "title": "Preços e Planos",
+    "subtitle": "Preços simples e transparentes. Comece grátis e faça upgrade quando quiser mais armazenamento e economia.",
+    "free": {
+      "name": "Grátis",
+      "priceNote": "Sem mensalidade",
+      "features": [
+        "Endereço pessoal grátis nos EUA",
+        "7 dias de armazenamento grátis",
+        "Consolidação básica de pacotes",
+        "Notificações por e-mail na chegada",
+        "Acesso a todas as transportadoras suportadas"
+      ],
+      "cta": "Criar conta grátis"
+    },
+    "premium": {
+      "name": "Premium",
+      "badge": "Recomendado",
+      "price": "US$ 9/mês",
+      "priceNote": "Preço ilustrativo, cobrado mensalmente",
+      "features": [
+        "45 a 90 dias de armazenamento grátis",
+        "Fotos grátis de cada pacote",
+        "Recebimento e manuseio prioritários",
+        "Descontos em consolidação e frete",
+        "Proteção de valor opcional incluída"
+      ],
+      "cta": "Assinar Premium"
+    },
+    "fees": {
+      "title": "Taxas de serviço",
+      "serviceLabel": "Serviço",
+      "feeLabel": "Taxa",
+      "note": "Estimativas — os valores finais são calculados no checkout.",
+      "rows": [
+        { "service": "Consolidação (por pacote)", "fee": "US$ 2,00" },
+        { "service": "Fotos extras", "fee": "US$ 0,50 cada" },
+        { "service": "Reembalagem", "fee": "US$ 3,00" },
+        { "service": "Armazenamento (por dia após o período grátis)", "fee": "US$ 0,15" },
+        { "service": "Proteção de valor", "fee": "2% do valor declarado" }
+      ]
+    }
+  },
+  "services": {
+    "title": "Nossos serviços",
+    "subtitle": "Tudo o que você precisa para comprar nos EUA e receber seus pacotes com segurança, pelo menor custo possível.",
+    "items": [
+      {
+        "title": "Consolidação",
+        "text": "Combinamos vários pacotes em uma única caixa, para você pagar por um envio em vez de vários."
+      },
+      {
+        "title": "Reembalagem",
+        "text": "Removemos a embalagem volumosa das lojas e reembalamos seus itens na caixa menor e mais leve possível."
+      },
+      {
+        "title": "Fotos dos pacotes",
+        "text": "Cada pacote é fotografado na chegada, então você sempre sabe exatamente o que está no seu depósito."
+      },
+      {
+        "title": "Personal shopper",
+        "text": "Não consegue comprar direto de uma loja dos EUA? Nossa equipe compra os itens por você e envia para o seu endereço."
+      },
+      {
+        "title": "Proteção de valor",
+        "text": "Adicione um seguro opcional para proteger seu envio contra perda ou dano durante o transporte."
+      },
+      {
+        "title": "Armazenamento estendido",
+        "text": "Mantenha seus pacotes guardados com segurança no nosso depósito por semanas enquanto planeja sua próxima consolidação."
+      }
+    ],
+    "cta": {
+      "title": "Pronto para aproveitar esses serviços?",
+      "subtitle": "Crie sua conta grátis e receba seu endereço nos EUA em segundos.",
+      "button": "Criar conta grátis"
+    }
+  },
+  "calculator": {
+    "title": "Calculadora de Frete",
+    "subtitle": "Estime o custo e o prazo de entrega para consolidar e enviar seus pacotes para qualquer lugar do mundo.",
+    "form": {
+      "countryLabel": "País de destino",
+      "countryPlaceholder": "Selecione um país",
+      "countries": {
+        "BR": "Brasil",
+        "US": "Estados Unidos",
+        "PT": "Portugal",
+        "ES": "Espanha",
+        "MX": "México",
+        "AR": "Argentina",
+        "GB": "Reino Unido",
+        "OTHER": "Outro"
+      },
+      "weightLabel": "Peso (kg)",
+      "lengthLabel": "Comprimento (cm)",
+      "widthLabel": "Largura (cm)",
+      "heightLabel": "Altura (cm)",
+      "submit": "Calcular",
+      "errors": {
+        "country": "Selecione um país de destino",
+        "positive": "Informe um valor maior que zero"
+      }
+    },
+    "result": {
+      "title": "Sua estimativa",
+      "chargeable": "Peso taxável: {{weight}} kg",
+      "carrier": "Transportadora",
+      "eta": "Prazo (dias)",
+      "cost": "Custo (USD)",
+      "note": "Isto é apenas uma estimativa. O custo final do frete é calculado no checkout com base no peso e nas dimensões reais do seu pacote consolidado.",
+      "error": "Não foi possível calcular uma estimativa. Verifique os valores e tente novamente."
+    }
+  },
+  "faq": {
+    "title": "Perguntas Frequentes",
+    "subtitle": "Tudo o que você precisa saber sobre seu endereço nos EUA, envios, armazenamento e sua conta. Não encontrou a resposta? Fale com nossa equipe de suporte.",
+    "categories": [
+      {
+        "name": "Primeiros passos",
+        "items": [
+          {
+            "q": "O que é a Bufano Redirect?",
+            "a": "A Bufano Redirect é um serviço de redirecionamento de encomendas que te dá um endereço pessoal grátis nos EUA, para você comprar em lojas americanas que não enviam para fora dos EUA e receber seus pedidos consolidados e redirecionados até a sua porta, em qualquer lugar do mundo."
+          },
+          {
+            "q": "Como eu recebo meu endereço nos EUA?",
+            "a": "Crie uma conta grátis e seu endereço pessoal de entrega nos EUA é gerado na hora. Você já pode usá-lo no checkout de qualquer loja dos EUA."
+          },
+          {
+            "q": "O cadastro é gratuito?",
+            "a": "Sim. Criar uma conta e receber seu endereço nos EUA não custa nada. Você só paga pelos serviços que realmente usar, como consolidação, armazenamento além do período grátis e frete."
+          },
+          {
+            "q": "Quanto tempo leva para configurar?",
+            "a": "O cadastro leva apenas alguns minutos. Assim que você confirmar seu e-mail, seu endereço nos EUA já está pronto para usar nas compras."
+          }
+        ]
+      },
+      {
+        "name": "Envio e alfândega",
+        "items": [
+          {
+            "q": "Para quais países vocês enviam?",
+            "a": "Enviamos para mais de 200 países ao redor do mundo através de transportadoras internacionais confiáveis. Você pode conferir os prazos de entrega para seu destino na página da calculadora de frete."
+          },
+          {
+            "q": "Como funcionam os impostos e taxas alfandegárias?",
+            "a": "Impostos de importação e taxas alfandegárias são definidos pela autoridade aduaneira do seu país e não estão incluídos nas nossas taxas de envio. Normalmente são cobrados pela transportadora ou pela alfândega na chegada, com base no valor declarado do pacote."
+          },
+          {
+            "q": "Posso rastrear meu envio?",
+            "a": "Sim. Assim que seu pacote consolidado é enviado, você recebe um código de rastreamento e pode acompanhar o trajeto do nosso depósito até a sua porta diretamente no seu painel."
+          },
+          {
+            "q": "Existem itens proibidos?",
+            "a": "Alguns itens, como líquidos inflamáveis, armas e certas baterias, não podem ser enviados internacionalmente devido às regras das transportadoras e da alfândega. Consulte nossa política de envio ou entre em contato com o suporte se tiver dúvidas sobre um item específico."
+          }
+        ]
+      },
+      {
+        "name": "Armazenamento e taxas",
+        "items": [
+          {
+            "q": "Por quanto tempo meus pacotes podem ficar armazenados?",
+            "a": "Contas grátis incluem 7 dias de armazenamento por pacote. Membros Premium contam com armazenamento estendido de 45 a 90 dias, dando mais tempo para aguardar vários pedidos antes de consolidar."
+          },
+          {
+            "q": "Quanto posso economizar consolidando?",
+            "a": "Consolidar vários pacotes em um único envio pode reduzir seu custo de frete em até 80%, já que você paga uma única taxa de envio em vez de várias. Use nossa calculadora para estimar sua economia."
+          },
+          {
+            "q": "Fotos extras têm algum custo?",
+            "a": "Contas grátis pagam uma pequena taxa por foto adicional além da primeira. Membros Premium recebem fotos de todos os pacotes sem custo extra."
+          },
+          {
+            "q": "O que é reembalagem e tem custo extra?",
+            "a": "Reembalagem significa remover as caixas volumosas das lojas e combinar seus itens na menor caixa possível para reduzir peso e dimensões. Está disponível por uma pequena taxa e muitas vezes se paga sozinha com a economia no frete."
+          }
+        ]
+      },
+      {
+        "name": "Conta e suporte",
+        "items": [
+          {
+            "q": "Posso mudar de plano depois?",
+            "a": "Sim, você pode fazer upgrade do plano Grátis para o Premium, ou ajustar seu plano a qualquer momento nas configurações da sua conta. As mudanças têm efeito imediato."
+          },
+          {
+            "q": "Como entro em contato com o suporte?",
+            "a": "Nossa equipe de suporte está disponível por e-mail e pelo formulário de contato no site, de segunda a sexta, das 9h às 17h (EST). Nosso objetivo é responder em até um dia útil."
+          },
+          {
+            "q": "Minhas informações pessoais estão seguras?",
+            "a": "Sim. Usamos criptografia em padrão de mercado para proteger seus dados e nunca compartilhamos suas informações pessoais com terceiros sem o seu consentimento."
+          },
+          {
+            "q": "Posso cancelar minha conta a qualquer momento?",
+            "a": "Com certeza. Você pode cancelar sua conta a qualquer momento nas configurações da conta, sem taxas de cancelamento. Pacotes em armazenamento devem ser enviados ou retirados antes do cancelamento."
+          }
+        ]
+      }
+    ],
+    "cta": {
+      "title": "Ainda tem dúvidas?",
+      "subtitle": "Nossa equipe de suporte terá prazer em ajudar com qualquer coisa que não esteja aqui.",
+      "button": "Fale conosco"
+    }
+  },
+  "contact": {
+    "title": "Fale conosco",
+    "subtitle": "Tem alguma dúvida sobre seu endereço nos EUA, envios ou sua conta? Envie uma mensagem e nossa equipe de suporte responderá em até um dia útil.",
+    "form": {
+      "nameLabel": "Nome",
+      "emailLabel": "E-mail",
+      "messageLabel": "Mensagem",
+      "submit": "Enviar mensagem",
+      "errors": {
+        "name": "Por favor, informe seu nome.",
+        "email": "Por favor, informe um e-mail válido.",
+        "message": "Por favor, escreva uma mensagem com pelo menos 10 caracteres."
+      },
+      "success": "Obrigado pelo contato! Recebemos sua mensagem e responderemos em até um dia útil."
+    },
+    "info": {
+      "title": "Entre em contato",
+      "hoursLabel": "Horário de atendimento",
+      "hours": "Seg–Sex, 9h–17h (EST)",
+      "addressLabel": "Endereço",
+      "address": "1234 Warehouse Ave, Suite 100, Miami, FL 33101, EUA"
+    }
+  },
+  "about": {
+    "title": "Sobre a Bufano Redirect",
+    "subtitle": "Ajudamos compradores ao redor do mundo a acessar lojas americanas, dando a eles um endereço real nos EUA e uma forma mais simples e barata de enviar suas compras para casa.",
+    "mission": [
+      "A Bufano Redirect foi criada para os milhões de compradores que encontram um produto que amam em uma loja dos EUA, só para descobrir que ela não envia para o seu país. Resolvemos isso dando a cada cliente um endereço pessoal grátis nos EUA em minutos.",
+      "Assim que seus pacotes chegam ao nosso depósito, nós os fotografamos, guardamos com segurança e consolidamos vários pedidos em uma única caixa antes de enviar para o mundo todo. Isso significa que você pode comprar em quantas lojas dos EUA quiser e pagar por um único envio em vez de vários.",
+      "Nosso objetivo é simples: fazer comprar nos EUA parecer local, não importa onde você mora, mantendo o processo transparente, acessível e confiável."
+    ],
+    "values": [
+      {
+        "title": "Transparência",
+        "text": "Preços claros e fotos dos pacotes em cada etapa, para você sempre saber pelo que está pagando e o que está no seu depósito."
+      },
+      {
+        "title": "Confiabilidade",
+        "text": "Seus pacotes são recebidos, registrados e armazenados com segurança desde a chegada até o dia do envio."
+      },
+      {
+        "title": "Economia",
+        "text": "Consolidação e reembalagem fazem parte do nosso processo, para você nunca pagar mais frete do que precisa."
+      },
+      {
+        "title": "Alcance global",
+        "text": "Entregamos em centenas de países através de transportadoras internacionais confiáveis, onde quer que você esteja."
+      }
+    ],
+    "stats": [
+      { "value": "220+", "label": "Países atendidos" },
+      { "value": "80%", "label": "Economia média no frete" },
+      { "value": "10 mil+", "label": "Pacotes enviados" },
+      { "value": "9h–17h", "label": "Horário de suporte (EST)" }
+    ],
+    "cta": "Criar minha conta grátis"
+  },
+  "terms": {
+    "title": "Termos de Uso",
+    "updated": "Última atualização: julho de 2026",
+    "draftNotice": "Rascunho — texto legal provisório, substituir por versão revisada antes do lançamento.",
+    "sections": [
+      {
+        "heading": "1. Aceitação dos termos",
+        "body": "Ao criar uma conta ou usar o site e os serviços da Bufano Redirect, você concorda em cumprir estes Termos de Uso. Se você não concordar com qualquer parte destes termos, não utilize nossos serviços."
+      },
+      {
+        "heading": "2. Descrição do serviço",
+        "body": "A Bufano Redirect fornece aos clientes um endereço pessoal de entrega nos EUA, recebimento de pacotes, consolidação, reembalagem e serviços de redirecionamento internacional. Recursos e disponibilidade podem mudar com o tempo à medida que melhoramos nossa plataforma."
+      },
+      {
+        "heading": "3. Cadastro de conta",
+        "body": "Para usar nossos serviços, você deve criar uma conta com informações precisas e atualizadas. Você é responsável por manter a confidencialidade das suas credenciais de acesso e por toda atividade realizada na sua conta."
+      },
+      {
+        "heading": "4. Itens proibidos",
+        "body": "Certos itens, incluindo líquidos inflamáveis, armas e baterias específicas, não podem ser aceitos ou enviados devido às regras das transportadoras e da alfândega. Reservamo-nos o direito de recusar, reter ou descartar qualquer pacote que viole esta política."
+      },
+      {
+        "heading": "5. Taxas e pagamento",
+        "body": "Consolidação, armazenamento além do período incluído, reembalagem e frete são cobrados de acordo com nossa tabela de taxas publicada. Os preços são estimativas até o checkout, quando os valores finais são calculados com base no peso e nas dimensões reais."
+      },
+      {
+        "heading": "6. Envio e responsabilidade",
+        "body": "Enviamos pacotes usando transportadoras terceirizadas confiáveis e não somos responsáveis por atrasos, apreensões alfandegárias ou taxas impostas pelos países de destino. Proteção de valor opcional está disponível para cobrir perda ou dano durante o transporte."
+      },
+      {
+        "heading": "7. Limitação de responsabilidade",
+        "body": "Na máxima extensão permitida por lei, a responsabilidade da Bufano Redirect por qualquer reclamação relacionada aos nossos serviços é limitada às taxas pagas pelo envio específico em questão. Não somos responsáveis por danos indiretos ou consequentes."
+      },
+      {
+        "heading": "8. Alterações nos termos",
+        "body": "Podemos atualizar estes Termos de Uso periodicamente. O uso continuado dos nossos serviços após a publicação de alterações constitui aceitação dos termos revisados. Recomendamos verificar esta página periodicamente."
+      }
+    ]
+  },
+  "auth": {
+    "login": {
+      "title": "Entre na sua conta",
+      "subtitle": "Acesse seu painel para gerenciar pacotes e envios.",
+      "email": "E-mail",
+      "password": "Senha",
+      "submit": "Entrar",
+      "error": "E-mail ou senha inválidos.",
+      "forgot": "Esqueceu sua senha?",
+      "noAccount": "Não tem uma conta?",
+      "signupLink": "Criar conta"
+    },
+    "signup": {
+      "title": "Crie sua conta",
+      "subtitle": "Cadastre-se para começar a gerenciar seus pacotes e envios.",
+      "name": "Nome",
+      "email": "E-mail",
+      "country": "País",
+      "password": "Senha",
+      "passwordHint": "Pelo menos 8 caracteres",
+      "confirmPassword": "Confirmar senha",
+      "terms": "Eu aceito os <termsLink>Termos de Uso</termsLink>",
+      "submit": "Criar conta",
+      "error": "Já existe uma conta com este e-mail.",
+      "passwordMismatch": "As senhas não coincidem.",
+      "haveAccount": "Já tem uma conta?",
+      "loginLink": "Entrar"
+    },
+    "forgot": {
+      "title": "Esqueceu sua senha?",
+      "subtitle": "Informe seu e-mail e enviaremos um link para redefinir sua senha.",
+      "email": "E-mail",
+      "submit": "Enviar link de redefinição",
+      "success": "Se existir uma conta com este e-mail, enviamos um link de redefinição. Confira sua caixa de entrada.",
+      "backToLogin": "Voltar para o login"
+    },
+    "verify": {
+      "title": "E-mail verificado",
+      "body": "Seu endereço de e-mail foi verificado com sucesso. Agora você pode acessar seu painel.",
+      "cta": "Ir para o painel"
+    }
+  },
+  "dashboard": {
+    "nav": {
+      "overview": "Visão geral",
+      "address": "Endereço nos EUA",
+      "inbox": "Caixa de entrada",
+      "ship": "Consolidar e enviar",
+      "shipments": "Envios",
+      "shopper": "Personal shopper",
+      "account": "Conta"
+    },
+    "signOut": "Sair",
+    "overview": {
+      "title": "Visão geral",
+      "welcome": "Bem-vindo(a) de volta, {{name}}!",
+      "address": {
+        "title": "Seu endereço nos EUA",
+        "note": "Sempre inclua o número da sua suite para que possamos vincular os pacotes à sua conta.",
+        "copyFull": "Copiar endereço completo",
+        "fullAddressLabel": "endereço nos EUA",
+        "copied": "Copiado"
+      },
+      "stats": {
+        "inBox": "Na sua caixa",
+        "inTransit": "Em trânsito",
+        "delivered": "Entregues"
+      },
+      "activity": {
+        "title": "Atividade recente",
+        "empty": "Ainda não há pacotes. Comece a comprar e eles aparecerão aqui."
+      },
+      "packageStatus": {
+        "in_box": "Na sua caixa",
+        "ready": "Pronto para envio"
+      }
+    },
+    "address": {
+      "title": "Meu Endereço nos EUA",
+      "subtitle": "Use este endereço no checkout de qualquer loja dos EUA. Vinculamos os pacotes recebidos à sua conta pelo número da sua suite, então nunca o deixe de fora.",
+      "labels": {
+        "recipient": "Destinatário",
+        "line1": "Endereço linha 1",
+        "city": "Cidade",
+        "state": "Estado",
+        "zip": "CEP",
+        "country": "País",
+        "suite": "Suite / Unidade"
+      },
+      "copyFull": "Copiar endereço completo",
+      "fullAddressLabel": "endereço completo",
+      "copied": "Copiado",
+      "suiteNote": "Este é o número exclusivo da sua suite. Sempre inclua-o — sem ele, não conseguimos vincular seus pacotes à sua conta.",
+      "instructions": {
+        "title": "Como usar seu endereço nas compras",
+        "items": [
+          "Sempre informe seu nome completo mais o número da sua suite na linha de endereço — é assim que vinculamos os pacotes à sua conta.",
+          "Use este endereço tanto como endereço de entrega quanto, quando a loja pedir, como endereço de cobrança.",
+          "Confira o número da suite depois do preenchimento automático. Alguns formulários de checkout descartam o campo de apartamento/suite por padrão.",
+          "Os pedidos costumam chegar ao nosso depósito de 3 a 7 dias úteis depois de a loja enviá-los.",
+          "Assim que um pacote chegar, você verá no seu painel com foto e peso."
+        ]
+      }
+    },
+    "inbox": {
+      "title": "Caixa de entrada",
+      "subtitle": "Todos os pacotes que recebemos em seu nome. Selecione os que deseja combinar em um único envio.",
+      "empty": "Ainda não há pacotes. Assim que uma loja enviar para o seu endereço nos EUA, ele aparecerá aqui.",
+      "table": {
+        "photo": "Foto",
+        "store": "Loja",
+        "description": "Descrição",
+        "weight": "Peso",
+        "received": "Recebido em",
+        "status": "Status"
+      },
+      "noPhoto": "Sem foto",
+      "selectPackage": "Selecionar pacote da {{store}}",
+      "packageStatus": {
+        "in_box": "Na sua caixa",
+        "ready": "Pronto para envio"
+      },
+      "consolidate": "Consolidar selecionados ({{count}})"
+    },
+    "ship": {
+      "title": "Consolidar e Enviar",
+      "subtitle": "Revise sua caixa consolidada, escolha um destino e uma transportadora, declare o conteúdo e finalize seu pedido.",
+      "summary": {
+        "title": "Pacotes selecionados",
+        "table": {
+          "store": "Loja",
+          "description": "Descrição",
+          "weight": "Peso"
+        },
+        "totalWeight": "Peso real total: {{weight}} kg"
+      },
+      "destination": {
+        "title": "Destino e transportadora",
+        "countryLabel": "País de destino",
+        "countries": {
+          "BR": "Brasil",
+          "US": "Estados Unidos",
+          "PT": "Portugal",
+          "ES": "Espanha",
+          "MX": "México",
+          "AR": "Argentina",
+          "GB": "Reino Unido",
+          "OTHER": "Outro"
+        },
+        "boxNote": "A estimativa considera uma caixa consolidada de 40 x 40 x 40 cm. As dimensões reais são confirmadas assim que sua caixa for embalada.",
+        "chargeableWeight": "Peso taxável: {{weight}} kg",
+        "eta": "Prazo: {{days}} dias",
+        "cost": "${{cost}}"
+      },
+      "customs": {
+        "title": "Declaração alfandegária",
+        "contentsLabel": "Descrição do conteúdo",
+        "valueLabel": "Valor declarado (USD)",
+        "errors": {
+          "contentsRequired": "Descreva o conteúdo (pelo menos 3 caracteres)",
+          "valuePositive": "Informe um valor maior que zero"
+        }
+      },
+      "costSummary": {
+        "title": "Resumo de custos",
+        "chargeableWeight": "Peso taxável",
+        "carrier": "Transportadora",
+        "total": "Custo total"
+      },
+      "placeOrder": "Finalizar pedido",
+      "confirmation": {
+        "title": "Pedido realizado!",
+        "reference": "Referência do envio: {{reference}}",
+        "destination": "Destino: {{country}}",
+        "carrier": "Transportadora: {{carrier}}",
+        "cost": "Custo total: ${{cost}}"
+      },
+      "empty": "Nenhum pacote para enviar. Adicione pacotes à sua caixa de entrada primeiro."
+    },
+    "shipments": {
+      "title": "Envios",
+      "subtitle": "Acompanhe cada envio feito em seu nome, do processamento até a entrega.",
+      "empty": "Ainda não há envios. Assim que você fizer um pedido, ele aparecerá aqui.",
+      "status": {
+        "processing": "Em processamento",
+        "in_transit": "Em trânsito",
+        "delivered": "Entregue"
+      },
+      "table": {
+        "date": "Data",
+        "carrier": "Transportadora",
+        "tracking": "Código de rastreio",
+        "items": "Itens",
+        "cost": "Custo"
+      },
+      "copyTracking": "código de rastreio {{code}}",
+      "showDetails": "Mostrar detalhes",
+      "hideDetails": "Ocultar detalhes",
+      "detailsLine": "{{count}} item(ns) enviados via {{carrier}}"
+    },
+    "shopper": {
+      "title": "Personal Shopper",
+      "subtitle": "Encontrou algo vendido só nos EUA? Envie o link do produto — nós compramos por você e recebemos no seu endereço nos EUA, pronto para enviar.",
+      "form": {
+        "productUrl": "URL do produto",
+        "productUrlPlaceholder": "https://loja.com/produto",
+        "quantity": "Quantidade",
+        "maxBudget": "Orçamento máximo (USD)",
+        "notes": "Observações",
+        "notesPlaceholder": "Tamanho, cor ou instruções especiais",
+        "submit": "Enviar solicitação",
+        "errors": {
+          "urlInvalid": "Informe uma URL de produto válida",
+          "quantityPositive": "Informe uma quantidade de pelo menos 1",
+          "budgetPositive": "Informe um orçamento maior que zero"
+        }
+      },
+      "confirmation": "Solicitação recebida — nossa equipe vai analisá-la e retornar em breve.",
+      "requestsTitle": "Suas solicitações",
+      "requestsEmpty": "Nenhuma solicitação enviada ainda.",
+      "requestItem": "{{quantity}}x — {{url}}"
+    },
+    "account": {
+      "title": "Conta",
+      "subtitle": "Gerencie seu perfil, idioma, notificações e endereços de entrega.",
+      "profile": {
+        "title": "Perfil",
+        "name": "Nome",
+        "email": "E-mail",
+        "country": "País",
+        "countries": {
+          "BR": "Brasil",
+          "US": "Estados Unidos",
+          "PT": "Portugal",
+          "ES": "Espanha",
+          "MX": "México",
+          "AR": "Argentina",
+          "GB": "Reino Unido",
+          "OTHER": "Outro"
+        },
+        "submit": "Salvar alterações",
+        "confirmation": "Perfil atualizado.",
+        "errors": {
+          "name": "Informe seu nome.",
+          "email": "Informe um e-mail válido.",
+          "country": "Selecione um país."
+        }
+      },
+      "language": {
+        "title": "Preferência de idioma",
+        "label": "Idioma",
+        "options": {
+          "en": "Inglês",
+          "pt": "Português",
+          "es": "Espanhol"
+        }
+      },
+      "notifications": {
+        "title": "Notificações",
+        "packageArrival": "E-mails de chegada de pacotes",
+        "shipmentUpdates": "Atualizações de status de envio",
+        "promotions": "Promoções"
+      },
+      "addresses": {
+        "title": "Endereços de entrega",
+        "label": "Endereço de entrega",
+        "placeholder": "Rua, cidade, CEP, país",
+        "add": "Adicionar endereço",
+        "remove": "Remover endereço",
+        "empty": "Nenhum endereço de entrega ainda. Adicione um acima."
+      }
+    }
+  },
+  "privacy": {
+    "title": "Política de Privacidade",
+    "updated": "Última atualização: julho de 2026",
+    "draftNotice": "Rascunho — texto legal provisório, substituir por versão revisada antes do lançamento.",
+    "sections": [
+      {
+        "heading": "1. Informações que coletamos",
+        "body": "Coletamos informações que você fornece ao criar uma conta, como nome, e-mail e dados de envio, além de informações geradas quando você usa nossos serviços, como registros de pacotes e envios."
+      },
+      {
+        "heading": "2. Como usamos as informações",
+        "body": "Usamos suas informações para fornecer e melhorar nossos serviços, processar envios, comunicar sobre seus pacotes e responder a solicitações de suporte. Não usamos seus dados para fins não relacionados a esses objetivos sem o seu consentimento."
+      },
+      {
+        "heading": "3. Cookies",
+        "body": "Nosso site usa cookies e tecnologias semelhantes para manter você conectado, lembrar suas preferências e entender como o site é utilizado. Você pode controlar os cookies nas configurações do seu navegador."
+      },
+      {
+        "heading": "4. Compartilhamento de dados",
+        "body": "Compartilhamos informações apenas com prestadores de serviço que nos ajudam a operar, como transportadoras e processadores de pagamento, e somente na medida necessária para entregar nossos serviços. Nunca vendemos suas informações pessoais."
+      },
+      {
+        "heading": "5. Segurança dos dados",
+        "body": "Usamos criptografia e controles de acesso em padrão de mercado para proteger seus dados. Embora nenhum sistema seja completamente seguro, revisamos continuamente nossas práticas para reduzir riscos."
+      },
+      {
+        "heading": "6. Seus direitos",
+        "body": "Dependendo de onde você mora, você pode ter o direito de acessar, corrigir ou excluir suas informações pessoais. Entre em contato com nossa equipe de suporte para exercer esses direitos, e responderemos em um prazo razoável."
+      },
+      {
+        "heading": "7. Transferências internacionais",
+        "body": "Como operamos um serviço de envio mundial, suas informações podem ser transferidas e processadas em países diferentes do seu, incluindo os Estados Unidos, sob salvaguardas apropriadas."
+      },
+      {
+        "heading": "8. Fale conosco",
+        "body": "Se você tiver dúvidas sobre esta Política de Privacidade ou sobre como tratamos suas informações, entre em contato com nossa equipe de suporte pela página de contato e teremos prazer em ajudar."
+      }
+    ]
+  }
+}
