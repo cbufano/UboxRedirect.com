@@ -1,0 +1,14 @@
+{
+  "brand": "Bufano Redirect",
+  "nav": {
+    "how": "How it works",
+    "pricing": "Pricing",
+    "services": "Services",
+    "calculator": "Calculator",
+    "faq": "FAQ",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Sign in",
+    "signup": "Create free account"
+  }
+}
