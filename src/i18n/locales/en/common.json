@@ -369,5 +369,28 @@
       "subtitle": "Our support team is happy to help with anything not covered here.",
       "button": "Contact us"
     }
+  },
+  "contact": {
+    "title": "Contact us",
+    "subtitle": "Have a question about your US address, shipping or your account? Send us a message and our support team will get back to you within one business day.",
+    "form": {
+      "nameLabel": "Name",
+      "emailLabel": "Email",
+      "messageLabel": "Message",
+      "submit": "Send message",
+      "errors": {
+        "name": "Please enter your name.",
+        "email": "Please enter a valid email.",
+        "message": "Please enter a message with at least 10 characters."
+      },
+      "success": "Thanks for reaching out! We've received your message and will reply within one business day."
+    },
+    "info": {
+      "title": "Get in touch",
+      "hoursLabel": "Business hours",
+      "hours": "Mon–Fri, 9am–5pm (EST)",
+      "addressLabel": "Address",
+      "address": "1234 Warehouse Ave, Suite 100, Miami, FL 33101, USA"
+    }
   }
 }

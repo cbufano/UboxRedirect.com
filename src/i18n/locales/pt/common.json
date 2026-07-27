@@ -369,5 +369,28 @@
       "subtitle": "Nossa equipe de suporte terá prazer em ajudar com qualquer coisa que não esteja aqui.",
       "button": "Fale conosco"
     }
+  },
+  "contact": {
+    "title": "Fale conosco",
+    "subtitle": "Tem alguma dúvida sobre seu endereço nos EUA, envios ou sua conta? Envie uma mensagem e nossa equipe de suporte responderá em até um dia útil.",
+    "form": {
+      "nameLabel": "Nome",
+      "emailLabel": "E-mail",
+      "messageLabel": "Mensagem",
+      "submit": "Enviar mensagem",
+      "errors": {
+        "name": "Por favor, informe seu nome.",
+        "email": "Por favor, informe um e-mail válido.",
+        "message": "Por favor, escreva uma mensagem com pelo menos 10 caracteres."
+      },
+      "success": "Obrigado pelo contato! Recebemos sua mensagem e responderemos em até um dia útil."
+    },
+    "info": {
+      "title": "Entre em contato",
+      "hoursLabel": "Horário de atendimento",
+      "hours": "Seg–Sex, 9h–17h (EST)",
+      "addressLabel": "Endereço",
+      "address": "1234 Warehouse Ave, Suite 100, Miami, FL 33101, EUA"
+    }
   }
 }

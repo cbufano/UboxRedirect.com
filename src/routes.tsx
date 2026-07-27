@@ -6,6 +6,7 @@ import Pricing from './pages/Pricing'
 import Services from './pages/Services'
 import Calculator from './pages/Calculator'
 import FAQ from './pages/FAQ'
+import Contact from './pages/Contact'
 
 export function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ export function AppRoutes() {
         <Route path="services" element={<Services />} />
         <Route path="calculator" element={<Calculator />} />
         <Route path="faq" element={<FAQ />} />
+        <Route path="contact" element={<Contact />} />
         {/* public routes added as their tasks complete */}
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
