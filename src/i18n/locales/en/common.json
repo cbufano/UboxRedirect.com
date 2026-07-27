@@ -466,6 +466,19 @@
       }
     ]
   },
+  "auth": {
+    "login": {
+      "title": "Sign in to your account",
+      "subtitle": "Access your dashboard to manage packages and shipments.",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "error": "Invalid email or password.",
+      "forgot": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "signupLink": "Sign up"
+    }
+  },
   "privacy": {
     "title": "Privacy Policy",
     "updated": "Last updated: July 2026",

@@ -466,6 +466,19 @@
       }
     ]
   },
+  "auth": {
+    "login": {
+      "title": "Inicia sesión en tu cuenta",
+      "subtitle": "Accede a tu panel para administrar paquetes y envíos.",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "submit": "Iniciar sesión",
+      "error": "Correo electrónico o contraseña inválidos.",
+      "forgot": "¿Olvidaste tu contraseña?",
+      "noAccount": "¿No tienes una cuenta?",
+      "signupLink": "Regístrate"
+    }
+  },
   "privacy": {
     "title": "Política de Privacidad",
     "updated": "Última actualización: julio de 2026",

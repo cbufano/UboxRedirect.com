@@ -466,6 +466,19 @@
       }
     ]
   },
+  "auth": {
+    "login": {
+      "title": "Entre na sua conta",
+      "subtitle": "Acesse seu painel para gerenciar pacotes e envios.",
+      "email": "E-mail",
+      "password": "Senha",
+      "submit": "Entrar",
+      "error": "E-mail ou senha inválidos.",
+      "forgot": "Esqueceu sua senha?",
+      "noAccount": "Não tem uma conta?",
+      "signupLink": "Criar conta"
+    }
+  },
   "privacy": {
     "title": "Política de Privacidade",
     "updated": "Última atualização: julho de 2026",
