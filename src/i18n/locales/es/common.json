@@ -687,6 +687,56 @@
       "requestsTitle": "Tus solicitudes",
       "requestsEmpty": "Todavía no has enviado solicitudes.",
       "requestItem": "{{quantity}}x — {{url}}"
+    },
+    "account": {
+      "title": "Cuenta",
+      "subtitle": "Gestiona tu perfil, idioma, notificaciones y direcciones de entrega.",
+      "profile": {
+        "title": "Perfil",
+        "name": "Nombre",
+        "email": "Correo electrónico",
+        "country": "País",
+        "countries": {
+          "BR": "Brasil",
+          "US": "Estados Unidos",
+          "PT": "Portugal",
+          "ES": "España",
+          "MX": "México",
+          "AR": "Argentina",
+          "GB": "Reino Unido",
+          "OTHER": "Otro"
+        },
+        "submit": "Guardar cambios",
+        "confirmation": "Perfil actualizado.",
+        "errors": {
+          "name": "Ingresa tu nombre.",
+          "email": "Ingresa un correo electrónico válido.",
+          "country": "Selecciona un país."
+        }
+      },
+      "language": {
+        "title": "Preferencia de idioma",
+        "label": "Idioma",
+        "options": {
+          "en": "Inglés",
+          "pt": "Portugués",
+          "es": "Español"
+        }
+      },
+      "notifications": {
+        "title": "Notificaciones",
+        "packageArrival": "Correos de llegada de paquetes",
+        "shipmentUpdates": "Actualizaciones de estado de envío",
+        "promotions": "Promociones"
+      },
+      "addresses": {
+        "title": "Direcciones de entrega",
+        "label": "Dirección de entrega",
+        "placeholder": "Calle, ciudad, código postal, país",
+        "add": "Agregar dirección",
+        "remove": "Eliminar dirección",
+        "empty": "Todavía no hay direcciones de entrega. Agrega una arriba."
+      }
     }
   },
   "privacy": {

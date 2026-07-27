@@ -687,6 +687,56 @@
       "requestsTitle": "Your requests",
       "requestsEmpty": "No requests submitted yet.",
       "requestItem": "{{quantity}}x — {{url}}"
+    },
+    "account": {
+      "title": "Account",
+      "subtitle": "Manage your profile, language, notifications and delivery addresses.",
+      "profile": {
+        "title": "Profile",
+        "name": "Name",
+        "email": "Email",
+        "country": "Country",
+        "countries": {
+          "BR": "Brazil",
+          "US": "United States",
+          "PT": "Portugal",
+          "ES": "Spain",
+          "MX": "Mexico",
+          "AR": "Argentina",
+          "GB": "United Kingdom",
+          "OTHER": "Other"
+        },
+        "submit": "Save changes",
+        "confirmation": "Profile updated.",
+        "errors": {
+          "name": "Please enter your name.",
+          "email": "Please enter a valid email.",
+          "country": "Please select a country."
+        }
+      },
+      "language": {
+        "title": "Language preference",
+        "label": "Language",
+        "options": {
+          "en": "English",
+          "pt": "Portuguese",
+          "es": "Spanish"
+        }
+      },
+      "notifications": {
+        "title": "Notifications",
+        "packageArrival": "Package arrival emails",
+        "shipmentUpdates": "Shipment status updates",
+        "promotions": "Promotions"
+      },
+      "addresses": {
+        "title": "Delivery addresses",
+        "label": "Delivery address",
+        "placeholder": "Street, city, postal code, country",
+        "add": "Add address",
+        "remove": "Remove address",
+        "empty": "No delivery addresses yet. Add one above."
+      }
     }
   },
   "privacy": {

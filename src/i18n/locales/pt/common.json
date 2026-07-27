@@ -687,6 +687,56 @@
       "requestsTitle": "Suas solicitações",
       "requestsEmpty": "Nenhuma solicitação enviada ainda.",
       "requestItem": "{{quantity}}x — {{url}}"
+    },
+    "account": {
+      "title": "Conta",
+      "subtitle": "Gerencie seu perfil, idioma, notificações e endereços de entrega.",
+      "profile": {
+        "title": "Perfil",
+        "name": "Nome",
+        "email": "E-mail",
+        "country": "País",
+        "countries": {
+          "BR": "Brasil",
+          "US": "Estados Unidos",
+          "PT": "Portugal",
+          "ES": "Espanha",
+          "MX": "México",
+          "AR": "Argentina",
+          "GB": "Reino Unido",
+          "OTHER": "Outro"
+        },
+        "submit": "Salvar alterações",
+        "confirmation": "Perfil atualizado.",
+        "errors": {
+          "name": "Informe seu nome.",
+          "email": "Informe um e-mail válido.",
+          "country": "Selecione um país."
+        }
+      },
+      "language": {
+        "title": "Preferência de idioma",
+        "label": "Idioma",
+        "options": {
+          "en": "Inglês",
+          "pt": "Português",
+          "es": "Espanhol"
+        }
+      },
+      "notifications": {
+        "title": "Notificações",
+        "packageArrival": "E-mails de chegada de pacotes",
+        "shipmentUpdates": "Atualizações de status de envio",
+        "promotions": "Promoções"
+      },
+      "addresses": {
+        "title": "Endereços de entrega",
+        "label": "Endereço de entrega",
+        "placeholder": "Rua, cidade, CEP, país",
+        "add": "Adicionar endereço",
+        "remove": "Remover endereço",
+        "empty": "Nenhum endereço de entrega ainda. Adicione um acima."
+      }
     }
   },
   "privacy": {
