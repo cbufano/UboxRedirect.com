@@ -21,5 +21,111 @@
     "contactTitle": "Contato",
     "hours": "Seg–Sex, 9h–17h (EST)",
     "rights": "Todos os direitos reservados."
+  },
+  "home": {
+    "hero": {
+      "title": "Seu endereço nos EUA. Compre, consolide, envie para o mundo.",
+      "subtitle": "A Bufano Redirect te dá um endereço pessoal grátis nos EUA para você comprar nas suas lojas americanas favoritas e receber tudo na sua porta — pagando menos.",
+      "ctaPrimary": "Criar conta grátis",
+      "ctaSecondary": "Como funciona"
+    },
+    "steps": {
+      "title": "Como funciona",
+      "items": [
+        {
+          "title": "Receba seu endereço nos EUA",
+          "text": "Cadastre-se grátis e receba um endereço pessoal de entrega nos EUA em segundos."
+        },
+        {
+          "title": "Compre nas suas lojas favoritas",
+          "text": "Compre na Amazon, eBay, Walmart e centenas de outras lojas americanas."
+        },
+        {
+          "title": "Recebemos seus pacotes",
+          "text": "Seus pedidos chegam com segurança ao nosso depósito, prontos para retirada."
+        },
+        {
+          "title": "Consolide para economizar",
+          "text": "Combinamos vários pacotes em uma única caixa para reduzir seu frete."
+        },
+        {
+          "title": "Envie para o mundo",
+          "text": "Escolha a transportadora e enviamos seu pacote consolidado para qualquer lugar do mundo."
+        }
+      ]
+    },
+    "benefits": {
+      "title": "Por que enviar com a Bufano Redirect",
+      "items": [
+        {
+          "title": "Economize até 80%",
+          "text": "Consolidar pacotes em um único envio reduz drasticamente o custo do frete."
+        },
+        {
+          "title": "Fotos dos pacotes",
+          "text": "Fotografamos cada pacote na chegada, então você sempre sabe o que está no depósito."
+        },
+        {
+          "title": "Armazenamento estendido",
+          "text": "Guarde seus pacotes com segurança por semanas enquanto decide quando consolidar."
+        },
+        {
+          "title": "Envio para o mundo todo",
+          "text": "Entregamos em mais de 200 países através de transportadoras internacionais confiáveis."
+        },
+        {
+          "title": "Personal shopper",
+          "text": "Não consegue comprar diretamente? Nossa equipe pode comprar os itens por você."
+        },
+        {
+          "title": "Proteção de valor",
+          "text": "Um seguro opcional protege seu envio contra perda ou dano no transporte."
+        }
+      ]
+    },
+    "stores": {
+      "title": "Compre nas suas lojas americanas favoritas"
+    },
+    "savings": {
+      "title": "Veja quanto você pode economizar",
+      "separate": {
+        "title": "Enviando separadamente",
+        "desc": "3 pedidos de 3 lojas diferentes, cada um enviado sozinho.",
+        "amount": "US$ 135"
+      },
+      "consolidated": {
+        "title": "Consolidado com a Bufano Redirect",
+        "desc": "Os mesmos 3 pedidos combinados em uma única caixa antes do envio.",
+        "amount": "US$ 52"
+      },
+      "savingsLabel": "Economia total",
+      "savingsAmount": "US$ 83 (61%)",
+      "note": "Exemplo ilustrativo. A economia real varia conforme peso, destino e transportadora."
+    },
+    "testimonials": {
+      "title": "O que nossos clientes dizem",
+      "items": [
+        {
+          "quote": "Finalmente tenho acesso a lojas exclusivas dos EUA. Meus pacotes chegaram consolidados e paguei bem menos do que esperava.",
+          "name": "Marina Costa",
+          "country": "Brasil"
+        },
+        {
+          "quote": "As fotos de cada pacote me deram tranquilidade, e o suporte respondeu todas as minhas dúvidas rapidamente.",
+          "name": "Diego Fernandez",
+          "country": "Argentina"
+        },
+        {
+          "quote": "Consolidar quatro pedidos em um único envio reduziu meu frete pela metade.",
+          "name": "Laura Gomez",
+          "country": "México"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Pronto para começar a comprar nos EUA?",
+      "subtitle": "Crie sua conta grátis hoje e receba seu endereço nos EUA em segundos.",
+      "button": "Criar conta grátis"
+    }
   }
 }

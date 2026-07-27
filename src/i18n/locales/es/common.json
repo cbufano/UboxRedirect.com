@@ -21,5 +21,111 @@
     "contactTitle": "Contacto",
     "hours": "Lun–Vie, 9:00–17:00 (EST)",
     "rights": "Todos los derechos reservados."
+  },
+  "home": {
+    "hero": {
+      "title": "Tu dirección en EE. UU. Compra, consolida, envía al mundo.",
+      "subtitle": "Bufano Redirect te da una dirección personal gratis en EE. UU. para que compres en tus tiendas americanas favoritas y recibas todo en tu puerta, pagando menos.",
+      "ctaPrimary": "Crear cuenta gratis",
+      "ctaSecondary": "Cómo funciona"
+    },
+    "steps": {
+      "title": "Cómo funciona",
+      "items": [
+        {
+          "title": "Obtén tu dirección en EE. UU.",
+          "text": "Regístrate gratis y recibe una dirección personal de envío en EE. UU. en segundos."
+        },
+        {
+          "title": "Compra en tus tiendas favoritas",
+          "text": "Compra en Amazon, eBay, Walmart y cientos de otras tiendas estadounidenses."
+        },
+        {
+          "title": "Recibimos tus paquetes",
+          "text": "Tus pedidos llegan de forma segura a nuestro almacén, listos para retirar."
+        },
+        {
+          "title": "Consolida para ahorrar",
+          "text": "Combinamos varios paquetes en una sola caja para reducir tu costo de envío."
+        },
+        {
+          "title": "Envía a todo el mundo",
+          "text": "Elige tu transportista y enviamos tu paquete consolidado a cualquier parte del mundo."
+        }
+      ]
+    },
+    "benefits": {
+      "title": "Por qué enviar con Bufano Redirect",
+      "items": [
+        {
+          "title": "Ahorra hasta 80%",
+          "text": "Consolidar paquetes en un solo envío reduce drásticamente tu costo de envío."
+        },
+        {
+          "title": "Fotos de los paquetes",
+          "text": "Fotografiamos cada paquete al llegar, así siempre sabes qué hay en tu almacén."
+        },
+        {
+          "title": "Almacenamiento extendido",
+          "text": "Guarda tus paquetes de forma segura durante semanas mientras decides cuándo consolidar."
+        },
+        {
+          "title": "Envío mundial",
+          "text": "Entregamos en más de 200 países a través de transportistas internacionales de confianza."
+        },
+        {
+          "title": "Personal shopper",
+          "text": "¿No puedes comprar directamente? Nuestro equipo puede comprar los artículos por ti."
+        },
+        {
+          "title": "Protección de valor",
+          "text": "Un seguro opcional protege tu envío contra pérdida o daño durante el transporte."
+        }
+      ]
+    },
+    "stores": {
+      "title": "Compra en tus tiendas estadounidenses favoritas"
+    },
+    "savings": {
+      "title": "Mira cuánto puedes ahorrar",
+      "separate": {
+        "title": "Enviando por separado",
+        "desc": "3 pedidos de 3 tiendas diferentes, cada uno enviado por su cuenta.",
+        "amount": "US$ 135"
+      },
+      "consolidated": {
+        "title": "Consolidado con Bufano Redirect",
+        "desc": "Los mismos 3 pedidos combinados en una sola caja antes del envío.",
+        "amount": "US$ 52"
+      },
+      "savingsLabel": "Ahorro total",
+      "savingsAmount": "US$ 83 (61%)",
+      "note": "Ejemplo ilustrativo. El ahorro real varía según el peso, el destino y el transportista."
+    },
+    "testimonials": {
+      "title": "Lo que dicen nuestros clientes",
+      "items": [
+        {
+          "quote": "Por fin tengo acceso a tiendas exclusivas de EE. UU. Mis paquetes llegaron consolidados y pagué mucho menos de lo que esperaba.",
+          "name": "Marina Costa",
+          "country": "Brasil"
+        },
+        {
+          "quote": "Las fotos de cada paquete me dieron tranquilidad, y el soporte respondió todas mis preguntas rápidamente.",
+          "name": "Diego Fernandez",
+          "country": "Argentina"
+        },
+        {
+          "quote": "Consolidar cuatro pedidos en un solo envío redujo mi costo de envío a la mitad.",
+          "name": "Laura Gomez",
+          "country": "México"
+        }
+      ]
+    },
+    "cta": {
+      "title": "¿Listo para empezar a comprar en EE. UU.?",
+      "subtitle": "Crea tu cuenta gratis hoy y obtén tu dirección en EE. UU. en segundos.",
+      "button": "Crear cuenta gratis"
+    }
   }
 }

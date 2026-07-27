@@ -21,5 +21,111 @@
     "contactTitle": "Contact",
     "hours": "Mon–Fri, 9am–5pm (EST)",
     "rights": "All rights reserved."
+  },
+  "home": {
+    "hero": {
+      "title": "Your US address. Shop, consolidate, ship worldwide.",
+      "subtitle": "Bufano Redirect gives you a free personal US address so you can buy from your favorite American stores and have everything shipped to your door — for less.",
+      "ctaPrimary": "Create free account",
+      "ctaSecondary": "How it works"
+    },
+    "steps": {
+      "title": "How it works",
+      "items": [
+        {
+          "title": "Get your US address",
+          "text": "Sign up free and receive a personal US shipping address in seconds."
+        },
+        {
+          "title": "Shop your favorite stores",
+          "text": "Buy from Amazon, eBay, Walmart and hundreds of other US retailers."
+        },
+        {
+          "title": "We receive your packages",
+          "text": "Your orders arrive safely at our secure warehouse, ready for pickup."
+        },
+        {
+          "title": "Consolidate to save",
+          "text": "We combine multiple packages into one box to cut your shipping costs."
+        },
+        {
+          "title": "Ship worldwide",
+          "text": "Choose your carrier and we send your consolidated package anywhere in the world."
+        }
+      ]
+    },
+    "benefits": {
+      "title": "Why ship with Bufano Redirect",
+      "items": [
+        {
+          "title": "Save up to 80%",
+          "text": "Consolidating packages into a single shipment dramatically reduces your shipping costs."
+        },
+        {
+          "title": "Package photos",
+          "text": "We photograph every package on arrival so you always know what is in your warehouse."
+        },
+        {
+          "title": "Extended storage",
+          "text": "Keep your packages safely stored for weeks while you decide when to consolidate."
+        },
+        {
+          "title": "Worldwide shipping",
+          "text": "We deliver to more than 200 countries through trusted international carriers."
+        },
+        {
+          "title": "Personal shopper",
+          "text": "Can't buy directly? Our team can purchase items on your behalf."
+        },
+        {
+          "title": "Value protection",
+          "text": "Optional insurance protects your shipment against loss or damage in transit."
+        }
+      ]
+    },
+    "stores": {
+      "title": "Shop your favorite US stores"
+    },
+    "savings": {
+      "title": "See how much you can save",
+      "separate": {
+        "title": "Shipping separately",
+        "desc": "3 orders from 3 different stores, each shipped on its own.",
+        "amount": "$135"
+      },
+      "consolidated": {
+        "title": "Consolidated with Bufano Redirect",
+        "desc": "The same 3 orders combined into a single box before shipping.",
+        "amount": "$52"
+      },
+      "savingsLabel": "Total savings",
+      "savingsAmount": "$83 (61%)",
+      "note": "Illustrative example. Actual savings vary by weight, destination and carrier."
+    },
+    "testimonials": {
+      "title": "What our customers say",
+      "items": [
+        {
+          "quote": "I finally have access to US-only stores. My packages arrived consolidated and I paid way less than I expected.",
+          "name": "Marina Costa",
+          "country": "Brazil"
+        },
+        {
+          "quote": "The photos of every package gave me peace of mind, and support answered every question fast.",
+          "name": "Diego Fernandez",
+          "country": "Argentina"
+        },
+        {
+          "quote": "Consolidating four orders into one shipment cut my shipping cost by more than half.",
+          "name": "Laura Gomez",
+          "country": "Mexico"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to start shopping in the US?",
+      "subtitle": "Create your free account today and get your US address in seconds.",
+      "button": "Create free account"
+    }
   }
 }
