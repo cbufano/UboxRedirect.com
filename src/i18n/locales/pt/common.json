@@ -238,5 +238,41 @@
       "subtitle": "Crie sua conta grátis e receba seu endereço nos EUA em segundos.",
       "button": "Criar conta grátis"
     }
+  },
+  "calculator": {
+    "title": "Calculadora de Frete",
+    "subtitle": "Estime o custo e o prazo de entrega para consolidar e enviar seus pacotes para qualquer lugar do mundo.",
+    "form": {
+      "countryLabel": "País de destino",
+      "countryPlaceholder": "Selecione um país",
+      "countries": {
+        "BR": "Brasil",
+        "US": "Estados Unidos",
+        "PT": "Portugal",
+        "ES": "Espanha",
+        "MX": "México",
+        "AR": "Argentina",
+        "GB": "Reino Unido",
+        "OTHER": "Outro"
+      },
+      "weightLabel": "Peso (kg)",
+      "lengthLabel": "Comprimento (cm)",
+      "widthLabel": "Largura (cm)",
+      "heightLabel": "Altura (cm)",
+      "submit": "Calcular",
+      "errors": {
+        "country": "Selecione um país de destino",
+        "positive": "Informe um valor maior que zero"
+      }
+    },
+    "result": {
+      "title": "Sua estimativa",
+      "chargeable": "Peso taxável: {{weight}} kg",
+      "carrier": "Transportadora",
+      "eta": "Prazo (dias)",
+      "cost": "Custo (USD)",
+      "note": "Isto é apenas uma estimativa. O custo final do frete é calculado no checkout com base no peso e nas dimensões reais do seu pacote consolidado.",
+      "error": "Não foi possível calcular uma estimativa. Verifique os valores e tente novamente."
+    }
   }
 }

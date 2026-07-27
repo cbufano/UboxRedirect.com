@@ -238,5 +238,41 @@
       "subtitle": "Crea tu cuenta gratis y obtén tu dirección en EE. UU. en segundos.",
       "button": "Crear cuenta gratis"
     }
+  },
+  "calculator": {
+    "title": "Calculadora de Envío",
+    "subtitle": "Estima el costo y el tiempo de entrega para consolidar y enviar tus paquetes a cualquier parte del mundo.",
+    "form": {
+      "countryLabel": "País de destino",
+      "countryPlaceholder": "Selecciona un país",
+      "countries": {
+        "BR": "Brasil",
+        "US": "Estados Unidos",
+        "PT": "Portugal",
+        "ES": "España",
+        "MX": "México",
+        "AR": "Argentina",
+        "GB": "Reino Unido",
+        "OTHER": "Otro"
+      },
+      "weightLabel": "Peso (kg)",
+      "lengthLabel": "Largo (cm)",
+      "widthLabel": "Ancho (cm)",
+      "heightLabel": "Alto (cm)",
+      "submit": "Calcular",
+      "errors": {
+        "country": "Selecciona un país de destino",
+        "positive": "Ingresa un valor mayor que cero"
+      }
+    },
+    "result": {
+      "title": "Tu estimación",
+      "chargeable": "Peso facturable: {{weight}} kg",
+      "carrier": "Transportista",
+      "eta": "Plazo (días)",
+      "cost": "Costo (USD)",
+      "note": "Esto es solo una estimación. El costo final del envío se calcula al pagar según el peso y las dimensiones reales de tu paquete consolidado.",
+      "error": "No pudimos calcular una estimación. Verifica los valores e inténtalo de nuevo."
+    }
   }
 }

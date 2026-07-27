@@ -238,5 +238,41 @@
       "subtitle": "Create your free account and get your US address in seconds.",
       "button": "Create free account"
     }
+  },
+  "calculator": {
+    "title": "Shipping Calculator",
+    "subtitle": "Estimate the cost and delivery time to consolidate and ship your packages anywhere in the world.",
+    "form": {
+      "countryLabel": "Destination country",
+      "countryPlaceholder": "Select a country",
+      "countries": {
+        "BR": "Brazil",
+        "US": "United States",
+        "PT": "Portugal",
+        "ES": "Spain",
+        "MX": "Mexico",
+        "AR": "Argentina",
+        "GB": "United Kingdom",
+        "OTHER": "Other"
+      },
+      "weightLabel": "Weight (kg)",
+      "lengthLabel": "Length (cm)",
+      "widthLabel": "Width (cm)",
+      "heightLabel": "Height (cm)",
+      "submit": "Calculate",
+      "errors": {
+        "country": "Please select a destination country",
+        "positive": "Enter a value greater than zero"
+      }
+    },
+    "result": {
+      "title": "Your estimate",
+      "chargeable": "Chargeable weight: {{weight}} kg",
+      "carrier": "Carrier",
+      "eta": "ETA (days)",
+      "cost": "Cost (USD)",
+      "note": "This is only an estimate. Final shipping cost is calculated at checkout based on the actual weight and dimensions of your consolidated package.",
+      "error": "We couldn't calculate an estimate. Please check the values and try again."
+    }
   }
 }
