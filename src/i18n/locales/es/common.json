@@ -160,5 +160,48 @@
     },
     "faqTeaser": "¿Tienes más preguntas sobre aduanas, tarifas o tiempos de entrega? Nuestro FAQ cubre los detalles.",
     "faqButton": "Ver FAQ"
+  },
+  "pricing": {
+    "title": "Precios y Planes",
+    "subtitle": "Precios simples y transparentes. Empieza gratis y actualiza cuando quieras más almacenamiento y ahorro.",
+    "free": {
+      "name": "Gratis",
+      "priceNote": "Sin mensualidad",
+      "features": [
+        "Dirección personal gratis en EE. UU.",
+        "7 días de almacenamiento gratis",
+        "Consolidación básica de paquetes",
+        "Notificaciones por correo al llegar",
+        "Acceso a todos los transportistas soportados"
+      ],
+      "cta": "Crear cuenta gratis"
+    },
+    "premium": {
+      "name": "Premium",
+      "badge": "Recomendado",
+      "price": "US$ 9/mes",
+      "priceNote": "Precio ilustrativo, facturado mensualmente",
+      "features": [
+        "45 a 90 días de almacenamiento gratis",
+        "Fotos gratis de cada paquete",
+        "Recepción y manejo prioritarios",
+        "Tarifas con descuento en consolidación y envío",
+        "Protección de valor opcional incluida"
+      ],
+      "cta": "Empezar Premium"
+    },
+    "fees": {
+      "title": "Tarifas de servicio",
+      "serviceLabel": "Servicio",
+      "feeLabel": "Tarifa",
+      "note": "Estimaciones — los cargos finales se calculan al pagar.",
+      "rows": [
+        { "service": "Consolidación (por paquete)", "fee": "US$ 2.00" },
+        { "service": "Fotos adicionales", "fee": "US$ 0.50 cada una" },
+        { "service": "Reembalaje", "fee": "US$ 3.00" },
+        { "service": "Almacenamiento (por día tras el período gratis)", "fee": "US$ 0.15" },
+        { "service": "Protección de valor", "fee": "2% del valor declarado" }
+      ]
+    }
   }
 }

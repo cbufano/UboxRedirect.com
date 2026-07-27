@@ -160,5 +160,48 @@
     },
     "faqTeaser": "Have more questions about customs, fees or delivery times? Our FAQ covers the details.",
     "faqButton": "See FAQ"
+  },
+  "pricing": {
+    "title": "Pricing & Plans",
+    "subtitle": "Simple, transparent pricing. Start at no cost, upgrade any time you want more storage and savings.",
+    "free": {
+      "name": "Free",
+      "priceNote": "No monthly fee",
+      "features": [
+        "Personal US shipping address",
+        "7-day package storage included",
+        "Basic package consolidation",
+        "Email notifications on arrival",
+        "Access to all supported carriers"
+      ],
+      "cta": "Get started"
+    },
+    "premium": {
+      "name": "Premium",
+      "badge": "Recommended",
+      "price": "$9/mo",
+      "priceNote": "Illustrative price, billed monthly",
+      "features": [
+        "45 to 90 days of package storage",
+        "Photos of every package at no extra cost",
+        "Priority receiving and handling",
+        "Discounted consolidation and shipping rates",
+        "Optional value protection included"
+      ],
+      "cta": "Upgrade now"
+    },
+    "fees": {
+      "title": "Service fees",
+      "serviceLabel": "Service",
+      "feeLabel": "Fee",
+      "note": "Estimates — final charges calculated at checkout.",
+      "rows": [
+        { "service": "Consolidation (per package)", "fee": "$2.00" },
+        { "service": "Extra photos", "fee": "$0.50 each" },
+        { "service": "Repackaging", "fee": "$3.00" },
+        { "service": "Storage (per day beyond included period)", "fee": "$0.15" },
+        { "service": "Value protection", "fee": "2% of declared value" }
+      ]
+    }
   }
 }
