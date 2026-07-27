@@ -644,6 +644,49 @@
         "cost": "Costo total: ${{cost}}"
       },
       "empty": "No hay paquetes para enviar. Agrega paquetes a tu bandeja de entrada primero."
+    },
+    "shipments": {
+      "title": "Envíos",
+      "subtitle": "Sigue cada envío que hicimos en tu nombre, desde el procesamiento hasta la entrega.",
+      "empty": "Todavía no hay envíos. En cuanto realices un pedido, aparecerá aquí.",
+      "status": {
+        "processing": "En proceso",
+        "in_transit": "En tránsito",
+        "delivered": "Entregado"
+      },
+      "table": {
+        "date": "Fecha",
+        "carrier": "Transportista",
+        "tracking": "Código de rastreo",
+        "items": "Artículos",
+        "cost": "Costo"
+      },
+      "copyTracking": "código de rastreo {{code}}",
+      "showDetails": "Mostrar detalles",
+      "hideDetails": "Ocultar detalles",
+      "detailsLine": "{{count}} artículo(s) enviados vía {{carrier}}"
+    },
+    "shopper": {
+      "title": "Personal Shopper",
+      "subtitle": "¿Encontraste algo que solo se vende en EE. UU.? Envíanos el enlace del producto — lo compramos por ti y lo recibimos en tu dirección en EE. UU., listo para enviar.",
+      "form": {
+        "productUrl": "URL del producto",
+        "productUrlPlaceholder": "https://tienda.com/producto",
+        "quantity": "Cantidad",
+        "maxBudget": "Presupuesto máximo (USD)",
+        "notes": "Notas",
+        "notesPlaceholder": "Talla, color o instrucciones especiales",
+        "submit": "Enviar solicitud",
+        "errors": {
+          "urlInvalid": "Ingresa una URL de producto válida",
+          "quantityPositive": "Ingresa una cantidad de al menos 1",
+          "budgetPositive": "Ingresa un presupuesto mayor que cero"
+        }
+      },
+      "confirmation": "Solicitud recibida — nuestro equipo la revisará y te responderá pronto.",
+      "requestsTitle": "Tus solicitudes",
+      "requestsEmpty": "Todavía no has enviado solicitudes.",
+      "requestItem": "{{quantity}}x — {{url}}"
     }
   },
   "privacy": {

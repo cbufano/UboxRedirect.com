@@ -20,6 +20,8 @@ import Overview from './pages/dashboard/Overview'
 import Address from './pages/dashboard/Address'
 import Inbox from './pages/dashboard/Inbox'
 import Ship from './pages/dashboard/Ship'
+import Shipments from './pages/dashboard/Shipments'
+import Shopper from './pages/dashboard/Shopper'
 
 export function AppRoutes() {
   return (
@@ -46,6 +48,8 @@ export function AppRoutes() {
         <Route path="address" element={<Address />} />
         <Route path="inbox" element={<Inbox />} />
         <Route path="ship" element={<Ship />} />
+        <Route path="shipments" element={<Shipments />} />
+        <Route path="shopper" element={<Shopper />} />
         {/* /app/* child routes added as their tasks complete */}
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

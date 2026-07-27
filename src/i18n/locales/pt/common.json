@@ -644,6 +644,49 @@
         "cost": "Custo total: ${{cost}}"
       },
       "empty": "Nenhum pacote para enviar. Adicione pacotes à sua caixa de entrada primeiro."
+    },
+    "shipments": {
+      "title": "Envios",
+      "subtitle": "Acompanhe cada envio feito em seu nome, do processamento até a entrega.",
+      "empty": "Ainda não há envios. Assim que você fizer um pedido, ele aparecerá aqui.",
+      "status": {
+        "processing": "Em processamento",
+        "in_transit": "Em trânsito",
+        "delivered": "Entregue"
+      },
+      "table": {
+        "date": "Data",
+        "carrier": "Transportadora",
+        "tracking": "Código de rastreio",
+        "items": "Itens",
+        "cost": "Custo"
+      },
+      "copyTracking": "código de rastreio {{code}}",
+      "showDetails": "Mostrar detalhes",
+      "hideDetails": "Ocultar detalhes",
+      "detailsLine": "{{count}} item(ns) enviados via {{carrier}}"
+    },
+    "shopper": {
+      "title": "Personal Shopper",
+      "subtitle": "Encontrou algo vendido só nos EUA? Envie o link do produto — nós compramos por você e recebemos no seu endereço nos EUA, pronto para enviar.",
+      "form": {
+        "productUrl": "URL do produto",
+        "productUrlPlaceholder": "https://loja.com/produto",
+        "quantity": "Quantidade",
+        "maxBudget": "Orçamento máximo (USD)",
+        "notes": "Observações",
+        "notesPlaceholder": "Tamanho, cor ou instruções especiais",
+        "submit": "Enviar solicitação",
+        "errors": {
+          "urlInvalid": "Informe uma URL de produto válida",
+          "quantityPositive": "Informe uma quantidade de pelo menos 1",
+          "budgetPositive": "Informe um orçamento maior que zero"
+        }
+      },
+      "confirmation": "Solicitação recebida — nossa equipe vai analisá-la e retornar em breve.",
+      "requestsTitle": "Suas solicitações",
+      "requestsEmpty": "Nenhuma solicitação enviada ainda.",
+      "requestItem": "{{quantity}}x — {{url}}"
     }
   },
   "privacy": {

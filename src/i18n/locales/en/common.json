@@ -644,6 +644,49 @@
         "cost": "Total cost: ${{cost}}"
       },
       "empty": "No packages to ship. Add packages to your inbox first."
+    },
+    "shipments": {
+      "title": "Shipments",
+      "subtitle": "Track every shipment we've sent on your behalf, from processing to delivery.",
+      "empty": "No shipments yet. Once you place an order, it will show up here.",
+      "status": {
+        "processing": "Processing",
+        "in_transit": "In transit",
+        "delivered": "Delivered"
+      },
+      "table": {
+        "date": "Date",
+        "carrier": "Carrier",
+        "tracking": "Tracking code",
+        "items": "Items",
+        "cost": "Cost"
+      },
+      "copyTracking": "tracking code {{code}}",
+      "showDetails": "Show details",
+      "hideDetails": "Hide details",
+      "detailsLine": "{{count}} item(s) shipped via {{carrier}}"
+    },
+    "shopper": {
+      "title": "Personal Shopper",
+      "subtitle": "Found something only sold in the US? Send us the product link — we'll buy it for you and receive it at your US address, ready to ship.",
+      "form": {
+        "productUrl": "Product URL",
+        "productUrlPlaceholder": "https://store.com/product",
+        "quantity": "Quantity",
+        "maxBudget": "Max budget (USD)",
+        "notes": "Notes",
+        "notesPlaceholder": "Size, color, or any special instructions",
+        "submit": "Submit request",
+        "errors": {
+          "urlInvalid": "Enter a valid product URL",
+          "quantityPositive": "Enter a quantity of at least 1",
+          "budgetPositive": "Enter a budget greater than zero"
+        }
+      },
+      "confirmation": "Request received — our team will review it and get back to you.",
+      "requestsTitle": "Your requests",
+      "requestsEmpty": "No requests submitted yet.",
+      "requestItem": "{{quantity}}x — {{url}}"
     }
   },
   "privacy": {
