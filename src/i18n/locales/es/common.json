@@ -477,6 +477,22 @@
       "forgot": "¿Olvidaste tu contraseña?",
       "noAccount": "¿No tienes una cuenta?",
       "signupLink": "Regístrate"
+    },
+    "signup": {
+      "title": "Crea tu cuenta",
+      "subtitle": "Regístrate para empezar a gestionar tus paquetes y envíos.",
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "country": "País",
+      "password": "Contraseña",
+      "passwordHint": "Al menos 8 caracteres",
+      "confirmPassword": "Confirmar contraseña",
+      "terms": "Acepto los <termsLink>Términos de Uso</termsLink>",
+      "submit": "Crear cuenta",
+      "error": "Ya existe una cuenta con este correo electrónico.",
+      "passwordMismatch": "Las contraseñas no coinciden.",
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "loginLink": "Iniciar sesión"
     }
   },
   "privacy": {

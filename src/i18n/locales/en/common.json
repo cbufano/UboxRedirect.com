@@ -477,6 +477,22 @@
       "forgot": "Forgot password?",
       "noAccount": "Don't have an account?",
       "signupLink": "Sign up"
+    },
+    "signup": {
+      "title": "Create your account",
+      "subtitle": "Sign up to start managing your packages and shipments.",
+      "name": "Name",
+      "email": "Email",
+      "country": "Country",
+      "password": "Password",
+      "passwordHint": "At least 8 characters",
+      "confirmPassword": "Confirm password",
+      "terms": "I accept the <termsLink>Terms of Use</termsLink>",
+      "submit": "Create account",
+      "error": "An account with this email already exists.",
+      "passwordMismatch": "Passwords do not match.",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Sign in"
     }
   },
   "privacy": {

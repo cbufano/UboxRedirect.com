@@ -477,6 +477,22 @@
       "forgot": "Esqueceu sua senha?",
       "noAccount": "Não tem uma conta?",
       "signupLink": "Criar conta"
+    },
+    "signup": {
+      "title": "Crie sua conta",
+      "subtitle": "Cadastre-se para começar a gerenciar seus pacotes e envios.",
+      "name": "Nome",
+      "email": "E-mail",
+      "country": "País",
+      "password": "Senha",
+      "passwordHint": "Pelo menos 8 caracteres",
+      "confirmPassword": "Confirmar senha",
+      "terms": "Eu aceito os <termsLink>Termos de Uso</termsLink>",
+      "submit": "Criar conta",
+      "error": "Já existe uma conta com este e-mail.",
+      "passwordMismatch": "As senhas não coincidem.",
+      "haveAccount": "Já tem uma conta?",
+      "loginLink": "Entrar"
     }
   },
   "privacy": {
