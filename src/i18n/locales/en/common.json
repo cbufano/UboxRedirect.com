@@ -392,5 +392,117 @@
       "addressLabel": "Address",
       "address": "1234 Warehouse Ave, Suite 100, Miami, FL 33101, USA"
     }
+  },
+  "about": {
+    "title": "About Bufano Redirect",
+    "subtitle": "We help shoppers around the world access American stores by giving them a real US address and a simpler, cheaper way to ship their purchases home.",
+    "mission": [
+      "Bufano Redirect was built for the millions of shoppers who find a product they love on a US store, only to discover it doesn't ship to their country. We solve that by giving every customer a free, personal US shipping address in minutes.",
+      "Once your packages arrive at our warehouse, we photograph them, hold them safely, and consolidate multiple orders into a single box before shipping worldwide. That means you shop as many US stores as you like and pay for one shipment instead of many.",
+      "Our goal is simple: make shopping in the US feel local, no matter where you live, while keeping the process transparent, affordable, and easy to trust."
+    ],
+    "values": [
+      {
+        "title": "Transparency",
+        "text": "Clear pricing and package photos at every step, so you always know what you're paying for and what's in your warehouse."
+      },
+      {
+        "title": "Reliability",
+        "text": "Your packages are received, scanned, and stored securely from the moment they arrive until the day they ship."
+      },
+      {
+        "title": "Savings",
+        "text": "Consolidation and repackaging are built into our process, so you never pay more shipping than you need to."
+      },
+      {
+        "title": "Global reach",
+        "text": "We deliver to hundreds of countries through trusted international carriers, wherever you call home."
+      }
+    ],
+    "stats": [
+      { "value": "220+", "label": "Countries served" },
+      { "value": "80%", "label": "Average shipping savings" },
+      { "value": "10k+", "label": "Packages shipped" },
+      { "value": "9am–5pm", "label": "Support hours (EST)" }
+    ],
+    "cta": "Create your free account"
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "updated": "Last updated: July 2026",
+    "draftNotice": "Draft — placeholder legal text, replace with reviewed copy before launch.",
+    "sections": [
+      {
+        "heading": "1. Acceptance of terms",
+        "body": "By creating an account or using Bufano Redirect's website and services, you agree to be bound by these Terms of Use. If you do not agree with any part of these terms, please do not use our services."
+      },
+      {
+        "heading": "2. Description of service",
+        "body": "Bufano Redirect provides customers with a personal US shipping address, package receiving, consolidation, repackaging, and international forwarding services. Features and availability may change over time as we improve our platform."
+      },
+      {
+        "heading": "3. Account registration",
+        "body": "To use our services you must create an account with accurate, current information. You are responsible for maintaining the confidentiality of your login credentials and for all activity that occurs under your account."
+      },
+      {
+        "heading": "4. Prohibited items",
+        "body": "Certain items, including flammable liquids, weapons, and specific batteries, cannot be accepted or shipped due to carrier and customs regulations. We reserve the right to refuse, hold, or dispose of any package that violates this policy."
+      },
+      {
+        "heading": "5. Fees and payment",
+        "body": "Consolidation, storage beyond the included period, repackaging, and shipping are billed according to our published fee schedule. Prices are estimates until checkout, when final charges are calculated based on actual weight and dimensions."
+      },
+      {
+        "heading": "6. Shipping and liability",
+        "body": "We ship packages using trusted third-party carriers and are not responsible for delays, customs seizures, or duties imposed by destination countries. Optional value protection is available to cover loss or damage during transit."
+      },
+      {
+        "heading": "7. Limitation of liability",
+        "body": "To the fullest extent permitted by law, Bufano Redirect's liability for any claim related to our services is limited to the fees you paid for the specific shipment in question. We are not liable for indirect or consequential damages."
+      },
+      {
+        "heading": "8. Changes to terms",
+        "body": "We may update these Terms of Use from time to time. Continued use of our services after changes are posted constitutes acceptance of the revised terms. We recommend checking this page periodically."
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "updated": "Last updated: July 2026",
+    "draftNotice": "Draft — placeholder legal text, replace with reviewed copy before launch.",
+    "sections": [
+      {
+        "heading": "1. Information we collect",
+        "body": "We collect information you provide when creating an account, such as your name, email address, and shipping details, as well as information generated when you use our services, like package and shipment records."
+      },
+      {
+        "heading": "2. How we use information",
+        "body": "We use your information to provide and improve our services, process shipments, communicate with you about your packages, and respond to support requests. We do not use your data for purposes unrelated to these goals without your consent."
+      },
+      {
+        "heading": "3. Cookies",
+        "body": "Our website uses cookies and similar technologies to keep you signed in, remember your preferences, and understand how our site is used. You can control cookies through your browser settings."
+      },
+      {
+        "heading": "4. Data sharing",
+        "body": "We share information only with service providers who help us operate, such as shipping carriers and payment processors, and only to the extent necessary to deliver our services. We never sell your personal information."
+      },
+      {
+        "heading": "5. Data security",
+        "body": "We use industry-standard encryption and access controls to protect your data. While no system is completely secure, we continuously review our practices to reduce risk."
+      },
+      {
+        "heading": "6. Your rights",
+        "body": "Depending on where you live, you may have the right to access, correct, or delete your personal information. Contact our support team to exercise these rights, and we will respond within a reasonable time."
+      },
+      {
+        "heading": "7. International transfers",
+        "body": "Because we operate a worldwide shipping service, your information may be transferred to and processed in countries other than your own, including the United States, under appropriate safeguards."
+      },
+      {
+        "heading": "8. Contact us",
+        "body": "If you have questions about this Privacy Policy or how we handle your information, reach out to our support team through the contact page and we'll be happy to help."
+      }
+    ]
   }
 }

@@ -392,5 +392,117 @@
       "addressLabel": "Dirección",
       "address": "1234 Warehouse Ave, Suite 100, Miami, FL 33101, EE. UU."
     }
+  },
+  "about": {
+    "title": "Acerca de Bufano Redirect",
+    "subtitle": "Ayudamos a compradores de todo el mundo a acceder a tiendas estadounidenses, dándoles una dirección real en EE. UU. y una forma más simple y económica de enviar sus compras a casa.",
+    "mission": [
+      "Bufano Redirect nació para los millones de compradores que encuentran un producto que aman en una tienda de EE. UU., solo para descubrir que no envía a su país. Resolvemos esto dando a cada cliente una dirección personal gratis en EE. UU. en minutos.",
+      "En cuanto tus paquetes llegan a nuestro almacén, los fotografiamos, los guardamos con seguridad y consolidamos varios pedidos en una sola caja antes de enviarlos a todo el mundo. Eso significa que puedes comprar en tantas tiendas de EE. UU. como quieras y pagar por un solo envío en lugar de varios.",
+      "Nuestro objetivo es simple: hacer que comprar en EE. UU. se sienta local, sin importar dónde vivas, manteniendo el proceso transparente, accesible y confiable."
+    ],
+    "values": [
+      {
+        "title": "Transparencia",
+        "text": "Precios claros y fotos de los paquetes en cada paso, para que siempre sepas por qué estás pagando y qué hay en tu almacén."
+      },
+      {
+        "title": "Confiabilidad",
+        "text": "Tus paquetes se reciben, registran y almacenan con seguridad desde que llegan hasta el día del envío."
+      },
+      {
+        "title": "Ahorro",
+        "text": "La consolidación y el reempaque forman parte de nuestro proceso, para que nunca pagues más envío del que necesitas."
+      },
+      {
+        "title": "Alcance global",
+        "text": "Entregamos en cientos de países a través de transportistas internacionales de confianza, estés donde estés."
+      }
+    ],
+    "stats": [
+      { "value": "220+", "label": "Países atendidos" },
+      { "value": "80%", "label": "Ahorro promedio en envío" },
+      { "value": "10 mil+", "label": "Paquetes enviados" },
+      { "value": "9:00–17:00", "label": "Horario de soporte (EST)" }
+    ],
+    "cta": "Crear mi cuenta gratis"
+  },
+  "terms": {
+    "title": "Términos de Uso",
+    "updated": "Última actualización: julio de 2026",
+    "draftNotice": "Borrador — texto legal provisional, reemplazar por versión revisada antes del lanzamiento.",
+    "sections": [
+      {
+        "heading": "1. Aceptación de los términos",
+        "body": "Al crear una cuenta o usar el sitio web y los servicios de Bufano Redirect, aceptas cumplir con estos Términos de Uso. Si no estás de acuerdo con alguna parte de estos términos, por favor no uses nuestros servicios."
+      },
+      {
+        "heading": "2. Descripción del servicio",
+        "body": "Bufano Redirect ofrece a los clientes una dirección personal de envío en EE. UU., recepción de paquetes, consolidación, reempaque y servicios de reenvío internacional. Las funciones y disponibilidad pueden cambiar con el tiempo a medida que mejoramos nuestra plataforma."
+      },
+      {
+        "heading": "3. Registro de cuenta",
+        "body": "Para usar nuestros servicios debes crear una cuenta con información precisa y actualizada. Eres responsable de mantener la confidencialidad de tus credenciales de acceso y de toda actividad realizada en tu cuenta."
+      },
+      {
+        "heading": "4. Artículos prohibidos",
+        "body": "Ciertos artículos, incluyendo líquidos inflamables, armas y baterías específicas, no pueden aceptarse ni enviarse debido a las regulaciones de los transportistas y la aduana. Nos reservamos el derecho de rechazar, retener o desechar cualquier paquete que infrinja esta política."
+      },
+      {
+        "heading": "5. Tarifas y pago",
+        "body": "La consolidación, el almacenamiento más allá del período incluido, el reempaque y el envío se cobran según nuestra tabla de tarifas publicada. Los precios son estimaciones hasta el pago, cuando los cargos finales se calculan según el peso y las dimensiones reales."
+      },
+      {
+        "heading": "6. Envío y responsabilidad",
+        "body": "Enviamos paquetes utilizando transportistas externos de confianza y no somos responsables de retrasos, incautaciones aduaneras o aranceles impuestos por los países de destino. La protección de valor opcional está disponible para cubrir pérdidas o daños durante el transporte."
+      },
+      {
+        "heading": "7. Limitación de responsabilidad",
+        "body": "En la máxima medida permitida por la ley, la responsabilidad de Bufano Redirect por cualquier reclamo relacionado con nuestros servicios se limita a las tarifas pagadas por el envío específico en cuestión. No somos responsables de daños indirectos o consecuentes."
+      },
+      {
+        "heading": "8. Cambios en los términos",
+        "body": "Podemos actualizar estos Términos de Uso periódicamente. El uso continuado de nuestros servicios después de publicados los cambios constituye la aceptación de los términos revisados. Recomendamos revisar esta página periódicamente."
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "updated": "Última actualización: julio de 2026",
+    "draftNotice": "Borrador — texto legal provisional, reemplazar por versión revisada antes del lanzamiento.",
+    "sections": [
+      {
+        "heading": "1. Información que recopilamos",
+        "body": "Recopilamos la información que proporcionas al crear una cuenta, como tu nombre, correo electrónico y datos de envío, además de la información generada cuando usas nuestros servicios, como registros de paquetes y envíos."
+      },
+      {
+        "heading": "2. Cómo usamos la información",
+        "body": "Usamos tu información para brindar y mejorar nuestros servicios, procesar envíos, comunicarnos contigo sobre tus paquetes y responder a solicitudes de soporte. No usamos tus datos para fines no relacionados con estos objetivos sin tu consentimiento."
+      },
+      {
+        "heading": "3. Cookies",
+        "body": "Nuestro sitio web usa cookies y tecnologías similares para mantener tu sesión iniciada, recordar tus preferencias y entender cómo se usa el sitio. Puedes controlar las cookies desde la configuración de tu navegador."
+      },
+      {
+        "heading": "4. Compartición de datos",
+        "body": "Compartimos información solo con proveedores de servicios que nos ayudan a operar, como transportistas y procesadores de pago, y solo en la medida necesaria para brindar nuestros servicios. Nunca vendemos tu información personal."
+      },
+      {
+        "heading": "5. Seguridad de los datos",
+        "body": "Usamos cifrado y controles de acceso estándar de la industria para proteger tus datos. Aunque ningún sistema es completamente seguro, revisamos continuamente nuestras prácticas para reducir riesgos."
+      },
+      {
+        "heading": "6. Tus derechos",
+        "body": "Según dónde vivas, es posible que tengas derecho a acceder, corregir o eliminar tu información personal. Contacta a nuestro equipo de soporte para ejercer estos derechos, y responderemos en un plazo razonable."
+      },
+      {
+        "heading": "7. Transferencias internacionales",
+        "body": "Como operamos un servicio de envío mundial, tu información puede transferirse y procesarse en países distintos al tuyo, incluido Estados Unidos, bajo las salvaguardas adecuadas."
+      },
+      {
+        "heading": "8. Contáctanos",
+        "body": "Si tienes preguntas sobre esta Política de Privacidad o sobre cómo manejamos tu información, comunícate con nuestro equipo de soporte a través de la página de contacto y con gusto te ayudaremos."
+      }
+    ]
   }
 }

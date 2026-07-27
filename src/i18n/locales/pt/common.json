@@ -392,5 +392,117 @@
       "addressLabel": "Endereço",
       "address": "1234 Warehouse Ave, Suite 100, Miami, FL 33101, EUA"
     }
+  },
+  "about": {
+    "title": "Sobre a Bufano Redirect",
+    "subtitle": "Ajudamos compradores ao redor do mundo a acessar lojas americanas, dando a eles um endereço real nos EUA e uma forma mais simples e barata de enviar suas compras para casa.",
+    "mission": [
+      "A Bufano Redirect foi criada para os milhões de compradores que encontram um produto que amam em uma loja dos EUA, só para descobrir que ela não envia para o seu país. Resolvemos isso dando a cada cliente um endereço pessoal grátis nos EUA em minutos.",
+      "Assim que seus pacotes chegam ao nosso depósito, nós os fotografamos, guardamos com segurança e consolidamos vários pedidos em uma única caixa antes de enviar para o mundo todo. Isso significa que você pode comprar em quantas lojas dos EUA quiser e pagar por um único envio em vez de vários.",
+      "Nosso objetivo é simples: fazer comprar nos EUA parecer local, não importa onde você mora, mantendo o processo transparente, acessível e confiável."
+    ],
+    "values": [
+      {
+        "title": "Transparência",
+        "text": "Preços claros e fotos dos pacotes em cada etapa, para você sempre saber pelo que está pagando e o que está no seu depósito."
+      },
+      {
+        "title": "Confiabilidade",
+        "text": "Seus pacotes são recebidos, registrados e armazenados com segurança desde a chegada até o dia do envio."
+      },
+      {
+        "title": "Economia",
+        "text": "Consolidação e reembalagem fazem parte do nosso processo, para você nunca pagar mais frete do que precisa."
+      },
+      {
+        "title": "Alcance global",
+        "text": "Entregamos em centenas de países através de transportadoras internacionais confiáveis, onde quer que você esteja."
+      }
+    ],
+    "stats": [
+      { "value": "220+", "label": "Países atendidos" },
+      { "value": "80%", "label": "Economia média no frete" },
+      { "value": "10 mil+", "label": "Pacotes enviados" },
+      { "value": "9h–17h", "label": "Horário de suporte (EST)" }
+    ],
+    "cta": "Criar minha conta grátis"
+  },
+  "terms": {
+    "title": "Termos de Uso",
+    "updated": "Última atualização: julho de 2026",
+    "draftNotice": "Rascunho — texto legal provisório, substituir por versão revisada antes do lançamento.",
+    "sections": [
+      {
+        "heading": "1. Aceitação dos termos",
+        "body": "Ao criar uma conta ou usar o site e os serviços da Bufano Redirect, você concorda em cumprir estes Termos de Uso. Se você não concordar com qualquer parte destes termos, não utilize nossos serviços."
+      },
+      {
+        "heading": "2. Descrição do serviço",
+        "body": "A Bufano Redirect fornece aos clientes um endereço pessoal de entrega nos EUA, recebimento de pacotes, consolidação, reembalagem e serviços de redirecionamento internacional. Recursos e disponibilidade podem mudar com o tempo à medida que melhoramos nossa plataforma."
+      },
+      {
+        "heading": "3. Cadastro de conta",
+        "body": "Para usar nossos serviços, você deve criar uma conta com informações precisas e atualizadas. Você é responsável por manter a confidencialidade das suas credenciais de acesso e por toda atividade realizada na sua conta."
+      },
+      {
+        "heading": "4. Itens proibidos",
+        "body": "Certos itens, incluindo líquidos inflamáveis, armas e baterias específicas, não podem ser aceitos ou enviados devido às regras das transportadoras e da alfândega. Reservamo-nos o direito de recusar, reter ou descartar qualquer pacote que viole esta política."
+      },
+      {
+        "heading": "5. Taxas e pagamento",
+        "body": "Consolidação, armazenamento além do período incluído, reembalagem e frete são cobrados de acordo com nossa tabela de taxas publicada. Os preços são estimativas até o checkout, quando os valores finais são calculados com base no peso e nas dimensões reais."
+      },
+      {
+        "heading": "6. Envio e responsabilidade",
+        "body": "Enviamos pacotes usando transportadoras terceirizadas confiáveis e não somos responsáveis por atrasos, apreensões alfandegárias ou taxas impostas pelos países de destino. Proteção de valor opcional está disponível para cobrir perda ou dano durante o transporte."
+      },
+      {
+        "heading": "7. Limitação de responsabilidade",
+        "body": "Na máxima extensão permitida por lei, a responsabilidade da Bufano Redirect por qualquer reclamação relacionada aos nossos serviços é limitada às taxas pagas pelo envio específico em questão. Não somos responsáveis por danos indiretos ou consequentes."
+      },
+      {
+        "heading": "8. Alterações nos termos",
+        "body": "Podemos atualizar estes Termos de Uso periodicamente. O uso continuado dos nossos serviços após a publicação de alterações constitui aceitação dos termos revisados. Recomendamos verificar esta página periodicamente."
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Política de Privacidade",
+    "updated": "Última atualização: julho de 2026",
+    "draftNotice": "Rascunho — texto legal provisório, substituir por versão revisada antes do lançamento.",
+    "sections": [
+      {
+        "heading": "1. Informações que coletamos",
+        "body": "Coletamos informações que você fornece ao criar uma conta, como nome, e-mail e dados de envio, além de informações geradas quando você usa nossos serviços, como registros de pacotes e envios."
+      },
+      {
+        "heading": "2. Como usamos as informações",
+        "body": "Usamos suas informações para fornecer e melhorar nossos serviços, processar envios, comunicar sobre seus pacotes e responder a solicitações de suporte. Não usamos seus dados para fins não relacionados a esses objetivos sem o seu consentimento."
+      },
+      {
+        "heading": "3. Cookies",
+        "body": "Nosso site usa cookies e tecnologias semelhantes para manter você conectado, lembrar suas preferências e entender como o site é utilizado. Você pode controlar os cookies nas configurações do seu navegador."
+      },
+      {
+        "heading": "4. Compartilhamento de dados",
+        "body": "Compartilhamos informações apenas com prestadores de serviço que nos ajudam a operar, como transportadoras e processadores de pagamento, e somente na medida necessária para entregar nossos serviços. Nunca vendemos suas informações pessoais."
+      },
+      {
+        "heading": "5. Segurança dos dados",
+        "body": "Usamos criptografia e controles de acesso em padrão de mercado para proteger seus dados. Embora nenhum sistema seja completamente seguro, revisamos continuamente nossas práticas para reduzir riscos."
+      },
+      {
+        "heading": "6. Seus direitos",
+        "body": "Dependendo de onde você mora, você pode ter o direito de acessar, corrigir ou excluir suas informações pessoais. Entre em contato com nossa equipe de suporte para exercer esses direitos, e responderemos em um prazo razoável."
+      },
+      {
+        "heading": "7. Transferências internacionais",
+        "body": "Como operamos um serviço de envio mundial, suas informações podem ser transferidas e processadas em países diferentes do seu, incluindo os Estados Unidos, sob salvaguardas apropriadas."
+      },
+      {
+        "heading": "8. Fale conosco",
+        "body": "Se você tiver dúvidas sobre esta Política de Privacidade ou sobre como tratamos suas informações, entre em contato com nossa equipe de suporte pela página de contato e teremos prazer em ajudar."
+      }
+    ]
   }
 }
