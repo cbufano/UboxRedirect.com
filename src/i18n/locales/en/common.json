@@ -274,5 +274,100 @@
       "note": "This is only an estimate. Final shipping cost is calculated at checkout based on the actual weight and dimensions of your consolidated package.",
       "error": "We couldn't calculate an estimate. Please check the values and try again."
     }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Everything you need to know about your US address, shipping, storage and your account. Can't find an answer? Reach out to our support team.",
+    "categories": [
+      {
+        "name": "Getting started",
+        "items": [
+          {
+            "q": "What is Bufano Redirect?",
+            "a": "Bufano Redirect is a package forwarding service that gives you a free personal US address, so you can shop at American stores that don't ship internationally and have your orders consolidated and forwarded to your door anywhere in the world."
+          },
+          {
+            "q": "How do I get my US address?",
+            "a": "Create a free account and your personal US shipping address is generated instantly. You can start using it at checkout on any US store right away."
+          },
+          {
+            "q": "Is signup free?",
+            "a": "Yes. Creating an account and receiving your US address costs nothing. You only pay for the services you actually use, like consolidation, storage beyond the free period, and shipping."
+          },
+          {
+            "q": "How long does setup take?",
+            "a": "Signup takes just a couple of minutes. As soon as you confirm your email, your US address is ready to use for shopping."
+          }
+        ]
+      },
+      {
+        "name": "Shipping & customs",
+        "items": [
+          {
+            "q": "Which countries do you ship to?",
+            "a": "We ship to more than 200 countries worldwide through trusted international carriers. You can check delivery estimates for your destination on the shipping calculator page."
+          },
+          {
+            "q": "How are duties and taxes handled?",
+            "a": "Import duties and taxes are set by your country's customs authority and are not included in our shipping fees. They are typically charged by the carrier or customs office upon arrival, based on the declared value of your package."
+          },
+          {
+            "q": "Can I track my shipment?",
+            "a": "Yes. Once your consolidated package ships, you receive a tracking number and can follow its journey from our warehouse to your door directly from your dashboard."
+          },
+          {
+            "q": "Are there prohibited items?",
+            "a": "Some items, such as flammable liquids, weapons, and certain batteries, cannot be shipped internationally due to carrier and customs regulations. Check our shipping policy or contact support if you're unsure about a specific item."
+          }
+        ]
+      },
+      {
+        "name": "Storage & fees",
+        "items": [
+          {
+            "q": "How long can my packages be stored?",
+            "a": "Free accounts include 7 days of storage per package. Premium members enjoy extended storage of 45 to 90 days, giving you more time to wait for multiple orders before consolidating."
+          },
+          {
+            "q": "How much can I save by consolidating?",
+            "a": "Consolidating multiple packages into a single shipment can cut your shipping cost by up to 80%, since you pay one shipping fee instead of several. Use our calculator to estimate your savings."
+          },
+          {
+            "q": "Do extra photos cost anything?",
+            "a": "Free accounts pay a small fee per additional photo beyond the first. Premium members receive photos of every package at no extra cost."
+          },
+          {
+            "q": "What is repackaging and does it cost extra?",
+            "a": "Repackaging means removing bulky retail boxes and combining your items into the smallest possible box to reduce weight and dimensions. It's available for a small fee and often pays for itself in shipping savings."
+          }
+        ]
+      },
+      {
+        "name": "Account & support",
+        "items": [
+          {
+            "q": "Can I change my plan later?",
+            "a": "Yes, you can upgrade from Free to Premium, or adjust your plan at any time from your account settings. Changes take effect immediately."
+          },
+          {
+            "q": "How do I contact support?",
+            "a": "Our support team is available by email and through the contact form on our website, Monday to Friday, 9am to 5pm (EST). We aim to respond within one business day."
+          },
+          {
+            "q": "Is my personal information secure?",
+            "a": "Yes. We use industry-standard encryption to protect your data and never share your personal information with third parties without your consent."
+          },
+          {
+            "q": "Can I cancel my account at any time?",
+            "a": "Absolutely. You can cancel your account at any time from your account settings with no cancellation fees. Any packages in storage should be shipped or picked up beforehand."
+          }
+        ]
+      }
+    ],
+    "cta": {
+      "title": "Still have questions?",
+      "subtitle": "Our support team is happy to help with anything not covered here.",
+      "button": "Contact us"
+    }
   }
 }

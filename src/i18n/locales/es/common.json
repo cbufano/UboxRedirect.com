@@ -274,5 +274,100 @@
       "note": "Esto es solo una estimación. El costo final del envío se calcula al pagar según el peso y las dimensiones reales de tu paquete consolidado.",
       "error": "No pudimos calcular una estimación. Verifica los valores e inténtalo de nuevo."
     }
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "subtitle": "Todo lo que necesitas saber sobre tu dirección en EE. UU., envíos, almacenamiento y tu cuenta. ¿No encontraste la respuesta? Contacta a nuestro equipo de soporte.",
+    "categories": [
+      {
+        "name": "Primeros pasos",
+        "items": [
+          {
+            "q": "¿Qué es Bufano Redirect?",
+            "a": "Bufano Redirect es un servicio de reenvío de paquetes que te da una dirección personal gratis en EE. UU., para que compres en tiendas americanas que no envían al extranjero y recibas tus pedidos consolidados y reenviados hasta tu puerta, en cualquier parte del mundo."
+          },
+          {
+            "q": "¿Cómo obtengo mi dirección en EE. UU.?",
+            "a": "Crea una cuenta gratis y tu dirección personal de envío en EE. UU. se genera al instante. Puedes empezar a usarla en el checkout de cualquier tienda de EE. UU. de inmediato."
+          },
+          {
+            "q": "¿El registro es gratuito?",
+            "a": "Sí. Crear una cuenta y recibir tu dirección en EE. UU. no cuesta nada. Solo pagas por los servicios que realmente uses, como consolidación, almacenamiento más allá del período gratis y envío."
+          },
+          {
+            "q": "¿Cuánto tiempo toma la configuración?",
+            "a": "El registro toma solo un par de minutos. En cuanto confirmes tu correo electrónico, tu dirección en EE. UU. estará lista para usar en tus compras."
+          }
+        ]
+      },
+      {
+        "name": "Envíos y aduana",
+        "items": [
+          {
+            "q": "¿A qué países envían?",
+            "a": "Enviamos a más de 200 países en todo el mundo a través de transportistas internacionales de confianza. Puedes revisar los tiempos estimados de entrega para tu destino en la página de la calculadora de envío."
+          },
+          {
+            "q": "¿Cómo se manejan los aranceles e impuestos?",
+            "a": "Los aranceles de importación e impuestos son establecidos por la autoridad aduanera de tu país y no están incluidos en nuestras tarifas de envío. Normalmente los cobra el transportista o la aduana al llegar, según el valor declarado de tu paquete."
+          },
+          {
+            "q": "¿Puedo rastrear mi envío?",
+            "a": "Sí. En cuanto tu paquete consolidado se envía, recibes un número de seguimiento y puedes seguir su trayecto desde nuestro almacén hasta tu puerta directamente desde tu panel."
+          },
+          {
+            "q": "¿Hay artículos prohibidos?",
+            "a": "Algunos artículos, como líquidos inflamables, armas y ciertas baterías, no se pueden enviar internacionalmente debido a las regulaciones de los transportistas y la aduana. Consulta nuestra política de envío o contacta a soporte si tienes dudas sobre un artículo en particular."
+          }
+        ]
+      },
+      {
+        "name": "Almacenamiento y tarifas",
+        "items": [
+          {
+            "q": "¿Cuánto tiempo pueden almacenarse mis paquetes?",
+            "a": "Las cuentas gratis incluyen 7 días de almacenamiento por paquete. Los miembros Premium disfrutan de almacenamiento extendido de 45 a 90 días, dando más tiempo para esperar varios pedidos antes de consolidar."
+          },
+          {
+            "q": "¿Cuánto puedo ahorrar consolidando?",
+            "a": "Consolidar varios paquetes en un solo envío puede reducir tu costo de envío hasta en un 80%, ya que pagas una sola tarifa de envío en lugar de varias. Usa nuestra calculadora para estimar tu ahorro."
+          },
+          {
+            "q": "¿Las fotos adicionales tienen algún costo?",
+            "a": "Las cuentas gratis pagan una pequeña tarifa por cada foto adicional más allá de la primera. Los miembros Premium reciben fotos de todos los paquetes sin costo extra."
+          },
+          {
+            "q": "¿Qué es el reempaque y tiene costo adicional?",
+            "a": "El reempaque consiste en quitar las cajas voluminosas de las tiendas y combinar tus artículos en la caja más pequeña posible para reducir el peso y las dimensiones. Está disponible por una pequeña tarifa y muchas veces se paga solo con el ahorro en el envío."
+          }
+        ]
+      },
+      {
+        "name": "Cuenta y soporte",
+        "items": [
+          {
+            "q": "¿Puedo cambiar de plan más adelante?",
+            "a": "Sí, puedes actualizar de Gratis a Premium, o ajustar tu plan en cualquier momento desde la configuración de tu cuenta. Los cambios se aplican de inmediato."
+          },
+          {
+            "q": "¿Cómo contacto a soporte?",
+            "a": "Nuestro equipo de soporte está disponible por correo electrónico y a través del formulario de contacto en nuestro sitio, de lunes a viernes, de 9:00 a 17:00 (EST). Buscamos responder dentro de un día hábil."
+          },
+          {
+            "q": "¿Mi información personal está segura?",
+            "a": "Sí. Usamos cifrado estándar de la industria para proteger tus datos y nunca compartimos tu información personal con terceros sin tu consentimiento."
+          },
+          {
+            "q": "¿Puedo cancelar mi cuenta en cualquier momento?",
+            "a": "Por supuesto. Puedes cancelar tu cuenta en cualquier momento desde la configuración de tu cuenta, sin tarifas de cancelación. Los paquetes en almacenamiento deben enviarse o retirarse antes."
+          }
+        ]
+      }
+    ],
+    "cta": {
+      "title": "¿Aún tienes preguntas?",
+      "subtitle": "Nuestro equipo de soporte estará encantado de ayudarte con cualquier cosa que no esté aquí.",
+      "button": "Contáctanos"
+    }
   }
 }

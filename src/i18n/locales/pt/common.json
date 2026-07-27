@@ -274,5 +274,100 @@
       "note": "Isto é apenas uma estimativa. O custo final do frete é calculado no checkout com base no peso e nas dimensões reais do seu pacote consolidado.",
       "error": "Não foi possível calcular uma estimativa. Verifique os valores e tente novamente."
     }
+  },
+  "faq": {
+    "title": "Perguntas Frequentes",
+    "subtitle": "Tudo o que você precisa saber sobre seu endereço nos EUA, envios, armazenamento e sua conta. Não encontrou a resposta? Fale com nossa equipe de suporte.",
+    "categories": [
+      {
+        "name": "Primeiros passos",
+        "items": [
+          {
+            "q": "O que é a Bufano Redirect?",
+            "a": "A Bufano Redirect é um serviço de redirecionamento de encomendas que te dá um endereço pessoal grátis nos EUA, para você comprar em lojas americanas que não enviam para fora dos EUA e receber seus pedidos consolidados e redirecionados até a sua porta, em qualquer lugar do mundo."
+          },
+          {
+            "q": "Como eu recebo meu endereço nos EUA?",
+            "a": "Crie uma conta grátis e seu endereço pessoal de entrega nos EUA é gerado na hora. Você já pode usá-lo no checkout de qualquer loja dos EUA."
+          },
+          {
+            "q": "O cadastro é gratuito?",
+            "a": "Sim. Criar uma conta e receber seu endereço nos EUA não custa nada. Você só paga pelos serviços que realmente usar, como consolidação, armazenamento além do período grátis e frete."
+          },
+          {
+            "q": "Quanto tempo leva para configurar?",
+            "a": "O cadastro leva apenas alguns minutos. Assim que você confirmar seu e-mail, seu endereço nos EUA já está pronto para usar nas compras."
+          }
+        ]
+      },
+      {
+        "name": "Envio e alfândega",
+        "items": [
+          {
+            "q": "Para quais países vocês enviam?",
+            "a": "Enviamos para mais de 200 países ao redor do mundo através de transportadoras internacionais confiáveis. Você pode conferir os prazos de entrega para seu destino na página da calculadora de frete."
+          },
+          {
+            "q": "Como funcionam os impostos e taxas alfandegárias?",
+            "a": "Impostos de importação e taxas alfandegárias são definidos pela autoridade aduaneira do seu país e não estão incluídos nas nossas taxas de envio. Normalmente são cobrados pela transportadora ou pela alfândega na chegada, com base no valor declarado do pacote."
+          },
+          {
+            "q": "Posso rastrear meu envio?",
+            "a": "Sim. Assim que seu pacote consolidado é enviado, você recebe um código de rastreamento e pode acompanhar o trajeto do nosso depósito até a sua porta diretamente no seu painel."
+          },
+          {
+            "q": "Existem itens proibidos?",
+            "a": "Alguns itens, como líquidos inflamáveis, armas e certas baterias, não podem ser enviados internacionalmente devido às regras das transportadoras e da alfândega. Consulte nossa política de envio ou entre em contato com o suporte se tiver dúvidas sobre um item específico."
+          }
+        ]
+      },
+      {
+        "name": "Armazenamento e taxas",
+        "items": [
+          {
+            "q": "Por quanto tempo meus pacotes podem ficar armazenados?",
+            "a": "Contas grátis incluem 7 dias de armazenamento por pacote. Membros Premium contam com armazenamento estendido de 45 a 90 dias, dando mais tempo para aguardar vários pedidos antes de consolidar."
+          },
+          {
+            "q": "Quanto posso economizar consolidando?",
+            "a": "Consolidar vários pacotes em um único envio pode reduzir seu custo de frete em até 80%, já que você paga uma única taxa de envio em vez de várias. Use nossa calculadora para estimar sua economia."
+          },
+          {
+            "q": "Fotos extras têm algum custo?",
+            "a": "Contas grátis pagam uma pequena taxa por foto adicional além da primeira. Membros Premium recebem fotos de todos os pacotes sem custo extra."
+          },
+          {
+            "q": "O que é reembalagem e tem custo extra?",
+            "a": "Reembalagem significa remover as caixas volumosas das lojas e combinar seus itens na menor caixa possível para reduzir peso e dimensões. Está disponível por uma pequena taxa e muitas vezes se paga sozinha com a economia no frete."
+          }
+        ]
+      },
+      {
+        "name": "Conta e suporte",
+        "items": [
+          {
+            "q": "Posso mudar de plano depois?",
+            "a": "Sim, você pode fazer upgrade do plano Grátis para o Premium, ou ajustar seu plano a qualquer momento nas configurações da sua conta. As mudanças têm efeito imediato."
+          },
+          {
+            "q": "Como entro em contato com o suporte?",
+            "a": "Nossa equipe de suporte está disponível por e-mail e pelo formulário de contato no site, de segunda a sexta, das 9h às 17h (EST). Nosso objetivo é responder em até um dia útil."
+          },
+          {
+            "q": "Minhas informações pessoais estão seguras?",
+            "a": "Sim. Usamos criptografia em padrão de mercado para proteger seus dados e nunca compartilhamos suas informações pessoais com terceiros sem o seu consentimento."
+          },
+          {
+            "q": "Posso cancelar minha conta a qualquer momento?",
+            "a": "Com certeza. Você pode cancelar sua conta a qualquer momento nas configurações da conta, sem taxas de cancelamento. Pacotes em armazenamento devem ser enviados ou retirados antes do cancelamento."
+          }
+        ]
+      }
+    ],
+    "cta": {
+      "title": "Ainda tem dúvidas?",
+      "subtitle": "Nossa equipe de suporte terá prazer em ajudar com qualquer coisa que não esteja aqui.",
+      "button": "Fale conosco"
+    }
   }
 }
