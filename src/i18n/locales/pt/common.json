@@ -127,5 +127,38 @@
       "subtitle": "Crie sua conta grátis hoje e receba seu endereço nos EUA em segundos.",
       "button": "Criar conta grátis"
     }
+  },
+  "how": {
+    "title": "Como funciona a Bufano Redirect",
+    "subtitle": "Do seu endereço grátis nos EUA até a caixa consolidada na sua porta — veja exatamente o que acontece em cada etapa.",
+    "steps": [
+      {
+        "title": "Receba seu endereço nos EUA",
+        "text": "Cadastre-se grátis em poucos minutos e receba um endereço pessoal de entrega nos EUA vinculado à sua conta. Não há taxa de adesão nem compromisso — você pode usá-lo imediatamente em qualquer loja que envie dentro dos EUA."
+      },
+      {
+        "title": "Compre nas lojas dos EUA e envie para o seu endereço",
+        "text": "Use seu novo endereço no checkout da Amazon, eBay, Walmart, Target, Best Buy e centenas de outras lojas americanas, exatamente como um comprador local faria. Compre em quantas lojas quiser — todos os pedidos chegarão no mesmo lugar."
+      },
+      {
+        "title": "Seus pacotes chegam ao nosso depósito",
+        "text": "Assim que um pacote chega às nossas instalações, nós o registramos, fotografamos sua condição e o vinculamos à sua conta. Você recebe uma notificação por e-mail e pode ver as fotos e detalhes no seu painel na hora."
+      },
+      {
+        "title": "Consolidamos e reembalamos",
+        "text": "Depois que seus pedidos chegarem, solicite a consolidação. Nossa equipe remove embalagens desnecessárias, combina tudo na menor caixa possível e informa o novo peso e as dimensões antes de você pagar pelo frete."
+      },
+      {
+        "title": "Enviamos para o mundo todo",
+        "text": "Escolha a transportadora e a velocidade que cabem no seu orçamento, pague online e acompanhe sua caixa do nosso depósito até a sua porta. Entregamos em mais de 200 países com transportadoras internacionais confiáveis."
+      }
+    ],
+    "cta": {
+      "title": "Pronto para receber seu endereço grátis nos EUA?",
+      "subtitle": "Crie sua conta em minutos e comece a comprar nas lojas dos EUA hoje mesmo.",
+      "button": "Criar conta grátis"
+    },
+    "faqTeaser": "Tem mais dúvidas sobre alfândega, taxas ou prazos de entrega? Nosso FAQ traz todos os detalhes.",
+    "faqButton": "Ver FAQ"
   }
 }

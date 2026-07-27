@@ -127,5 +127,38 @@
       "subtitle": "Crea tu cuenta gratis hoy y obtén tu dirección en EE. UU. en segundos.",
       "button": "Crear cuenta gratis"
     }
+  },
+  "how": {
+    "title": "Cómo funciona Bufano Redirect",
+    "subtitle": "Desde tu dirección gratis en EE. UU. hasta la caja consolidada en tu puerta — mira exactamente qué pasa en cada paso.",
+    "steps": [
+      {
+        "title": "Obtén tu dirección en EE. UU.",
+        "text": "Regístrate gratis en pocos minutos y recibe una dirección personal de envío en EE. UU. vinculada a tu cuenta. No hay costo de alta ni compromiso: puedes usarla de inmediato en cualquier tienda que envíe dentro de EE. UU."
+      },
+      {
+        "title": "Compra en tiendas de EE. UU. y envía a tu dirección",
+        "text": "Usa tu nueva dirección al pagar en Amazon, eBay, Walmart, Target, Best Buy y cientos de otras tiendas estadounidenses, igual que lo haría un comprador local. Compra en tantas tiendas como quieras: todos los pedidos llegarán al mismo lugar."
+      },
+      {
+        "title": "Tus paquetes llegan a nuestro almacén",
+        "text": "En cuanto un paquete llega a nuestras instalaciones, lo registramos, fotografiamos su estado y lo vinculamos a tu cuenta. Recibes una notificación por correo y puedes ver las fotos y los detalles en tu panel de inmediato."
+      },
+      {
+        "title": "Consolidamos y reempacamos",
+        "text": "Una vez que tus pedidos hayan llegado, solicita la consolidación. Nuestro equipo quita el embalaje innecesario, combina todo en la caja más pequeña posible y te indica el nuevo peso y dimensiones antes de que pagues el envío."
+      },
+      {
+        "title": "Enviamos a todo el mundo",
+        "text": "Elige el transportista y la velocidad que se ajusten a tu presupuesto, paga en línea y rastrea tu caja desde nuestro almacén hasta tu puerta. Entregamos en más de 200 países con transportistas internacionales de confianza."
+      }
+    ],
+    "cta": {
+      "title": "¿Listo para obtener tu dirección gratis en EE. UU.?",
+      "subtitle": "Crea tu cuenta en minutos y empieza a comprar en tiendas de EE. UU. hoy mismo.",
+      "button": "Crear cuenta gratis"
+    },
+    "faqTeaser": "¿Tienes más preguntas sobre aduanas, tarifas o tiempos de entrega? Nuestro FAQ cubre los detalles.",
+    "faqButton": "Ver FAQ"
   }
 }

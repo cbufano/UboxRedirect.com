@@ -127,5 +127,38 @@
       "subtitle": "Create your free account today and get your US address in seconds.",
       "button": "Create free account"
     }
+  },
+  "how": {
+    "title": "How Bufano Redirect works",
+    "subtitle": "From your free US address to a consolidated box at your door — here is exactly what happens at every step.",
+    "steps": [
+      {
+        "title": "Get your US address",
+        "text": "Sign up for free in a couple of minutes and receive a personal US shipping address tied to your account. There are no setup fees and no commitment — you can start using it right away for any store that ships within the US."
+      },
+      {
+        "title": "Shop US stores and ship to it",
+        "text": "Use your new address at checkout on Amazon, eBay, Walmart, Target, Best Buy and hundreds of other US retailers, exactly like a local shopper would. Buy from as many stores as you like — every order will arrive at the same place."
+      },
+      {
+        "title": "Your packages arrive at our warehouse",
+        "text": "As soon as a package reaches our facility, we scan it in, photograph its condition and label it to your account. You get an email notification and can see the photos and details in your dashboard right away."
+      },
+      {
+        "title": "We consolidate and repackage",
+        "text": "Once your orders have arrived, request a consolidation. Our team removes unnecessary packaging, combines everything into the smallest possible box and lets you know the new weight and dimensions before you pay for shipping."
+      },
+      {
+        "title": "We ship worldwide",
+        "text": "Choose the carrier and speed that fit your budget, pay online and track your box from our warehouse to your door. We deliver to more than 200 countries with trusted international carriers."
+      }
+    ],
+    "cta": {
+      "title": "Ready to get your free US address?",
+      "subtitle": "Create your account in minutes and start shopping US stores today.",
+      "button": "Create free account"
+    },
+    "faqTeaser": "Have more questions about customs, fees or delivery times? Our FAQ covers the details.",
+    "faqButton": "See FAQ"
   }
 }
