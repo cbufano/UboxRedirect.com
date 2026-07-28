@@ -1,0 +1,41 @@
+name: Deploy para a Hostinger
+
+# Roda a cada push no branch principal (e permite disparo manual)
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Rodar testes
+        run: npm test
+
+      - name: Compilar o site (gera dist/)
+        run: npm run build
+
+      - name: Enviar por FTP para a Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # Conteúdo compilado a enviar:
+          local-dir: ./dist/
+          # Pasta de destino no servidor. Veja a NOTA no chat: pode ser
+          # ./public_html/ OU ./ dependendo de onde sua conta FTP "cai".
+          server-dir: ./public_html/
