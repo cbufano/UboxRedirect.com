@@ -64,9 +64,17 @@ create table public.profiles (
 -- 5) Suites — o endereço pessoal do cliente no galpão
 create sequence public.suite_number_seq start with 10001;
 
+-- FK aponta para public.profiles (não auth.users) de propósito: profiles.id
+-- já referencia auth.users(id) 1:1, e apontar suites.user_id para profiles
+-- dá ao PostgREST uma relação direta entre as duas tabelas — sem isso, um
+-- select com embedding (`profiles ... suites (suite_number)`) falha com
+-- PGRST200 "could not find a relationship", já que o PostgREST não infere
+-- relações através de uma terceira tabela em comum (auth.users). A ordem de
+-- inserção do trigger handle_new_user (profiles antes de suites) garante
+-- que a FK nunca falha no cadastro.
 create table public.suites (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null unique references auth.users (id) on delete cascade,
+  user_id uuid not null unique references public.profiles (id) on delete cascade,
   suite_number text not null unique,
   status text not null default 'active' check (status in ('active', 'suspended', 'closed')),
   created_at timestamptz not null default now()
