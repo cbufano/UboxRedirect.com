@@ -57,6 +57,13 @@ export const profileService = {
     const userId = await currentUserId()
     if (!userId) throw new Error('Not authenticated')
 
+    // Duas escritas sequenciais, não atômicas: se a segunda falhar depois
+    // da primeira ter sucesso, `profiles` fica com o dado novo mas
+    // `user_metadata` (fonte do nome no header) fica desatualizado até a
+    // próxima chamada bem-sucedida ou refresh de sessão. Falha alta e clara
+    // (o caller vê o erro) em vez de mascarar — aceitável nesta fase; uma
+    // função Postgres fazendo as duas coisas atomicamente resolveria de
+    // vez, se isso virar um problema real.
     const { error } = await supabase
       .from('profiles')
       .update({ name: input.name, country: input.country })
