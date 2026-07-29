@@ -536,6 +536,7 @@
       "subtitle": "Escolha uma nova senha para a sua conta.",
       "password": "Nova senha",
       "confirmPassword": "Confirmar nova senha",
+      "passwordMismatch": "As senhas não coincidem.",
       "submit": "Atualizar senha",
       "success": "Senha atualizada! Você já pode fazer login.",
       "error": "Não foi possível atualizar sua senha. Abra o link do e-mail novamente e tente de novo.",

@@ -37,6 +37,7 @@ it('validates that passwords match before submitting', async () => {
   await userEvent.type(screen.getByLabelText(/confirm/i), 'different1')
   await userEvent.click(screen.getByRole('button', { name: /update/i }))
   expect(mocked.updatePassword).not.toHaveBeenCalled()
+  expect(await screen.findByText(/don't match/i)).toBeInTheDocument()
 })
 
 it('shows an error when the update fails', async () => {

@@ -536,6 +536,7 @@
       "subtitle": "Choose a new password for your account.",
       "password": "New password",
       "confirmPassword": "Confirm new password",
+      "passwordMismatch": "Passwords don't match.",
       "submit": "Update password",
       "success": "Password updated! You can now sign in.",
       "error": "We couldn't update your password. Open the link from the email again and retry.",

@@ -536,6 +536,7 @@
       "subtitle": "Elige una nueva contraseña para tu cuenta.",
       "password": "Nueva contraseña",
       "confirmPassword": "Confirmar nueva contraseña",
+      "passwordMismatch": "Las contraseñas no coinciden.",
       "submit": "Actualizar contraseña",
       "success": "¡Contraseña actualizada! Ya puedes iniciar sesión.",
       "error": "No pudimos actualizar tu contraseña. Abre de nuevo el enlace del correo e inténtalo otra vez.",

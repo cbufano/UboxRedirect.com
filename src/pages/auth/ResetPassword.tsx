@@ -21,7 +21,7 @@ export default function ResetPassword() {
     })
     .superRefine((data, ctx) => {
       if (data.password !== data.confirmPassword) {
-        ctx.addIssue({ code: 'custom', path: ['confirmPassword'], message: t('auth.reset.confirmPassword') })
+        ctx.addIssue({ code: 'custom', path: ['confirmPassword'], message: t('auth.reset.passwordMismatch') })
       }
     })
 
