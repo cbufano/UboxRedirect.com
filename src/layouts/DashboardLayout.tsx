@@ -15,6 +15,7 @@ import {
 import { LanguageSwitcher } from '../components/LanguageSwitcher'
 import { Button } from '../components/ui/Button'
 import { authService } from '../services/authService'
+import { useAuth } from '../contexts/AuthContext'
 
 const NAV_ITEMS = [
   { to: '/app', key: 'dashboard.nav.overview', icon: LayoutDashboard, end: true },
@@ -34,13 +35,13 @@ const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
 export function DashboardLayout() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const user = authService.getSession()
+  const { user } = useAuth()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const closeSidebar = () => setIsSidebarOpen(false)
 
-  const handleSignOut = () => {
-    authService.logout()
+  const handleSignOut = async () => {
+    await authService.logout()
     navigate('/')
   }
 
