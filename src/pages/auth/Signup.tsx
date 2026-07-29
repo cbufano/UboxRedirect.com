@@ -64,11 +64,11 @@ export default function Signup() {
     },
   })
 
-  const onSubmit: SubmitHandler<FormValues> = ({ name, email, country, password }) => {
+  const onSubmit: SubmitHandler<FormValues> = async ({ name, email, country, password }) => {
     setAuthError(false)
     try {
-      authService.register({ name, email, country, password })
-      navigate('/app')
+      const { needsEmailConfirmation } = await authService.register({ name, email, country, password })
+      navigate(needsEmailConfirmation ? '/verify' : '/app')
     } catch {
       setAuthError(true)
     }

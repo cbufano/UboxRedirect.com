@@ -527,9 +527,9 @@
       "backToLogin": "Voltar para o login"
     },
     "verify": {
-      "title": "E-mail verificado",
-      "body": "Seu endereço de e-mail foi verificado com sucesso. Agora você pode acessar seu painel.",
-      "cta": "Ir para o painel"
+      "title": "Confira seu e-mail",
+      "body": "Enviamos um link de confirmação para o seu e-mail. Clique nele para ativar sua conta e depois faça login.",
+      "cta": "Voltar para o login"
     }
   },
   "dashboard": {

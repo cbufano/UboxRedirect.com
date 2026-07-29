@@ -527,9 +527,9 @@
       "backToLogin": "Back to sign in"
     },
     "verify": {
-      "title": "Email verified",
-      "body": "Your email address has been successfully verified. You can now access your dashboard.",
-      "cta": "Continue to dashboard"
+      "title": "Check your email",
+      "body": "We sent a confirmation link to your email address. Click it to activate your account, then sign in.",
+      "cta": "Back to sign in"
     }
   },
   "dashboard": {
