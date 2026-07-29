@@ -30,10 +30,10 @@ export default function Login() {
     defaultValues: { email: '', password: '' },
   })
 
-  const onSubmit: SubmitHandler<FormValues> = ({ email, password }) => {
+  const onSubmit: SubmitHandler<FormValues> = async ({ email, password }) => {
     setAuthError(false)
     try {
-      authService.login(email, password)
+      await authService.login(email, password)
       navigate('/app')
     } catch {
       setAuthError(true)
