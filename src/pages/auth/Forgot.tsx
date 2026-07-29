@@ -8,6 +8,7 @@ import { MailCheck } from 'lucide-react'
 import { Card } from '../../components/ui/Card'
 import { Input } from '../../components/ui/Input'
 import { Button } from '../../components/ui/Button'
+import { authService } from '../../services/authService'
 
 const schema = z.object({
   email: z.string().email(),
@@ -28,8 +29,17 @@ export default function Forgot() {
     defaultValues: { email: '' },
   })
 
-  const onSubmit: SubmitHandler<FormValues> = () => {
-    setSubmitted(true)
+  const onSubmit: SubmitHandler<FormValues> = async ({ email }) => {
+    try {
+      await authService.requestPasswordReset(email)
+    } catch {
+      // Erro engolido de propósito: sempre mostramos sucesso, para não
+      // revelar se o e-mail existe (anti-enumeração). Sem o catch aqui, o
+      // handleSubmit do react-hook-form relança a rejeição — que viraria
+      // um "unhandled rejection" visível no console/telemetria.
+    } finally {
+      setSubmitted(true)
+    }
   }
 
   return (

@@ -1,0 +1,238 @@
+# Bufano Redirect — Estado Atual do Sistema e Roadmap Completo
+
+> **Empresa:** Bufano Redirect — redirecionamento de encomendas (package forwarding) sediada em Miami/Doral, FL, EUA.
+> **Repositório:** https://github.com/cbufano/UboxRedirect.com
+> **Data deste documento:** 29/07/2026
+
+> **Atualização 29/07/2026 — Fase 2 entregue:** auth real (Supabase Auth + Postgres com RLS em 100% das tabelas), suite gerada automaticamente no cadastro, fluxo completo de recuperação de senha, e o painel (`Address`, `Overview`, `Account`) lendo dados reais via `profileService`. Plano de execução em `docs/superpowers/plans/2026-07-29-fase2-supabase-backend.md`. Pendências manuais para produção estão listadas no fim deste documento.
+
+---
+
+# PARTE 1 — O que já foi construído
+
+## 1.1 Stack técnica atual
+
+| Camada | Tecnologia | Versão |
+|---|---|---|
+| Build | Vite | 8 |
+| UI | React + TypeScript | 19 / 6.0 |
+| Estilo | Tailwind CSS (CSS-first, plugin Vite) | 4 |
+| Rotas | React Router (com code-splitting/lazy) | 7 |
+| Idiomas | react-i18next + i18next (EN / PT / ES) | 17 / 26 |
+| Formulários | react-hook-form + zod | 7 / 4 |
+| Ícones | lucide-react | 1 |
+| Testes | Vitest + React Testing Library (todas as páginas têm teste) | 4 |
+| Lint | oxlint | 1 |
+| Deploy | GitHub Actions → FTP → Hostinger (workflow criado, **push pendente + secrets FTP**) | — |
+
+**Design tokens:** `navy #0B1F3A`, `blue #1E88E5`, `offwhite #F5F7FA`, `slate #0F172A`, `success #16A34A`.
+
+## 1.2 Site institucional (público)
+
+Todas multilíngues (EN/PT/ES), com SEO (`DocumentMeta`), responsivas e acessíveis:
+
+- **Home** (`/`) — hero, proposta de valor, CTAs
+- **Como Funciona** (`/how`)
+- **Preços** (`/pricing`)
+- **Serviços** (`/services`)
+- **Calculadora de frete** (`/calculator`) — usa `shippingEstimator` (peso cubado, divisor 5000, tarifas por zona BR/US/default, opções Economy e Express)
+- **FAQ** (`/faq`)
+- **Contato** (`/contact`)
+- **Sobre** (`/about`)
+- **Termos** (`/terms`) e **Privacidade** (`/privacy`) — texto placeholder, precisa de revisão jurídica
+
+## 1.3 Autenticação (MOCK — não é produção)
+
+Páginas: **Login, Cadastro, Esqueci a senha, Verificação** (`/login`, `/signup`, `/forgot`, `/verify`).
+
+`authService` é uma camada de isolamento em `localStorage`: registro, login, logout e sessão funcionam **apenas no navegador**, com senha em texto puro (documentado como mock). A interface pública (`register/login/logout/getSession`) foi desenhada para trocar o interno por um backend real **sem tocar na UI**.
+
+## 1.4 Painel do usuário (`/app`, protegido por `ProtectedRoute`)
+
+Todos alimentados por dados mock (`src/mocks/`):
+
+- **Overview** — resumo da conta
+- **Meu Endereço US** — endereço do galpão em Doral/FL com suite pessoal (ex.: `BUF-10482`) e botão de copiar
+- **Inbox** — pacotes recebidos no galpão (loja, descrição, peso, status `in_box`/`ready`)
+- **Enviar** (`/app/ship`) — montagem de envio
+- **Meus Envios** — histórico (carrier, tracking, status `processing`/`in_transit`/`delivered`, custo)
+- **Personal Shopper** — solicitação de compra assistida
+- **Conta** — dados do usuário
+
+## 1.5 Infra e qualidade
+
+- Testes unitários/smoke em **todas** as páginas e serviços
+- CI de deploy (`.github/workflows/deploy.yml`): testa → builda → envia `dist/` por FTP para `public_html/` da Hostinger
+- `.htaccess` de SPA para as rotas do React Router
+- Plano e spec de design da Fase 1 em `docs/superpowers/`
+
+**Resumo honesto:** hoje é um site institucional excelente com um *protótipo funcional* de painel. Não há backend, banco, pagamento, admin nem segurança real — tudo isso é a Parte 2.
+
+---
+
+# PARTE 2 — Proposta: o que falta para virar um sistema top
+
+## 2.1 Arquitetura alvo
+
+```
+┌────────────────┐     ┌──────────────────────────── SUPABASE ───────────────────────────┐
+│  Site React    │────▶│ Auth (e-mail+senha, OAuth, MFA)                                  │
+│  (usuário)     │     │ Postgres + RLS (Row Level Security)                              │
+├────────────────┤     │ Storage (fotos de pacotes, documentos KYC)                       │
+│  Painel Admin  │────▶│ Edge Functions (pagamentos, webhooks, e-mails, cotação real)     │
+│  (equipe)      │     │ Realtime (notificações de pacote recebido)                       │
+├────────────────┤     └───────────────┬──────────────────────────────────────────────────┘
+│  App mobile    │                     │ webhooks/API
+│  (fase futura) │            ┌────────┴─────────┐   ┌──────────────┐   ┌───────────────┐
+└────────────────┘            │ Stripe (US)      │   │ EasyPost/    │   │ Resend/Postmark│
+                              │ + dLocal/EBANX   │   │ Shippo (fretes│  │ (e-mails)      │
+                              │ (Pix p/ Brasil)  │   │ e etiquetas) │   └───────────────┘
+                              └──────────────────┘   └──────────────┘
+```
+
+**Princípio central:** o frontend nunca decide nada sensível. Preço, cobrança, status e permissões são calculados/validados no servidor (Postgres + Edge Functions). O `authService` e o `shippingEstimator` atuais são exatamente os pontos de troca.
+
+## 2.2 Banco de dados — Supabase (Postgres)
+
+### Tabelas principais
+
+| Tabela | Conteúdo | Observações |
+|---|---|---|
+| `profiles` | id (= auth.uid), nome, país, telefone, idioma, CPF/documento, status KYC | Estende `auth.users`; criada por trigger no signup |
+| `roles` / `user_roles` | `customer`, `ops` (galpão), `support`, `admin`, `super_admin` | Papéis **nunca** em claims editáveis pelo cliente |
+| `suites` | número da suite (BUF-XXXXX), user_id, status | Gerada automaticamente no cadastro |
+| `destination_addresses` | endereços de entrega do cliente (BR, etc.) | Vários por usuário |
+| `packages` | suite_id, loja, descrição, peso real, dimensões, valor declarado, status, recebido_em, recebido_por (ops) | Status: `expected → received → in_review → ready → consolidating → shipped → discarded` |
+| `package_photos` | package_id, url no Storage | Fotos tiradas pelo galpão |
+| `consolidations` | agrupamento de pacotes num envio único | Serviço-chave do negócio |
+| `shipments` | user_id, endereço destino, carrier, serviço, tracking, peso cobrado, status, custos | Status com timeline |
+| `shipment_items` | shipment_id ↔ package_id | |
+| `quotes` | cotações geradas (input, opções, validade) | Auditoria de preço |
+| `rate_tables` | tarifas por zona/carrier/faixa de peso | Editável só pelo admin — substitui as constantes do `shippingEstimator` |
+| `payments` | stripe_payment_intent_id, valor, moeda, status, método | Fonte de verdade vem do **webhook**, nunca do cliente |
+| `invoices` | fatura/recibo por envio ou serviço | |
+| `wallet_ledger` (opcional) | créditos/estornos do cliente | Livro-razão imutável (só INSERT) |
+| `shopper_orders` | pedidos de personal shopper (link, qtd, orçamento, taxa, status) | |
+| `storage_fees` | cobrança de armazenagem após X dias grátis | Job diário (pg_cron) |
+| `support_tickets` + `ticket_messages` | atendimento | |
+| `notifications` | in-app + espelho do que foi enviado por e-mail/push | |
+| `prohibited_items_log` | itens barrados na inspeção | Compliance de exportação |
+| `audit_logs` | quem fez o quê, quando, de onde (ações de admin/ops) | Só INSERT; obrigatório p/ compliance |
+| `consents` | aceite de termos/privacidade/marketing com versão e timestamp | LGPD/GDPR |
+| `data_requests` | pedidos de exportação/exclusão de dados | LGPD/GDPR |
+
+### Row Level Security (a regra de ouro)
+
+- **RLS ligado em todas as tabelas, sem exceção.**
+- Cliente: `user_id = auth.uid()` para SELECT nos seus dados; INSERT/UPDATE só onde fizer sentido (endereços, tickets); **nunca** UPDATE em `packages.weight`, `payments`, `shipments.status`.
+- Ops/Admin: policies via função `has_role(auth.uid(), 'ops')` consultando `user_roles`.
+- Mutações sensíveis (marcar pacote recebido, alterar tarifa, reembolsar) **só via Edge Functions** com service role + registro em `audit_logs`.
+
+## 2.3 Pagamentos — Stripe (empresa em Miami)
+
+**Recomendação: Stripe** — padrão de mercado nos EUA, aceita empresa registrada na Flórida (LLC/Inc + EIN), e resolve PCI-DSS (o cartão nunca toca seu servidor).
+
+- **Métodos EUA/global:** cartão de crédito/débito, Apple Pay, Google Pay, Link, e **ACH Direct Debit** (barato para tickets altos).
+- **Clientes no Brasil (seu público principal):** Stripe não processa **Pix** nativamente para conta US — integrar um segundo provedor para LatAm: **dLocal, EBANX ou PagBrasil** (Pix + boleto + cartão local em BRL). Arquitetura de pagamento com 2 provedores atrás de uma interface única `paymentService`.
+- **Fluxo:** Edge Function `create-payment` cria o Payment Intent/Checkout Session server-side (preço recalculado no servidor, nunca aceito do cliente) → cliente paga → **webhook** `payment_succeeded` atualiza `payments` e libera o envio → recibo por e-mail.
+- **Extras Stripe úteis:** Stripe Tax (sales tax da Flórida se aplicável), Radar (antifraude — essencial em forwarding, setor visado por fraude de cartão), Billing (assinaturas para planos de armazenagem premium), Identity (verificação de documento no KYC).
+- **Regra inegociável:** status de pagamento só muda via webhook assinado (verificação de assinatura do Stripe) — nunca por chamada do frontend.
+
+## 2.4 Separação Admin × Usuário (sem conflito)
+
+**Dois "aplicativos" na mesma base, com fronteira dura:**
+
+| | Usuário (`/app`) | Admin/Ops (`/admin`) |
+|---|---|---|
+| Quem | Cliente final | Equipe (papéis `ops`, `support`, `admin`, `super_admin`) |
+| Acesso | E-mail+senha, OAuth, MFA opcional | **MFA obrigatório**, allowlist de e-mails corporativos |
+| Vê | Só os próprios dados (RLS) | Conforme o papel |
+| Faz | Endereços, pedir envio, pagar, tickets, shopper | Ver abaixo |
+
+**Funcionalidades do Admin (novo, a construir):**
+
+1. **Recebimento no galpão (Ops):** buscar suite, registrar pacote (loja, peso, dimensões, valor declarado), tirar/subir fotos, marcar `received` → dispara notificação ao cliente.
+2. **Gestão de envios:** fila de pedidos pagos, consolidação física, compra de etiqueta (EasyPost/Shippo), inserir tracking, atualizar status.
+3. **Clientes:** busca, histórico, suspensão, aprovação de KYC.
+4. **Tarifas e preços:** editar `rate_tables`, taxas de serviço, dias grátis de armazenagem — com histórico (auditoria).
+5. **Financeiro:** pagamentos, reembolsos (via Stripe, com dupla confirmação), relatório de receita.
+6. **Suporte:** fila de tickets com SLA.
+7. **Conteúdo:** editar FAQ/avisos sem deploy.
+8. **Dashboards:** pacotes/dia, receita, ticket médio, tempo galpão→envio.
+9. **Compliance:** fila de `data_requests` (exportar/excluir dados), log de itens proibidos.
+
+**Anti-conflito na prática:** papéis vivem em `user_roles` (não no JWT editável), toda policy de admin verifica o papel no banco, rotas `/admin` têm guard próprio + verificação server-side em cada Edge Function (o guard de UI é cosmético — a segurança real é RLS + função).
+
+## 2.5 Funcionalidades novas para o usuário (deixar o produto "top")
+
+- **Notificações reais:** e-mail transacional (Resend/Postmark) + Realtime in-app: pacote recebido (com foto!), envio pago, tracking atualizado, armazenagem prestes a vencer.
+- **Tracking unificado:** timeline do pacote da chegada ao galpão até a entrega (webhook do carrier via EasyPost/Shippo).
+- **Consolidação self-service:** selecionar pacotes do Inbox → cotação real → escolher carrier → pagar → acompanhar.
+- **Serviços extras por pacote:** fotos adicionais, reembalagem, remoção de nota, seguro, medição.
+- **Declaração aduaneira guiada:** cliente declara conteúdo/valor por item (obrigatório p/ exportação; gera o CN22/commercial invoice).
+- **Calculadora pública ligada às tarifas reais** (`rate_tables`) — mesma fonte que o checkout, sem surpresa de preço.
+- **Indicação (referral):** crédito em `wallet_ledger` por indicação.
+- **Onboarding pós-cadastro:** tour mostrando o endereço US e como preencher checkout nas lojas.
+
+## 2.6 Segurança (sem vazamento)
+
+**Camada de aplicação**
+- Supabase Auth: senha com hash forte (nativo), verificação de e-mail obrigatória, política de senha, **MFA TOTP** (opcional p/ cliente, obrigatório p/ admin), rate limiting de login, CAPTCHA (Cloudflare Turnstile) em signup/login/contato.
+- Sessão: tokens do Supabase (refresh rotativo); logout global; expiração curta p/ admin.
+- Validação **zod dos dois lados** — no form e na Edge Function (nunca confiar no cliente).
+
+**Camada de dados**
+- RLS em 100% das tabelas (teste automatizado de policies no CI).
+- Service role key **só** em Edge Functions (jamais no bundle do site).
+- Storage com bucket privado + URLs assinadas com expiração para fotos/documentos.
+- Backups automáticos (PITR no plano Pro do Supabase) + teste de restauração.
+- Criptografia de campos ultra-sensíveis (documento de identidade) com pgsodium, se armazenados.
+
+**Camada web**
+- HTTPS + HSTS; headers `Content-Security-Policy`, `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options` (no `.htaccess`/CDN).
+- Sem segredo nenhum no frontend (só a anon key pública do Supabase, que é segura *por causa* do RLS).
+- Dependabot/renovate + `npm audit` no CI; secrets só no GitHub Actions/Supabase Vault.
+- `audit_logs` imutável para toda ação administrativa.
+
+## 2.7 Compliance (LGPD, leis dos EUA e específicas do setor)
+
+**Proteção de dados**
+- **LGPD (Brasil)** — aplica-se porque vocês atendem consumidores no Brasil: base legal por tratamento, consentimento registrado (`consents` versionado), direitos do titular (acesso, correção, **exportação e exclusão** — telas self-service no painel + fila `data_requests` com prazo de 15 dias), DPO/encarregado nomeado, relatório de impacto se necessário.
+- **EUA** — não há lei federal geral; na Flórida vale o **Florida Digital Bill of Rights (FDBR)**; se houver clientes na Califórnia, **CCPA/CPRA** (link "Do Not Sell/Share"). Boa prática: atender ao padrão mais alto (GDPR-like) para todos.
+- **GDPR (UE)** — se aceitar clientes europeus, mesmos direitos + DPA com subprocessadores (Supabase, Stripe, carrier APIs — todos oferecem DPA padrão).
+- **Práticas transversais:** minimização de dados, política de retenção (ex.: excluir fotos de pacotes após N meses, anonimizar contas encerradas), banner de cookies com consentimento real (analytics só após opt-in), Privacy Policy e Terms **escritos por advogado** (os atuais são placeholder), registro de tratamento de dados.
+
+**Específico de package forwarding (importante e muitas vezes esquecido)**
+- **Export compliance (EUA):** screening dos destinatários contra listas **OFAC/SDN e Denied Persons** (obrigatório para quem exporta dos EUA); bloqueio de países embargados; lista de itens proibidos (baterias soltas, aerossóis, ITAR/armas, perfumes conforme carrier) com verificação na inspeção do galpão (`prohibited_items_log`).
+- **Declarações aduaneiras:** commercial invoice/CN22 corretos, valor declarado pelo cliente com aceite de responsabilidade nos Termos; AES filing quando valor > US$ 2.500 por item (o carrier/EasyPost geralmente cuida).
+- **KYC:** verificação de identidade (Stripe Identity ou Sumsub) antes do primeiro envio, ou acima de certo valor — protege contra fraude de cartão + reshipping, o golpe nº 1 do setor.
+- **Financeiro:** PCI-DSS delegado ao Stripe (SAQ-A); sales tax da Flórida sobre taxas de serviço a validar com contador; 1099-K etc. com contabilidade local.
+
+## 2.8 App mobile (fase futura)
+
+- **React Native + Expo** — reaproveita TypeScript, zod, i18n, `paymentService`/`authService` e o **mesmo Supabase** (mesma RLS, mesmas Edge Functions — zero backend novo).
+- Diferenciais mobile: **push notification** ("Seu pacote chegou! 📦" com foto), scanner de código de barras para rastrear, biometria no login, deep link do e-mail para o envio.
+- Publicação: App Store + Play Store com conta da empresa de Miami.
+- Pré-requisito: Fases 2–4 abaixo prontas (o app é só mais um cliente da mesma API).
+
+## 2.9 Roadmap sugerido
+
+| Fase | Entrega | Conteúdo |
+|---|---|---|
+| **2** | Backend real | Supabase (Auth + schema + RLS + Storage), trocar `authService` mock pelo real, suites automáticas, e-mails transacionais, deploy dos secrets + push do CI pendente |
+| **3** | Operação | Painel Admin/Ops (recebimento, fotos, consolidação), notificações Realtime, `rate_tables` + calculadora real, EasyPost/Shippo para etiquetas e tracking |
+| **4** | Dinheiro | Stripe (cartão/Apple Pay/ACH) + dLocal/EBANX (Pix), webhooks, faturas, reembolsos no admin, Radar antifraude, armazenagem cobrada |
+| **5** | Compliance & blindagem | KYC + screening OFAC, declaração aduaneira guiada, telas LGPD self-service, políticas jurídicas reais, headers de segurança, auditoria de RLS, pentest básico |
+| **6** | Escala | App mobile (Expo), referral, dashboards de BI, personal shopper completo, suporte com SLA |
+
+**Custo base estimado (mensal, início):** Supabase Pro ~US$ 25 + Resend ~US$ 20 + EasyPost (por etiqueta) + Stripe (2,9% + 30¢ por transação; ACH 0,8%) + dLocal/EBANX (negociado). Hostinger atual serve para o site; avaliar Cloudflare (grátis) na frente para CDN/WAF.
+
+---
+
+## Decisões em aberto (para você decidir antes da Fase 2)
+
+1. **Provedor Pix/BRL:** dLocal, EBANX ou PagBrasil? (afeta contrato e taxas)
+2. **KYC:** desde o primeiro cadastro ou só a partir do primeiro envio/valor X?
+3. **Dias grátis de armazenagem** e preço da diária depois (regra de negócio central)
+4. **Admin no mesmo domínio** (`/admin`) ou subdomínio separado (`admin.uboxredirect.com`)? — subdomínio separado é um pouco mais seguro e limpo
+5. **Advogado** para Termos/Privacidade/compliance de exportação — recomendo escritório em Miami com experiência em logística

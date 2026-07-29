@@ -527,9 +527,20 @@
       "backToLogin": "Voltar para o login"
     },
     "verify": {
-      "title": "E-mail verificado",
-      "body": "Seu endereço de e-mail foi verificado com sucesso. Agora você pode acessar seu painel.",
-      "cta": "Ir para o painel"
+      "title": "Confira seu e-mail",
+      "body": "Enviamos um link de confirmação para o seu e-mail. Clique nele para ativar sua conta e depois faça login.",
+      "cta": "Voltar para o login"
+    },
+    "reset": {
+      "title": "Defina uma nova senha",
+      "subtitle": "Escolha uma nova senha para a sua conta.",
+      "password": "Nova senha",
+      "confirmPassword": "Confirmar nova senha",
+      "passwordMismatch": "As senhas não coincidem.",
+      "submit": "Atualizar senha",
+      "success": "Senha atualizada! Você já pode fazer login.",
+      "error": "Não foi possível atualizar sua senha. Abra o link do e-mail novamente e tente de novo.",
+      "backToLogin": "Voltar para o login"
     }
   },
   "dashboard": {
@@ -543,6 +554,7 @@
       "account": "Conta"
     },
     "signOut": "Sair",
+    "loading": "Carregando…",
     "overview": {
       "title": "Visão geral",
       "welcome": "Bem-vindo(a) de volta, {{name}}!",
@@ -582,6 +594,7 @@
       "copyFull": "Copiar endereço completo",
       "fullAddressLabel": "endereço completo",
       "copied": "Copiado",
+      "loadError": "Não foi possível carregar seu endereço. Atualize a página para tentar novamente.",
       "suiteNote": "Este é o número exclusivo da sua suite. Sempre inclua-o — sem ele, não conseguimos vincular seus pacotes à sua conta.",
       "instructions": {
         "title": "Como usar seu endereço nas compras",
@@ -736,7 +749,10 @@
           "name": "Informe seu nome.",
           "email": "Informe um e-mail válido.",
           "country": "Selecione um país."
-        }
+        },
+        "emailLocked": "A alteração de e-mail estará disponível em breve. Fale com o suporte se precisar atualizar.",
+        "error": "Não foi possível salvar suas alterações. Tente novamente.",
+        "loadError": "Não foi possível carregar seu perfil. Atualize a página para tentar novamente."
       },
       "language": {
         "title": "Preferência de idioma",

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -7,17 +7,18 @@ import { Trash2 } from 'lucide-react'
 import { Card } from '../../components/ui/Card'
 import { Input } from '../../components/ui/Input'
 import { Button } from '../../components/ui/Button'
-import { authService } from '../../services/authService'
+import { profileService } from '../../services/profileService'
 import { SUPPORTED_LANGUAGES } from '../../i18n'
 
 const COUNTRY_CODES = ['BR', 'US', 'PT', 'ES', 'MX', 'AR', 'GB', 'OTHER'] as const
 
 export default function Account() {
   const { t, i18n } = useTranslation()
-  const session = authService.getSession()
 
   // --- Profile form ---
   const [profileSaved, setProfileSaved] = useState(false)
+  const [profileError, setProfileError] = useState(false)
+  const [loadError, setLoadError] = useState(false)
 
   const schema = z.object({
     name: z.string().min(1, t('dashboard.account.profile.errors.name')),
@@ -30,18 +31,47 @@ export default function Account() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    reset,
+    formState: { errors, isDirty },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      name: session?.name ?? '',
-      email: session?.email ?? '',
-      country: session?.country ?? '',
-    },
+    defaultValues: { name: '', email: '', country: '' },
   })
 
-  const onValid: SubmitHandler<FormValues> = () => {
-    setProfileSaved(true)
+  // Espelha isDirty num ref: o efeito de carga roda uma vez e resolve mais
+  // tarde, então ele precisa do valor de isDirty NO MOMENTO em que a busca
+  // termina — não do valor capturado quando o efeito foi criado.
+  const isDirtyRef = useRef(isDirty)
+  useEffect(() => {
+    isDirtyRef.current = isDirty
+  }, [isDirty])
+
+  useEffect(() => {
+    let active = true
+    profileService
+      .getMyProfile()
+      .then((profile) => {
+        // Não sobrescreve o que o usuário já começou a digitar.
+        if (active && profile && !isDirtyRef.current) {
+          reset({ name: profile.name, email: profile.email, country: profile.country })
+        }
+      })
+      .catch(() => {
+        if (active) setLoadError(true)
+      })
+    return () => {
+      active = false
+    }
+  }, [reset])
+
+  const onValid: SubmitHandler<FormValues> = async ({ name, country }) => {
+    setProfileError(false)
+    try {
+      await profileService.updateMyProfile({ name, country })
+      setProfileSaved(true)
+    } catch {
+      setProfileError(true)
+    }
   }
 
   // --- Language preference ---
@@ -97,14 +127,18 @@ export default function Account() {
               {...register('name')}
             />
 
-            <Input
-              label={t('dashboard.account.profile.email')}
-              id="email"
-              type="email"
-              autoComplete="email"
-              error={errors.email?.message}
-              {...register('email')}
-            />
+            <div>
+              <Input
+                label={t('dashboard.account.profile.email')}
+                id="email"
+                type="email"
+                autoComplete="email"
+                disabled
+                error={errors.email?.message}
+                {...register('email')}
+              />
+              <p className="mt-1 text-xs text-slate/60">{t('dashboard.account.profile.emailLocked')}</p>
+            </div>
 
             <div>
               <label htmlFor="country" className="block">
@@ -140,6 +174,18 @@ export default function Account() {
       {profileSaved && (
         <Card className="mt-6 max-w-xl" role="status">
           <p className="text-sm text-navy">{t('dashboard.account.profile.confirmation')}</p>
+        </Card>
+      )}
+
+      {profileError && (
+        <Card className="mt-6 max-w-xl" role="alert">
+          <p className="text-sm text-red-600">{t('dashboard.account.profile.error')}</p>
+        </Card>
+      )}
+
+      {loadError && (
+        <Card className="mt-6 max-w-xl" role="alert">
+          <p className="text-sm text-red-600">{t('dashboard.account.profile.loadError')}</p>
         </Card>
       )}
 
