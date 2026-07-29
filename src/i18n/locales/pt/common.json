@@ -530,6 +530,16 @@
       "title": "Confira seu e-mail",
       "body": "Enviamos um link de confirmação para o seu e-mail. Clique nele para ativar sua conta e depois faça login.",
       "cta": "Voltar para o login"
+    },
+    "reset": {
+      "title": "Defina uma nova senha",
+      "subtitle": "Escolha uma nova senha para a sua conta.",
+      "password": "Nova senha",
+      "confirmPassword": "Confirmar nova senha",
+      "submit": "Atualizar senha",
+      "success": "Senha atualizada! Você já pode fazer login.",
+      "error": "Não foi possível atualizar sua senha. Abra o link do e-mail novamente e tente de novo.",
+      "backToLogin": "Voltar para o login"
     }
   },
   "dashboard": {

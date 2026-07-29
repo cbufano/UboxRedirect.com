@@ -530,6 +530,16 @@
       "title": "Revisa tu correo",
       "body": "Te enviamos un enlace de confirmación a tu correo. Haz clic para activar tu cuenta y luego inicia sesión.",
       "cta": "Volver a iniciar sesión"
+    },
+    "reset": {
+      "title": "Define una nueva contraseña",
+      "subtitle": "Elige una nueva contraseña para tu cuenta.",
+      "password": "Nueva contraseña",
+      "confirmPassword": "Confirmar nueva contraseña",
+      "submit": "Actualizar contraseña",
+      "success": "¡Contraseña actualizada! Ya puedes iniciar sesión.",
+      "error": "No pudimos actualizar tu contraseña. Abre de nuevo el enlace del correo e inténtalo otra vez.",
+      "backToLogin": "Volver a iniciar sesión"
     }
   },
   "dashboard": {

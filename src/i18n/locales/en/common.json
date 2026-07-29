@@ -530,6 +530,16 @@
       "title": "Check your email",
       "body": "We sent a confirmation link to your email address. Click it to activate your account, then sign in.",
       "cta": "Back to sign in"
+    },
+    "reset": {
+      "title": "Set a new password",
+      "subtitle": "Choose a new password for your account.",
+      "password": "New password",
+      "confirmPassword": "Confirm new password",
+      "submit": "Update password",
+      "success": "Password updated! You can now sign in.",
+      "error": "We couldn't update your password. Open the link from the email again and retry.",
+      "backToLogin": "Back to sign in"
     }
   },
   "dashboard": {

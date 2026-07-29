@@ -18,6 +18,7 @@ const Login = lazy(() => import('./pages/auth/Login'))
 const Signup = lazy(() => import('./pages/auth/Signup'))
 const Forgot = lazy(() => import('./pages/auth/Forgot'))
 const Verify = lazy(() => import('./pages/auth/Verify'))
+const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'))
 const Overview = lazy(() => import('./pages/dashboard/Overview'))
 const Address = lazy(() => import('./pages/dashboard/Address'))
 const Inbox = lazy(() => import('./pages/dashboard/Inbox'))
@@ -45,6 +46,7 @@ export function AppRoutes() {
           <Route path="signup" element={<Signup />} />
           <Route path="forgot" element={<Forgot />} />
           <Route path="verify" element={<Verify />} />
+          <Route path="reset-password" element={<ResetPassword />} />
           {/* public routes added as their tasks complete */}
         </Route>
         <Route path="/app" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
