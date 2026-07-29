@@ -554,6 +554,7 @@
       "account": "Cuenta"
     },
     "signOut": "Cerrar sesión",
+    "loading": "Cargando…",
     "overview": {
       "title": "Resumen",
       "welcome": "¡Bienvenido(a) de nuevo, {{name}}!",

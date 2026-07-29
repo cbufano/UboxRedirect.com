@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Package, Truck, CheckCircle2, MapPin } from 'lucide-react'
-import { authService } from '../../services/authService'
-import { usAddress } from '../../mocks/address'
+import { useAuth } from '../../contexts/AuthContext'
+import { WAREHOUSE_ADDRESS } from '../../config/warehouse'
+import { profileService } from '../../services/profileService'
 import { packages, type Package as PackageRecord } from '../../mocks/packages'
 import { shipments } from '../../mocks/shipments'
 import { Card } from '../../components/ui/Card'
@@ -15,12 +17,23 @@ const packageStatusClasses: Record<PackageRecord['status'], string> = {
 
 export default function Overview() {
   const { t } = useTranslation()
-  const user = authService.getSession()
-  // The address card shows the account's generic recipient hint (not the
-  // user's real name a second time) — the name already appears in the
-  // greeting above, and the customer is expected to write their own name in
-  // when checking out at a store, matched to their account by suite number.
-  const address = formatUsAddress(usAddress)
+  const { user } = useAuth()
+  const [suite, setSuite] = useState<string | null>(null)
+
+  useEffect(() => {
+    let active = true
+    profileService.getMyProfile().then((profile) => {
+      if (active) setSuite(profile?.suiteNumber ?? null)
+    })
+    return () => {
+      active = false
+    }
+  }, [])
+
+  // O card mostra o hint genérico de destinatário (o nome já aparece na
+  // saudação acima) — o cliente escreve o próprio nome no checkout da loja,
+  // e o galpão o identifica pela suite.
+  const address = formatUsAddress(WAREHOUSE_ADDRESS, suite ?? '—')
 
   const inBoxCount = packages.filter((pkg) => pkg.status === 'in_box').length
   const inTransitCount = shipments.filter(

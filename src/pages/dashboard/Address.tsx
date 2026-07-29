@@ -1,22 +1,43 @@
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { usAddress } from '../../mocks/address'
-import { authService } from '../../services/authService'
+import { WAREHOUSE_ADDRESS } from '../../config/warehouse'
+import { profileService, type Profile } from '../../services/profileService'
 import { Card } from '../../components/ui/Card'
 import { CopyButton } from '../../components/ui/CopyButton'
 import { formatUsAddress } from '../../lib/address'
 
 export default function Address() {
   const { t } = useTranslation()
-  const user = authService.getSession()
-  const address = formatUsAddress(usAddress, user?.name)
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let active = true
+    profileService
+      .getMyProfile()
+      .then((data) => {
+        if (active) setProfile(data)
+      })
+      .finally(() => {
+        if (active) setLoading(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [])
+
+  if (loading) return <p className="text-sm text-slate/60">{t('dashboard.loading')}</p>
+
+  const suite = profile?.suiteNumber ?? '—'
+  const address = formatUsAddress(WAREHOUSE_ADDRESS, suite, profile?.name)
   const copiedText = t('dashboard.address.copied')
 
   const lines = [
     { key: 'recipient', label: t('dashboard.address.labels.recipient'), value: address.recipient },
     { key: 'line1', label: t('dashboard.address.labels.line1'), value: address.street },
-    { key: 'city', label: t('dashboard.address.labels.city'), value: usAddress.city },
-    { key: 'state', label: t('dashboard.address.labels.state'), value: usAddress.state },
-    { key: 'zip', label: t('dashboard.address.labels.zip'), value: usAddress.zip },
+    { key: 'city', label: t('dashboard.address.labels.city'), value: WAREHOUSE_ADDRESS.city },
+    { key: 'state', label: t('dashboard.address.labels.state'), value: WAREHOUSE_ADDRESS.state },
+    { key: 'zip', label: t('dashboard.address.labels.zip'), value: WAREHOUSE_ADDRESS.zip },
     { key: 'country', label: t('dashboard.address.labels.country'), value: address.country },
   ]
 
@@ -41,7 +62,7 @@ export default function Address() {
             </div>
           ))}
 
-          {/* Suite — highlighted, the field customers most often forget */}
+          {/* Suite — destacada, o campo que os clientes mais esquecem */}
           <div className="flex items-center justify-between gap-3 rounded-lg bg-brand/10 px-3 py-3">
             <div>
               <dt className="text-xs font-medium uppercase tracking-wide text-brand">

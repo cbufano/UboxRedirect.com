@@ -554,6 +554,7 @@
       "account": "Account"
     },
     "signOut": "Sign out",
+    "loading": "Loading…",
     "overview": {
       "title": "Overview",
       "welcome": "Welcome back, {{name}}!",

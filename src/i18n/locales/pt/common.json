@@ -554,6 +554,7 @@
       "account": "Conta"
     },
     "signOut": "Sair",
+    "loading": "Carregando…",
     "overview": {
       "title": "Visão geral",
       "welcome": "Bem-vindo(a) de volta, {{name}}!",
