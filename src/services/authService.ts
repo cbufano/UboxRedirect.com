@@ -1,20 +1,13 @@
 /**
- * authService — MOCK auth layer backed by localStorage.
- *
- * This is the ISOLATION LAYER for authentication in the app. When the real
- * backend is wired up, only the internals of this module should change —
- * the public interface (`User`, `authService.register/login/logout/getSession`)
- * must remain exactly as-is so consumers never need to change.
- *
- * IMPORTANT (mock-only, not production-safe):
- * Passwords are stored in plain text in localStorage purely so this mock can
- * validate credentials client-side. A real backend must NEVER do this — it
- * must hash passwords server-side (e.g. bcrypt/argon2) and never persist or
- * transmit plain-text passwords to the client at all.
+ * authService — camada de isolamento de autenticação, agora sobre Supabase.
+ * Consumidores nunca importam o supabase-js diretamente para auth: sempre
+ * este módulo. Toda a API é assíncrona.
  */
+import { supabase } from '../lib/supabase'
+import type { User as SupabaseUser } from '@supabase/supabase-js'
 
-const USERS_KEY = 'bufano.users'
-const SESSION_KEY = 'bufano.session'
+/** Versão dos Termos aceitos no cadastro — gravada em consents pelo trigger. */
+export const TERMS_VERSION = '2026-07-29'
 
 export interface User {
   id: string
@@ -23,91 +16,83 @@ export interface User {
   country: string
 }
 
-interface StoredUser extends User {
-  // MOCK ONLY — see file header. Never store plain-text passwords in production.
-  password: string
-}
-
-interface RegisterInput {
+export interface RegisterInput {
   name: string
   email: string
   country: string
   password: string
 }
 
-function readUsers(): StoredUser[] {
-  try {
-    const raw = localStorage.getItem(USERS_KEY)
-    if (!raw) return []
-    const parsed = JSON.parse(raw)
-    return Array.isArray(parsed) ? (parsed as StoredUser[]) : []
-  } catch {
-    return []
+export interface RegisterResult {
+  user: User | null
+  /** true quando o Supabase exige confirmação por e-mail antes do login. */
+  needsEmailConfirmation: boolean
+}
+
+function mapUser(supabaseUser: SupabaseUser | null | undefined): User | null {
+  if (!supabaseUser) return null
+  const metadata = (supabaseUser.user_metadata ?? {}) as Record<string, unknown>
+  return {
+    id: supabaseUser.id,
+    name: typeof metadata.name === 'string' ? metadata.name : '',
+    email: supabaseUser.email ?? '',
+    country: typeof metadata.country === 'string' ? metadata.country : '',
   }
 }
 
-function writeUsers(users: StoredUser[]): void {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users))
-}
-
-function toPublicUser(stored: StoredUser): User {
-  const { id, name, email, country } = stored
-  return { id, name, email, country }
-}
-
-function setSession(user: User): void {
-  localStorage.setItem(SESSION_KEY, JSON.stringify(user))
-}
-
 export const authService = {
-  register(data: RegisterInput): User {
-    const users = readUsers()
-    const exists = users.some((u) => u.email === data.email)
-    if (exists) {
-      throw new Error('A user with this email already exists')
-    }
-
-    const stored: StoredUser = {
-      id: data.email,
-      name: data.name,
+  async register(data: RegisterInput): Promise<RegisterResult> {
+    const { data: result, error } = await supabase.auth.signUp({
       email: data.email,
-      country: data.country,
       password: data.password,
-    }
-
-    users.push(stored)
-    writeUsers(users)
-
-    const publicUser = toPublicUser(stored)
-    setSession(publicUser)
-    return publicUser
+      options: {
+        data: {
+          name: data.name,
+          country: data.country,
+          terms_accepted: true,
+          terms_version: TERMS_VERSION,
+        },
+        emailRedirectTo: `${window.location.origin}/login`,
+      },
+    })
+    if (error) throw new Error(error.message)
+    return { user: mapUser(result.user), needsEmailConfirmation: !result.session }
   },
 
-  login(email: string, password: string): User {
-    const users = readUsers()
-    const found = users.find((u) => u.email === email)
-    if (!found || found.password !== password) {
-      throw new Error('Invalid credentials')
-    }
-
-    const publicUser = toPublicUser(found)
-    setSession(publicUser)
-    return publicUser
+  async login(email: string, password: string): Promise<User> {
+    const { data: result, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) throw new Error(error.message)
+    const user = mapUser(result.user)
+    if (!user) throw new Error('Invalid credentials')
+    return user
   },
 
-  logout(): void {
-    localStorage.removeItem(SESSION_KEY)
+  async logout(): Promise<void> {
+    await supabase.auth.signOut()
   },
 
-  getSession(): User | null {
-    try {
-      const raw = localStorage.getItem(SESSION_KEY)
-      if (!raw) return null
-      const parsed = JSON.parse(raw)
-      if (!parsed || typeof parsed !== 'object') return null
-      return parsed as User
-    } catch {
-      return null
-    }
+  async getSession(): Promise<User | null> {
+    const { data } = await supabase.auth.getSession()
+    return mapUser(data.session?.user)
+  },
+
+  /** Observa mudanças de sessão; retorna a função de unsubscribe. */
+  onAuthStateChange(callback: (user: User | null) => void): () => void {
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      callback(mapUser(session?.user))
+    })
+    return () => data.subscription.unsubscribe()
+  },
+
+  async requestPasswordReset(email: string): Promise<void> {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    })
+    if (error) throw new Error(error.message)
+  },
+
+  async updatePassword(newPassword: string): Promise<void> {
+    const { error } = await supabase.auth.updateUser({ password: newPassword })
+    if (error) throw new Error(error.message)
   },
 }
