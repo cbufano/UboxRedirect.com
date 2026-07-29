@@ -3,6 +3,11 @@
 -- Aplicar no SQL Editor do Supabase (ou via supabase db push).
 -- ============================================================
 
+-- 0) Schema privado — nunca exposto pelo PostgREST (só o schema `public` é
+--    exposto por padrão no Supabase). Funções de checagem de papel moram
+--    aqui para não virarem endpoints RPC chamáveis por qualquer cliente.
+create schema if not exists private;
+
 -- 1) Enum de papéis
 create type public.app_role as enum ('customer', 'ops', 'support', 'admin', 'super_admin');
 
@@ -15,9 +20,11 @@ create table public.user_roles (
   unique (user_id, role)
 );
 
--- 3) Checagem de papel. SECURITY DEFINER: evita recursão de RLS ao ser
---    usada dentro das próprias policies.
-create or replace function public.has_role(_user_id uuid, _role public.app_role)
+-- 3) Checagem de papel. Vive em `private` (não em `public`) para que o
+--    PostgREST nunca a exponha como RPC — chamada direta revelaria o papel
+--    de qualquer user_id para qualquer chamador. SECURITY DEFINER evita
+--    recursão de RLS ao ser usada dentro das próprias policies.
+create or replace function private.has_role(_user_id uuid, _role public.app_role)
 returns boolean
 language sql
 stable
@@ -29,6 +36,19 @@ as $$
     where user_id = _user_id and role = _role
   );
 $$;
+
+-- Só `authenticated` pode chamar (as próprias policies rodam como o role
+-- autenticado). `anon` e `public` nunca recebem EXECUTE.
+revoke execute on function private.has_role(uuid, public.app_role) from public;
+grant usage on schema private to authenticated;
+grant execute on function private.has_role(uuid, public.app_role) to authenticated;
+
+-- Atribuição de papéis (ex.: promover alguém a admin) é feita apenas via
+-- SQL direto/service_role por enquanto — não há UI nem RPC para isso ainda.
+-- Quando o painel admin existir (Fase 3+), adicionar uma função
+-- SECURITY DEFINER dedicada e auditada para isso, gated por
+-- private.has_role(auth.uid(), 'admin'); nunca abrir INSERT/UPDATE direto
+-- em user_roles para clientes.
 
 -- 4) Perfis (1:1 com auth.users)
 create table public.profiles (
@@ -77,8 +97,66 @@ create trigger profiles_set_updated_at
 before update on public.profiles
 for each row execute function public.set_updated_at();
 
--- 8) Novo usuário → perfil + papel customer + suite + consentimento dos
---    termos (vindo do metadata do signUp), tudo atômico.
+-- 8) `email` e `created_at` de profiles não são editáveis pelo cliente —
+--    RLS só restringe QUAIS LINHAS, não QUAIS COLUNAS, um dono pode alterar.
+--    Este trigger garante que um PATCH direto ao PostgREST não consiga
+--    forjar um e-mail ou uma data de criação diferente da real.
+create or replace function public.protect_profile_immutable_columns()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.email = old.email;
+  new.created_at = old.created_at;
+  return new;
+end;
+$$;
+
+create trigger profiles_protect_immutable_columns
+before update on public.profiles
+for each row execute function public.protect_profile_immutable_columns();
+
+-- 9) `consents.created_at` também não pode ser escolhido pelo cliente no
+--    INSERT (senão um usuário poderia forjar a data de um consentimento
+--    legal) — o valor default só vale se a coluna for omitida, não se o
+--    cliente enviar um valor explícito, então força-se aqui.
+create or replace function public.force_consent_created_at()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.created_at = now();
+  return new;
+end;
+$$;
+
+create trigger consents_force_created_at
+before insert on public.consents
+for each row execute function public.force_consent_created_at();
+
+-- 10) Mantém profiles.email em sincronia quando o e-mail muda pelo fluxo
+--     verificado do Supabase Auth (o único jeito de mudar e-mail, já que o
+--     trigger acima trava a coluna contra escrita direta do cliente).
+create or replace function public.handle_user_email_change()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if new.email is distinct from old.email then
+    update public.profiles set email = new.email where id = new.id;
+  end if;
+  return new;
+end;
+$$;
+
+create trigger on_auth_user_email_updated
+after update of email on auth.users
+for each row execute function public.handle_user_email_change();
+
+-- 11) Novo usuário → perfil + papel customer + suite + consentimento dos
+--     termos (vindo do metadata do signUp), tudo atômico.
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
@@ -105,7 +183,10 @@ begin
     new.id,
     'terms',
     coalesce(new.raw_user_meta_data ->> 'terms_version', 'unknown'),
-    coalesce((new.raw_user_meta_data ->> 'terms_accepted')::boolean, false)
+    -- Comparação tolerante em vez de ::boolean — um valor inesperado em
+    -- metadata do cliente não pode abortar a transação inteira de signup;
+    -- na dúvida, assume não-aceito (o valor mais seguro).
+    coalesce(lower(new.raw_user_meta_data ->> 'terms_accepted') in ('true', 't', '1', 'yes'), false)
   );
 
   return new;
@@ -116,38 +197,48 @@ create trigger on_auth_user_created
 after insert on auth.users
 for each row execute function public.handle_new_user();
 
--- 9) RLS ligado em TODAS as tabelas
+-- 12) RLS ligado em TODAS as tabelas
 alter table public.profiles enable row level security;
 alter table public.user_roles enable row level security;
 alter table public.suites enable row level security;
 alter table public.consents enable row level security;
 
 -- profiles: dono lê/atualiza o próprio; admin lê tudo. Sem INSERT/DELETE
--- pelo cliente (só o trigger cria).
+-- pelo cliente (só o trigger cria). UPDATE restrito por RLS à própria
+-- linha, e por GRANT de coluna a name/country apenas (email/created_at são
+-- protegidos pelo trigger acima, não pelo GRANT, mas o GRANT documenta a
+-- intenção e barra outras colunas que venham a existir aqui).
 create policy "profiles_select_own_or_admin" on public.profiles
   for select to authenticated
-  using (id = (select auth.uid()) or public.has_role((select auth.uid()), 'admin'));
+  using (id = (select auth.uid()) or private.has_role((select auth.uid()), 'admin'));
 
 create policy "profiles_update_own" on public.profiles
   for update to authenticated
   using (id = (select auth.uid()))
   with check (id = (select auth.uid()));
 
--- user_roles: dono lê os próprios papéis; admin lê tudo. Sem escrita pelo cliente.
+revoke update on public.profiles from authenticated;
+grant update (name, country) on public.profiles to authenticated;
+
+-- user_roles: dono lê os próprios papéis; admin lê tudo. Sem escrita pelo
+-- cliente (nenhuma policy de insert/update/delete = bloqueado por RLS).
 create policy "user_roles_select_own_or_admin" on public.user_roles
   for select to authenticated
-  using (user_id = (select auth.uid()) or public.has_role((select auth.uid()), 'admin'));
+  using (user_id = (select auth.uid()) or private.has_role((select auth.uid()), 'admin'));
 
 -- suites: dono lê a própria; admin lê tudo. Sem escrita pelo cliente.
 create policy "suites_select_own_or_admin" on public.suites
   for select to authenticated
-  using (user_id = (select auth.uid()) or public.has_role((select auth.uid()), 'admin'));
+  using (user_id = (select auth.uid()) or private.has_role((select auth.uid()), 'admin'));
 
--- consents: dono lê e registra os próprios; sem UPDATE/DELETE (imutável).
+-- consents: dono lê e registra os próprios; sem UPDATE/DELETE (imutável —
+-- reforçado tanto por RLS (sem essas policies) quanto pelo GRANT abaixo).
 create policy "consents_select_own_or_admin" on public.consents
   for select to authenticated
-  using (user_id = (select auth.uid()) or public.has_role((select auth.uid()), 'admin'));
+  using (user_id = (select auth.uid()) or private.has_role((select auth.uid()), 'admin'));
 
 create policy "consents_insert_own" on public.consents
   for insert to authenticated
   with check (user_id = (select auth.uid()));
+
+revoke update, delete on public.consents from authenticated;
