@@ -748,7 +748,9 @@
           "name": "Informe seu nome.",
           "email": "Informe um e-mail válido.",
           "country": "Selecione um país."
-        }
+        },
+        "emailLocked": "A alteração de e-mail estará disponível em breve. Fale com o suporte se precisar atualizar.",
+        "error": "Não foi possível salvar suas alterações. Tente novamente."
       },
       "language": {
         "title": "Preferência de idioma",

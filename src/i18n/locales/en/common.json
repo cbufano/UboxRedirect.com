@@ -748,7 +748,9 @@
           "name": "Please enter your name.",
           "email": "Please enter a valid email.",
           "country": "Please select a country."
-        }
+        },
+        "emailLocked": "Email changes will be available soon. Contact support if you need to update it.",
+        "error": "We couldn't save your changes. Try again."
       },
       "language": {
         "title": "Language preference",

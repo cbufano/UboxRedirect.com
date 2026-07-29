@@ -748,7 +748,9 @@
           "name": "Ingresa tu nombre.",
           "email": "Ingresa un correo electrónico válido.",
           "country": "Selecciona un país."
-        }
+        },
+        "emailLocked": "El cambio de correo estará disponible pronto. Contacta con soporte si necesitas actualizarlo.",
+        "error": "No pudimos guardar tus cambios. Inténtalo de nuevo."
       },
       "language": {
         "title": "Preferencia de idioma",
