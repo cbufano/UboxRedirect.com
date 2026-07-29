@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -18,6 +18,7 @@ export default function Account() {
   // --- Profile form ---
   const [profileSaved, setProfileSaved] = useState(false)
   const [profileError, setProfileError] = useState(false)
+  const [loadError, setLoadError] = useState(false)
 
   const schema = z.object({
     name: z.string().min(1, t('dashboard.account.profile.errors.name')),
@@ -31,19 +32,33 @@ export default function Account() {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { name: '', email: '', country: '' },
   })
 
+  // Espelha isDirty num ref: o efeito de carga roda uma vez e resolve mais
+  // tarde, então ele precisa do valor de isDirty NO MOMENTO em que a busca
+  // termina — não do valor capturado quando o efeito foi criado.
+  const isDirtyRef = useRef(isDirty)
+  useEffect(() => {
+    isDirtyRef.current = isDirty
+  }, [isDirty])
+
   useEffect(() => {
     let active = true
-    profileService.getMyProfile().then((profile) => {
-      if (active && profile) {
-        reset({ name: profile.name, email: profile.email, country: profile.country })
-      }
-    })
+    profileService
+      .getMyProfile()
+      .then((profile) => {
+        // Não sobrescreve o que o usuário já começou a digitar.
+        if (active && profile && !isDirtyRef.current) {
+          reset({ name: profile.name, email: profile.email, country: profile.country })
+        }
+      })
+      .catch(() => {
+        if (active) setLoadError(true)
+      })
     return () => {
       active = false
     }
@@ -165,6 +180,12 @@ export default function Account() {
       {profileError && (
         <Card className="mt-6 max-w-xl" role="alert">
           <p className="text-sm text-red-600">{t('dashboard.account.profile.error')}</p>
+        </Card>
+      )}
+
+      {loadError && (
+        <Card className="mt-6 max-w-xl" role="alert">
+          <p className="text-sm text-red-600">{t('dashboard.account.profile.loadError')}</p>
         </Card>
       )}
 

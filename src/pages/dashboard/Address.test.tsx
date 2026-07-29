@@ -39,3 +39,13 @@ it('shows a loading state while the profile resolves', () => {
   )
   expect(screen.getByText('Loading…')).toBeInTheDocument()
 })
+
+it('shows an error state when the profile fails to load', async () => {
+  mocked.getMyProfile.mockRejectedValue(new Error('network error'))
+  render(
+    <MemoryRouter>
+      <Address />
+    </MemoryRouter>,
+  )
+  expect(await screen.findByRole('alert')).toBeInTheDocument()
+})

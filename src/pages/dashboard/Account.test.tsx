@@ -57,3 +57,33 @@ it('shows an error when saving fails', async () => {
   await userEvent.click(screen.getByRole('button', { name: /save|update/i }))
   expect(await screen.findByRole('alert')).toBeInTheDocument()
 })
+
+it('shows an error when the profile fails to load', async () => {
+  mocked.getMyProfile.mockRejectedValue(new Error('network error'))
+  renderAccount()
+  expect(await screen.findByRole('alert')).toBeInTheDocument()
+})
+
+it('does not overwrite in-progress edits if the profile resolves after typing starts', async () => {
+  let resolveProfile: (value: Awaited<ReturnType<typeof profileService.getMyProfile>>) => void = () => {}
+  mocked.getMyProfile.mockReturnValue(
+    new Promise((resolve) => {
+      resolveProfile = resolve
+    }),
+  )
+  renderAccount()
+  const name = screen.getByLabelText(/^name$/i)
+  await userEvent.type(name, 'Someone Else')
+
+  resolveProfile({
+    id: '1',
+    name: 'Ana',
+    email: 'ana@example.com',
+    country: 'BR',
+    preferredLanguage: 'pt',
+    suiteNumber: 'BUF-10482',
+  })
+
+  await new Promise((r) => setTimeout(r, 0))
+  expect(name).toHaveValue('Someone Else')
+})

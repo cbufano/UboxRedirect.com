@@ -10,6 +10,7 @@ export default function Address() {
   const { t } = useTranslation()
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -17,6 +18,9 @@ export default function Address() {
       .getMyProfile()
       .then((data) => {
         if (active) setProfile(data)
+      })
+      .catch(() => {
+        if (active) setLoadError(true)
       })
       .finally(() => {
         if (active) setLoading(false)
@@ -27,6 +31,14 @@ export default function Address() {
   }, [])
 
   if (loading) return <p className="text-sm text-slate/60">{t('dashboard.loading')}</p>
+
+  if (loadError) {
+    return (
+      <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+        {t('dashboard.address.loadError')}
+      </p>
+    )
+  }
 
   const suite = profile?.suiteNumber ?? '—'
   const address = formatUsAddress(WAREHOUSE_ADDRESS, suite, profile?.name)

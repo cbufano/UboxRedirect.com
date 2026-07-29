@@ -22,9 +22,16 @@ export default function Overview() {
 
   useEffect(() => {
     let active = true
-    profileService.getMyProfile().then((profile) => {
-      if (active) setSuite(profile?.suiteNumber ?? null)
-    })
+    profileService
+      .getMyProfile()
+      .then((profile) => {
+        if (active) setSuite(profile?.suiteNumber ?? null)
+      })
+      .catch((error) => {
+        // Degrada com segurança: o card mostra '—' no lugar da suite; só
+        // registramos o erro para diagnóstico, sem quebrar a página.
+        console.error('Overview: failed to load profile', error)
+      })
     return () => {
       active = false
     }

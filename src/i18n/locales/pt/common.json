@@ -594,6 +594,7 @@
       "copyFull": "Copiar endereço completo",
       "fullAddressLabel": "endereço completo",
       "copied": "Copiado",
+      "loadError": "Não foi possível carregar seu endereço. Atualize a página para tentar novamente.",
       "suiteNote": "Este é o número exclusivo da sua suite. Sempre inclua-o — sem ele, não conseguimos vincular seus pacotes à sua conta.",
       "instructions": {
         "title": "Como usar seu endereço nas compras",
@@ -750,7 +751,8 @@
           "country": "Selecione um país."
         },
         "emailLocked": "A alteração de e-mail estará disponível em breve. Fale com o suporte se precisar atualizar.",
-        "error": "Não foi possível salvar suas alterações. Tente novamente."
+        "error": "Não foi possível salvar suas alterações. Tente novamente.",
+        "loadError": "Não foi possível carregar seu perfil. Atualize a página para tentar novamente."
       },
       "language": {
         "title": "Preferência de idioma",
