@@ -79,6 +79,18 @@ describe('register', () => {
       authService.register({ name: 'Ana', email: 'ana@example.com', country: 'BR', password: 'secret12' }),
     ).rejects.toThrow('User already registered')
   })
+
+  it('preserves the original Supabase error as the thrown error cause', async () => {
+    const supabaseError = { message: 'User already registered', status: 400 }
+    mockedAuth.signUp.mockResolvedValue({
+      data: { user: null, session: null },
+      error: supabaseError,
+    } as never)
+
+    await expect(
+      authService.register({ name: 'Ana', email: 'ana@example.com', country: 'BR', password: 'secret12' }),
+    ).rejects.toMatchObject({ cause: supabaseError })
+  })
 })
 
 describe('login', () => {
@@ -120,6 +132,18 @@ describe('session', () => {
   it('getSession returns null when signed out', async () => {
     mockedAuth.getSession.mockResolvedValue({ data: { session: null }, error: null } as never)
     expect(await authService.getSession()).toBeNull()
+  })
+
+  it('getSession returns null (not throw) when the call errors', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    mockedAuth.getSession.mockResolvedValue({
+      data: { session: null },
+      error: { message: 'network error' },
+    } as never)
+
+    expect(await authService.getSession()).toBeNull()
+    expect(consoleSpy).toHaveBeenCalledWith('authService.getSession failed:', 'network error')
+    consoleSpy.mockRestore()
   })
 
   it('onAuthStateChange forwards mapped users and returns an unsubscriber', () => {

@@ -40,6 +40,15 @@ function mapUser(supabaseUser: SupabaseUser | null | undefined): User | null {
   }
 }
 
+/**
+ * Preserva o `error` original do Supabase (status/code) como `cause` — o
+ * `.message` vira o texto da UI, mas um consumidor futuro (i18n, telemetria)
+ * ainda consegue inspecionar o erro estruturado original.
+ */
+function assertNoAuthError(error: { message: string } | null): void {
+  if (error) throw new Error(error.message, { cause: error })
+}
+
 export const authService = {
   async register(data: RegisterInput): Promise<RegisterResult> {
     const { data: result, error } = await supabase.auth.signUp({
@@ -55,13 +64,13 @@ export const authService = {
         emailRedirectTo: `${window.location.origin}/login`,
       },
     })
-    if (error) throw new Error(error.message)
+    assertNoAuthError(error)
     return { user: mapUser(result.user), needsEmailConfirmation: !result.session }
   },
 
   async login(email: string, password: string): Promise<User> {
     const { data: result, error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) throw new Error(error.message)
+    assertNoAuthError(error)
     const user = mapUser(result.user)
     if (!user) throw new Error('Invalid credentials')
     return user
@@ -72,7 +81,13 @@ export const authService = {
   },
 
   async getSession(): Promise<User | null> {
-    const { data } = await supabase.auth.getSession()
+    const { data, error } = await supabase.auth.getSession()
+    if (error) {
+      // Não relançamos: AuthProvider trata isto como "sem sessão" e segue o
+      // boot normal do app. Logamos para não perder o sinal de diagnóstico.
+      console.error('authService.getSession failed:', error.message)
+      return null
+    }
     return mapUser(data.session?.user)
   },
 
@@ -88,11 +103,11 @@ export const authService = {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset-password`,
     })
-    if (error) throw new Error(error.message)
+    assertNoAuthError(error)
   },
 
   async updatePassword(newPassword: string): Promise<void> {
     const { error } = await supabase.auth.updateUser({ password: newPassword })
-    if (error) throw new Error(error.message)
+    assertNoAuthError(error)
   },
 }
