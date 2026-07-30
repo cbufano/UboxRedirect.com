@@ -933,6 +933,7 @@
       "consolidations": "Consolidações",
       "warehouse": "Galpão",
       "payments": "Pagamentos",
+      "rates": "Tarifas e taxas",
       "dataRequests": "Pedidos de dados"
     },
     "overview": {
@@ -1334,6 +1335,108 @@
         "markFailed": "Marcar falhou",
         "working": "Atualizando…",
         "actionError": "Não foi possível atualizar esse estorno. Tente novamente."
+      }
+    },
+    "rates": {
+      "title": "Tarifas e taxas",
+      "subtitle": "Tabela de tarifas de envio, taxas de serviço e um simulador ao vivo que roda o mesmo cálculo que o cliente vê.",
+      "table": {
+        "title": "Tarifas de envio",
+        "add": "Nova tarifa",
+        "loadError": "Não foi possível carregar as tarifas. Atualize a página para tentar novamente.",
+        "empty": "Nenhuma tarifa cadastrada ainda.",
+        "zone": "Zona",
+        "carrier": "Transportadora",
+        "eta": "Prazo (dias)",
+        "base": "Taxa base (USD)",
+        "perKg": "Por kg (USD)",
+        "multiplier": "Multiplicador",
+        "actions": "Ações",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "confirmDelete": "Excluir a tarifa {{zone}} — {{carrier}}?",
+        "confirmYes": "Sim, excluir",
+        "confirmNo": "Cancelar",
+        "deleting": "Excluindo…",
+        "deleteError": "Não foi possível excluir esta tarifa. Tente novamente.",
+        "created": "Tarifa criada.",
+        "updated": "Tarifa atualizada.",
+        "deleted": "Tarifa excluída."
+      },
+      "form": {
+        "createTitle": "Nova tarifa",
+        "editTitle": "Editar tarifa",
+        "zoneLabel": "Zona de destino",
+        "zonePlaceholder": "BR, US ou DEFAULT",
+        "carrierLabel": "Transportadora",
+        "etaLabel": "Prazo (dias)",
+        "etaPlaceholder": "8-14",
+        "baseLabel": "Taxa base (USD)",
+        "perKgLabel": "Tarifa por kg (USD)",
+        "multiplierLabel": "Multiplicador",
+        "submitCreate": "Criar tarifa",
+        "submitEdit": "Salvar alterações",
+        "submitting": "Salvando…",
+        "cancel": "Cancelar",
+        "error": "Não foi possível salvar esta tarifa. Tente novamente.",
+        "errors": {
+          "zoneRequired": "Informe a zona de destino.",
+          "carrierRequired": "Informe a transportadora.",
+          "etaRequired": "Informe o prazo estimado.",
+          "baseNonNegative": "Informe uma taxa base de zero ou mais.",
+          "perKgNonNegative": "Informe uma tarifa por kg de zero ou mais.",
+          "multiplierPositive": "Informe um multiplicador maior que zero."
+        }
+      },
+      "fees": {
+        "title": "Taxas de serviço",
+        "hint": "As cinco chaves de taxa são fixas — o site as lê pela chave. Edite aqui o rótulo, os valores e o status.",
+        "loadError": "Não foi possível carregar as taxas de serviço. Atualize a página para tentar novamente.",
+        "table": {
+          "fee": "Taxa",
+          "amount": "Valor (USD)",
+          "percent": "Percentual (%)",
+          "status": "Status",
+          "actions": "Ações"
+        },
+        "active": "Ativa",
+        "inactive": "Inativa",
+        "edit": "Editar",
+        "labelLabel": "Rótulo",
+        "amountLabel": "Valor (USD)",
+        "percentLabel": "Percentual (%)",
+        "activeLabel": "Ativa",
+        "save": "Salvar taxa",
+        "saving": "Salvando…",
+        "cancel": "Cancelar",
+        "success": "Taxa atualizada.",
+        "error": "Não foi possível atualizar esta taxa. Tente novamente.",
+        "errors": {
+          "labelRequired": "Informe o rótulo da taxa.",
+          "valueRequired": "Informe um valor ou percentual válido (pelo menos um dos dois)."
+        }
+      },
+      "simulator": {
+        "title": "Simulador de envio",
+        "hint": "Roda exatamente o mesmo cálculo ao vivo da calculadora do cliente — edite uma tarifa acima e simule para ver o efeito.",
+        "weightLabel": "Peso (kg)",
+        "lengthLabel": "Comprimento (cm)",
+        "widthLabel": "Largura (cm)",
+        "heightLabel": "Altura (cm)",
+        "zoneLabel": "Zona de destino",
+        "submit": "Simular",
+        "simulating": "Calculando…",
+        "resultTitle": "O que o cliente vê",
+        "chargeable": "Peso cobrável: {{weight}} kg",
+        "carrier": "Transportadora",
+        "eta": "Prazo estimado (dias)",
+        "cost": "Custo estimado",
+        "noRates": "Nenhuma tarifa configurada para este destino — cadastre acima uma linha da zona ou uma linha DEFAULT.",
+        "error": "Não foi possível rodar a simulação. Tente novamente.",
+        "errors": {
+          "weightPositive": "Informe um peso maior que zero.",
+          "dimensionPositive": "Informe uma dimensão maior que zero."
+        }
       }
     }
   },

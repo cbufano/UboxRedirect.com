@@ -933,6 +933,7 @@
       "consolidations": "Consolidations",
       "warehouse": "Warehouse",
       "payments": "Payments",
+      "rates": "Rates & fees",
       "dataRequests": "Data requests"
     },
     "overview": {
@@ -1334,6 +1335,108 @@
         "markFailed": "Mark failed",
         "working": "Updating…",
         "actionError": "We couldn't update that refund. Please try again."
+      }
+    },
+    "rates": {
+      "title": "Rates & fees",
+      "subtitle": "Shipping rate table, service fees and a live simulator that runs the exact calculation customers see.",
+      "table": {
+        "title": "Shipping rates",
+        "add": "Add rate",
+        "loadError": "We couldn't load the shipping rates. Refresh the page to try again.",
+        "empty": "No shipping rates configured yet.",
+        "zone": "Zone",
+        "carrier": "Carrier",
+        "eta": "ETA (days)",
+        "base": "Base fee (USD)",
+        "perKg": "Per kg (USD)",
+        "multiplier": "Multiplier",
+        "actions": "Actions",
+        "edit": "Edit",
+        "delete": "Delete",
+        "confirmDelete": "Delete the {{zone}} — {{carrier}} rate?",
+        "confirmYes": "Yes, delete",
+        "confirmNo": "Cancel",
+        "deleting": "Deleting…",
+        "deleteError": "We couldn't delete this rate. Please try again.",
+        "created": "Rate created.",
+        "updated": "Rate updated.",
+        "deleted": "Rate deleted."
+      },
+      "form": {
+        "createTitle": "New rate",
+        "editTitle": "Edit rate",
+        "zoneLabel": "Destination zone",
+        "zonePlaceholder": "BR, US or DEFAULT",
+        "carrierLabel": "Carrier",
+        "etaLabel": "ETA (days)",
+        "etaPlaceholder": "8-14",
+        "baseLabel": "Base fee (USD)",
+        "perKgLabel": "Rate per kg (USD)",
+        "multiplierLabel": "Multiplier",
+        "submitCreate": "Create rate",
+        "submitEdit": "Save changes",
+        "submitting": "Saving…",
+        "cancel": "Cancel",
+        "error": "We couldn't save this rate. Please try again.",
+        "errors": {
+          "zoneRequired": "Enter the destination zone.",
+          "carrierRequired": "Enter the carrier name.",
+          "etaRequired": "Enter the estimated delivery time.",
+          "baseNonNegative": "Enter a base fee of zero or more.",
+          "perKgNonNegative": "Enter a per-kg rate of zero or more.",
+          "multiplierPositive": "Enter a multiplier greater than zero."
+        }
+      },
+      "fees": {
+        "title": "Service fees",
+        "hint": "The five fee keys are fixed — the site reads them by key. Edit the label, values and status here.",
+        "loadError": "We couldn't load the service fees. Refresh the page to try again.",
+        "table": {
+          "fee": "Fee",
+          "amount": "Amount (USD)",
+          "percent": "Percent (%)",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "active": "Active",
+        "inactive": "Inactive",
+        "edit": "Edit",
+        "labelLabel": "Label",
+        "amountLabel": "Amount (USD)",
+        "percentLabel": "Percent (%)",
+        "activeLabel": "Active",
+        "save": "Save fee",
+        "saving": "Saving…",
+        "cancel": "Cancel",
+        "success": "Fee updated.",
+        "error": "We couldn't update this fee. Please try again.",
+        "errors": {
+          "labelRequired": "Enter the fee label.",
+          "valueRequired": "Enter a valid amount or percent (at least one of the two)."
+        }
+      },
+      "simulator": {
+        "title": "Shipping simulator",
+        "hint": "Runs the exact same live calculation as the customer calculator — edit a rate above and simulate to see the effect.",
+        "weightLabel": "Weight (kg)",
+        "lengthLabel": "Length (cm)",
+        "widthLabel": "Width (cm)",
+        "heightLabel": "Height (cm)",
+        "zoneLabel": "Destination zone",
+        "submit": "Simulate",
+        "simulating": "Calculating…",
+        "resultTitle": "What the customer sees",
+        "chargeable": "Chargeable weight: {{weight}} kg",
+        "carrier": "Carrier",
+        "eta": "Estimated time (days)",
+        "cost": "Estimated cost",
+        "noRates": "No shipping rates are configured for this destination — add a row for the zone or a DEFAULT row above.",
+        "error": "We couldn't run the simulation. Please try again.",
+        "errors": {
+          "weightPositive": "Enter a weight greater than zero.",
+          "dimensionPositive": "Enter a dimension greater than zero."
+        }
       }
     }
   },
