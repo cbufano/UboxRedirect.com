@@ -4,11 +4,13 @@ import { useTranslation } from 'react-i18next'
 import {
   LayoutDashboard,
   MapPin,
+  PackageSearch,
   Inbox,
   PackagePlus,
   Truck,
   ShoppingBag,
   UserCircle,
+  ShieldCheck,
   Menu,
   X,
 } from 'lucide-react'
@@ -20,11 +22,13 @@ import { useAuth } from '../contexts/AuthContext'
 const NAV_ITEMS = [
   { to: '/app', key: 'dashboard.nav.overview', icon: LayoutDashboard, end: true },
   { to: '/app/address', key: 'dashboard.nav.address', icon: MapPin, end: false },
+  { to: '/app/notify', key: 'dashboard.nav.notify', icon: PackageSearch, end: false },
   { to: '/app/inbox', key: 'dashboard.nav.inbox', icon: Inbox, end: false },
   { to: '/app/ship', key: 'dashboard.nav.ship', icon: PackagePlus, end: false },
   { to: '/app/shipments', key: 'dashboard.nav.shipments', icon: Truck, end: false },
   { to: '/app/shopper', key: 'dashboard.nav.shopper', icon: ShoppingBag, end: false },
   { to: '/app/account', key: 'dashboard.nav.account', icon: UserCircle, end: false },
+  { to: '/app/privacy', key: 'dashboard.nav.privacy', icon: ShieldCheck, end: false },
 ] as const
 
 const navLinkClassName = ({ isActive }: { isActive: boolean }) =>

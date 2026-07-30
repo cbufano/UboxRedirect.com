@@ -5,3 +5,8 @@ dist/
 !.env.example
 .superpowers/
 .DS_Store
+
+# mobile (Expo)
+mobile/node_modules
+mobile/.expo
+mobile/.env

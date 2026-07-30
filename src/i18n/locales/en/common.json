@@ -220,11 +220,26 @@
       "feeLabel": "Fee",
       "note": "Estimates — final charges calculated at checkout.",
       "rows": [
-        { "service": "Consolidation (per package)", "fee": "$2.00" },
-        { "service": "Extra photos", "fee": "$0.50 each" },
-        { "service": "Repackaging", "fee": "$3.00" },
-        { "service": "Storage (per day beyond included period)", "fee": "$0.15" },
-        { "service": "Value protection", "fee": "2% of declared value" }
+        {
+          "service": "Consolidation (per package)",
+          "fee": "$2.00"
+        },
+        {
+          "service": "Extra photos",
+          "fee": "$0.50 each"
+        },
+        {
+          "service": "Repackaging",
+          "fee": "$3.00"
+        },
+        {
+          "service": "Storage (per day beyond included period)",
+          "fee": "$0.15"
+        },
+        {
+          "service": "Value protection",
+          "fee": "2% of declared value"
+        }
       ]
     }
   },
@@ -296,7 +311,8 @@
       "eta": "ETA (days)",
       "cost": "Cost (USD)",
       "note": "This is only an estimate. Final shipping cost is calculated at checkout based on the actual weight and dimensions of your consolidated package.",
-      "error": "We couldn't calculate an estimate. Please check the values and try again."
+      "error": "We couldn't calculate an estimate. Please check the values and try again.",
+      "calculating": "Calculating…"
     }
   },
   "faq": {
@@ -444,10 +460,22 @@
       }
     ],
     "stats": [
-      { "value": "220+", "label": "Countries served" },
-      { "value": "80%", "label": "Average shipping savings" },
-      { "value": "10k+", "label": "Packages shipped" },
-      { "value": "9am–5pm", "label": "Support hours (EST)" }
+      {
+        "value": "220+",
+        "label": "Countries served"
+      },
+      {
+        "value": "80%",
+        "label": "Average shipping savings"
+      },
+      {
+        "value": "10k+",
+        "label": "Packages shipped"
+      },
+      {
+        "value": "9am–5pm",
+        "label": "Support hours (EST)"
+      }
     ],
     "cta": "Create your free account"
   },
@@ -547,11 +575,13 @@
     "nav": {
       "overview": "Overview",
       "address": "US Address",
+      "notify": "Notify Purchase",
       "inbox": "Inbox",
       "ship": "Consolidate & Ship",
       "shipments": "Shipments",
       "shopper": "Personal Shopper",
-      "account": "Account"
+      "account": "Account",
+      "privacy": "My Data & Privacy"
     },
     "signOut": "Sign out",
     "loading": "Loading…",
@@ -574,10 +604,7 @@
         "title": "Recent activity",
         "empty": "No packages yet. Start shopping and they'll show up here."
       },
-      "packageStatus": {
-        "in_box": "In your box",
-        "ready": "Ready to ship"
-      }
+      "loadError": "We couldn't load your overview. Refresh the page to try again."
     },
     "address": {
       "title": "My US Address",
@@ -607,6 +634,43 @@
         ]
       }
     },
+    "notify": {
+      "title": "Notify a Purchase",
+      "subtitle": "Let us know a package is on its way before it reaches our warehouse. Pre-alerting helps us match it to your account faster and is an extra layer of protection against fraud.",
+      "form": {
+        "title": "New pre-alert",
+        "store": "Store",
+        "trackingNumber": "Tracking number",
+        "trackingNumberHint": "Optional — add it later if the store hasn't given you one yet.",
+        "description": "Description",
+        "declaredValue": "Declared value (USD)",
+        "submit": "Add pre-alert",
+        "errors": {
+          "store": "Please enter the store name.",
+          "description": "Describe the item (at least 3 characters).",
+          "declaredValue": "Enter a value greater than zero."
+        },
+        "success": "Pre-alert added! We'll match it to your account as soon as the package arrives.",
+        "error": "We couldn't save your pre-alert. Please try again."
+      },
+      "list": {
+        "title": "Your pre-alerts",
+        "empty": "No pre-alerts yet. Add one above whenever you place an order.",
+        "table": {
+          "store": "Store",
+          "description": "Description",
+          "status": "Status"
+        },
+        "cancel": "Cancel"
+      },
+      "status": {
+        "pending": "Pending",
+        "matched": "Matched",
+        "cancelled": "Cancelled"
+      },
+      "loadError": "We couldn't load your pre-alerts. Refresh the page to try again.",
+      "cancelError": "We couldn't cancel that pre-alert. Please try again."
+    },
     "inbox": {
       "title": "Inbox",
       "subtitle": "All the packages we've received on your behalf. Select the ones you'd like to combine into a single shipment.",
@@ -621,11 +685,17 @@
       },
       "noPhoto": "No photo",
       "selectPackage": "Select package from {{store}}",
+      "notReady": "Not ready to ship yet",
       "packageStatus": {
-        "in_box": "In your box",
-        "ready": "Ready to ship"
+        "received": "Received",
+        "in_review": "In review",
+        "ready": "Ready to ship",
+        "consolidating": "Consolidating",
+        "shipped": "Shipped",
+        "discarded": "Discarded"
       },
-      "consolidate": "Consolidate selected ({{count}})"
+      "consolidate": "Consolidate selected ({{count}})",
+      "loadError": "We couldn't load your packages. Refresh the page to try again."
     },
     "ship": {
       "title": "Consolidate & Ship",
@@ -655,7 +725,21 @@
         "boxNote": "Estimate assumes a consolidated box of 40 x 40 x 40 cm. Actual dimensions are confirmed once your box is packed.",
         "chargeableWeight": "Chargeable weight: {{weight}} kg",
         "eta": "ETA: {{days}} days",
-        "cost": "${{cost}}"
+        "cost": "${{cost}}",
+        "calculating": "Calculating shipping options…",
+        "estimateError": "We couldn't calculate shipping options. Please try again.",
+        "addressTitle": "Delivery address",
+        "recipientNameLabel": "Recipient name",
+        "streetLabel": "Street address",
+        "cityLabel": "City",
+        "stateProvinceLabel": "State / Province (optional)",
+        "postalCodeLabel": "Postal code",
+        "errors": {
+          "recipientNameRequired": "Enter the recipient's full name",
+          "streetRequired": "Enter the street address",
+          "cityRequired": "Enter the city",
+          "postalCodeRequired": "Enter the postal code"
+        }
       },
       "customs": {
         "title": "Customs declaration",
@@ -680,28 +764,42 @@
         "carrier": "Carrier: {{carrier}}",
         "cost": "Total cost: ${{cost}}"
       },
-      "empty": "No packages to ship. Add packages to your inbox first."
+      "empty": "No packages to ship. Add packages to your inbox first.",
+      "loadError": "We couldn't load your packages. Refresh the page to try again.",
+      "submitError": "We couldn't place your order. Please try again."
     },
     "shipments": {
       "title": "Shipments",
-      "subtitle": "Track every shipment we've sent on your behalf, from processing to delivery.",
-      "empty": "No shipments yet. Once you place an order, it will show up here.",
+      "subtitle": "Track every consolidated shipment, from payment to delivery.",
+      "empty": "No shipments yet. Consolidate packages from your inbox to get started.",
+      "loadError": "We couldn't load your shipments. Refresh the page to try again.",
       "status": {
-        "processing": "Processing",
-        "in_transit": "In transit",
-        "delivered": "Delivered"
+        "pending": "Awaiting payment",
+        "paid": "Paid",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
       },
       "table": {
-        "date": "Date",
+        "created": "Created",
+        "destination": "Destination",
         "carrier": "Carrier",
         "tracking": "Tracking code",
-        "items": "Items",
         "cost": "Cost"
       },
       "copyTracking": "tracking code {{code}}",
-      "showDetails": "Show details",
-      "hideDetails": "Hide details",
-      "detailsLine": "{{count}} item(s) shipped via {{carrier}}"
+      "pendingNote": "Complete payment to send this shipment to our warehouse team.",
+      "paidOn": "Paid on {{date}}",
+      "cancelledNote": "This shipment was cancelled.",
+      "noTracking": "Tracking not yet available",
+      "payNow": "Pay now",
+      "payingNow": "Redirecting to checkout…",
+      "payError": "We couldn't start checkout. Please try again.",
+      "banner": {
+        "success": "Payment received! Your shipment is now being prepared.",
+        "cancelled": "Checkout was cancelled — you can try paying again whenever you're ready.",
+        "dismiss": "Dismiss"
+      }
     },
     "shopper": {
       "title": "Personal Shopper",
@@ -776,6 +874,177 @@
         "add": "Add address",
         "remove": "Remove address",
         "empty": "No delivery addresses yet. Add one above."
+      }
+    },
+    "privacy": {
+      "title": "Your data & privacy",
+      "subtitle": "Manage requests related to the personal data we hold about you, under LGPD and GDPR.",
+      "rights": {
+        "title": "Your rights",
+        "items": [
+          "Access — request a copy of the personal data we hold about you.",
+          "Correction — ask us to fix inaccurate or outdated information (from your Account page, or by contacting support).",
+          "Export — receive your data in a portable format to take elsewhere.",
+          "Deletion — ask us to erase your personal data, except for records we're legally required to keep, like completed shipment and payment history."
+        ]
+      },
+      "actions": {
+        "exportTitle": "Request my data (export)",
+        "exportDescription": "We'll compile a copy of your account, package and shipment data and send it to your email.",
+        "deleteTitle": "Request account deletion",
+        "deleteDescription": "We'll close your account and erase what we can. Some records are kept as required by law, such as completed shipments and payments.",
+        "noteLabel": "Note for our support team (optional)",
+        "notePlaceholder": "Anything you'd like us to know about this request",
+        "confirmExport": "Confirm export request",
+        "confirmDelete": "Confirm deletion request",
+        "cancel": "Cancel",
+        "submitting": "Sending…",
+        "success": "Request received. We'll process it and you can track its status below.",
+        "error": "We couldn't send your request. Please try again."
+      },
+      "list": {
+        "title": "Your requests",
+        "empty": "No requests yet.",
+        "table": {
+          "kind": "Type",
+          "status": "Status",
+          "requested": "Requested",
+          "completed": "Completed"
+        }
+      },
+      "kind": {
+        "export": "Data export",
+        "delete": "Account deletion"
+      },
+      "status": {
+        "pending": "Pending",
+        "processing": "In progress",
+        "completed": "Completed",
+        "rejected": "Rejected"
+      },
+      "loadError": "We couldn't load your requests. Refresh the page to try again."
+    }
+  },
+  "admin": {
+    "staffBadge": "Staff",
+    "nav": {
+      "overview": "Overview",
+      "packages": "Packages",
+      "consolidations": "Consolidations",
+      "dataRequests": "Data requests"
+    },
+    "overview": {
+      "title": "Ops overview",
+      "subtitle": "Snapshot of what needs attention right now.",
+      "stats": {
+        "awaitingReview": "Awaiting review",
+        "pendingConsolidations": "Pending consolidations",
+        "openPreAlerts": "Open pre-alerts"
+      },
+      "loadError": "We couldn't load the stats. Refresh the page to try again."
+    },
+    "packages": {
+      "title": "Packages queue",
+      "subtitle": "Packages received or in review, waiting to be marked ready to ship.",
+      "empty": "Nothing in the queue right now.",
+      "loadError": "We couldn't load the queue. Refresh the page to try again.",
+      "table": {
+        "store": "Store",
+        "description": "Description",
+        "weight": "Weight",
+        "customer": "Customer",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "status": {
+        "received": "Received",
+        "in_review": "In review"
+      },
+      "markReady": "Mark ready",
+      "markingReady": "Updating…",
+      "markReadyError": "We couldn't update that package. Please try again.",
+      "receiveForm": {
+        "title": "Receive a new package",
+        "suiteLabel": "Customer suite number",
+        "suitePlaceholder": "BUF-10001",
+        "lookup": "Find customer",
+        "looking": "Looking up…",
+        "notFound": "No customer found for that suite number.",
+        "found": "Receiving for {{name}} (suite {{suite}})",
+        "storeLabel": "Store",
+        "descriptionLabel": "Description",
+        "weightLabel": "Weight (kg)",
+        "submit": "Receive package",
+        "submitting": "Saving…",
+        "success": "Package received.",
+        "error": "We couldn't save this package. Please try again.",
+        "errors": {
+          "suiteRequired": "Enter the customer's suite number.",
+          "storeRequired": "Enter the store name.",
+          "descriptionRequired": "Describe the item.",
+          "weightPositive": "Enter a weight greater than zero."
+        }
+      },
+      "compliance": {
+        "title": "Compliance status",
+        "kycLabel": "KYC status",
+        "ofacLabel": "OFAC screening",
+        "kycStatuses": {
+          "not_started": "Not started",
+          "pending": "Pending",
+          "verified": "Verified",
+          "rejected": "Rejected"
+        },
+        "ofacStatuses": {
+          "not_started": "Not started",
+          "clear": "Clear",
+          "flagged": "Flagged"
+        },
+        "saving": "Saving…",
+        "error": "We couldn't update the compliance status. Please try again.",
+        "updated": "Compliance status updated."
+      }
+    },
+    "consolidations": {
+      "title": "Consolidations queue",
+      "subtitle": "Consolidations waiting for payment or shipping.",
+      "empty": "No pending consolidations right now.",
+      "loadError": "We couldn't load the queue. Refresh the page to try again.",
+      "table": {
+        "customer": "Customer",
+        "destination": "Destination",
+        "declaredValue": "Declared value",
+        "shipping": "Shipping",
+        "carrierLabel": "Carrier",
+        "carrierPlaceholder": "Carrier",
+        "trackingLabel": "Tracking code",
+        "trackingPlaceholder": "Tracking code"
+      },
+      "markShipped": "Mark shipped",
+      "shipError": "We couldn't update that consolidation. Please try again."
+    },
+    "dataRequests": {
+      "title": "Data requests",
+      "subtitle": "Open LGPD/GDPR export and deletion requests awaiting action.",
+      "empty": "No open data requests right now.",
+      "loadError": "We couldn't load the queue. Refresh the page to try again.",
+      "table": {
+        "customer": "Customer",
+        "kind": "Type",
+        "note": "Customer note",
+        "requested": "Requested",
+        "actions": "Actions"
+      },
+      "kind": {
+        "export": "Export",
+        "delete": "Deletion"
+      },
+      "resolveForm": {
+        "notesLabel": "Resolution notes",
+        "notesPlaceholder": "What was done to resolve this request",
+        "markCompleted": "Mark completed",
+        "reject": "Reject",
+        "error": "We couldn't update that request. Please try again."
       }
     }
   },

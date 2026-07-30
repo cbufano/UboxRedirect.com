@@ -4,53 +4,72 @@ import { Package, Truck, CheckCircle2, MapPin } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { WAREHOUSE_ADDRESS } from '../../config/warehouse'
 import { profileService } from '../../services/profileService'
-import { packages, type Package as PackageRecord } from '../../mocks/packages'
-import { shipments } from '../../mocks/shipments'
+import { packageService, type ReceivedPackage } from '../../services/packageService'
 import { Card } from '../../components/ui/Card'
 import { CopyButton } from '../../components/ui/CopyButton'
 import { formatUsAddress } from '../../lib/address'
 
-const packageStatusClasses: Record<PackageRecord['status'], string> = {
-  in_box: 'bg-slate/10 text-slate',
+const packageStatusClasses: Record<ReceivedPackage['status'], string> = {
+  received: 'bg-slate/10 text-slate',
+  in_review: 'bg-slate/10 text-slate',
   ready: 'bg-success/10 text-success',
+  consolidating: 'bg-amber-500/10 text-amber-600',
+  shipped: 'bg-brand/10 text-brand',
+  discarded: 'bg-red-50 text-red-600',
 }
 
 export default function Overview() {
   const { t } = useTranslation()
   const { user } = useAuth()
   const [suite, setSuite] = useState<string | null>(null)
+  const [inBoxCount, setInBoxCount] = useState(0)
+  const [inTransitCount, setInTransitCount] = useState(0)
+  const [deliveredCount, setDeliveredCount] = useState(0)
+  const [recentPackages, setRecentPackages] = useState<ReceivedPackage[]>([])
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
 
   useEffect(() => {
     let active = true
-    profileService
-      .getMyProfile()
-      .then((profile) => {
-        if (active) setSuite(profile?.suiteNumber ?? null)
+    Promise.all([
+      profileService.getMyProfile(),
+      packageService.getMyReceivedPackages(),
+      packageService.getMyConsolidations(),
+    ])
+      .then(([profile, packages, consolidations]) => {
+        if (!active) return
+        setSuite(profile?.suiteNumber ?? null)
+        setInBoxCount(packages.filter((pkg) => pkg.status === 'received' || pkg.status === 'in_review').length)
+        setInTransitCount(consolidations.filter((c) => c.status === 'paid' || c.status === 'shipped').length)
+        setDeliveredCount(consolidations.filter((c) => c.status === 'delivered').length)
+        setRecentPackages([...packages].sort((a, b) => (a.receivedAt < b.receivedAt ? 1 : -1)).slice(0, 3))
       })
       .catch((error) => {
-        // Degrada com segurança: o card mostra '—' no lugar da suite; só
-        // registramos o erro para diagnóstico, sem quebrar a página.
-        console.error('Overview: failed to load profile', error)
+        console.error('Overview: failed to load dashboard data', error)
+        if (active) setLoadError(true)
+      })
+      .finally(() => {
+        if (active) setLoading(false)
       })
     return () => {
       active = false
     }
   }, [])
 
+  if (loading) return <p className="text-sm text-slate/60">{t('dashboard.loading')}</p>
+
+  if (loadError) {
+    return (
+      <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+        {t('dashboard.overview.loadError')}
+      </p>
+    )
+  }
+
   // O card mostra o hint genérico de destinatário (o nome já aparece na
   // saudação acima) — o cliente escreve o próprio nome no checkout da loja,
   // e o galpão o identifica pela suite.
   const address = formatUsAddress(WAREHOUSE_ADDRESS, suite ?? '—')
-
-  const inBoxCount = packages.filter((pkg) => pkg.status === 'in_box').length
-  const inTransitCount = shipments.filter(
-    (shipment) => shipment.status === 'in_transit' || shipment.status === 'processing',
-  ).length
-  const deliveredCount = shipments.filter((shipment) => shipment.status === 'delivered').length
-
-  const recentPackages = [...packages]
-    .sort((a, b) => (a.receivedDate < b.receivedDate ? 1 : -1))
-    .slice(0, 3)
 
   const statTiles = [
     { key: 'inBox', icon: Package, value: inBoxCount, iconClasses: 'bg-brand/10 text-brand' },
@@ -124,7 +143,7 @@ export default function Overview() {
                 <span
                   className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${packageStatusClasses[pkg.status]}`}
                 >
-                  {t(`dashboard.overview.packageStatus.${pkg.status}`)}
+                  {t(`dashboard.inbox.packageStatus.${pkg.status}`)}
                 </span>
               </li>
             ))}

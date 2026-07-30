@@ -2,7 +2,9 @@ import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { PublicLayout } from './layouts/PublicLayout'
 import { DashboardLayout } from './layouts/DashboardLayout'
+import { AdminLayout } from './layouts/AdminLayout'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { StaffRoute } from './components/StaffRoute'
 
 const Home = lazy(() => import('./pages/Home'))
 const HowItWorks = lazy(() => import('./pages/HowItWorks'))
@@ -21,11 +23,17 @@ const Verify = lazy(() => import('./pages/auth/Verify'))
 const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'))
 const Overview = lazy(() => import('./pages/dashboard/Overview'))
 const Address = lazy(() => import('./pages/dashboard/Address'))
+const NotifyPurchase = lazy(() => import('./pages/dashboard/NotifyPurchase'))
 const Inbox = lazy(() => import('./pages/dashboard/Inbox'))
 const Ship = lazy(() => import('./pages/dashboard/Ship'))
 const Shipments = lazy(() => import('./pages/dashboard/Shipments'))
 const Shopper = lazy(() => import('./pages/dashboard/Shopper'))
 const Account = lazy(() => import('./pages/dashboard/Account'))
+const DashboardPrivacy = lazy(() => import('./pages/dashboard/Privacy'))
+const AdminOverview = lazy(() => import('./pages/admin/Overview'))
+const AdminPackagesQueue = lazy(() => import('./pages/admin/PackagesQueue'))
+const AdminConsolidationsQueue = lazy(() => import('./pages/admin/ConsolidationsQueue'))
+const AdminDataRequestsQueue = lazy(() => import('./pages/admin/DataRequestsQueue'))
 
 export function AppRoutes() {
   return (
@@ -52,12 +60,21 @@ export function AppRoutes() {
         <Route path="/app" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
           <Route index element={<Overview />} />
           <Route path="address" element={<Address />} />
+          <Route path="notify" element={<NotifyPurchase />} />
           <Route path="inbox" element={<Inbox />} />
           <Route path="ship" element={<Ship />} />
           <Route path="shipments" element={<Shipments />} />
           <Route path="shopper" element={<Shopper />} />
           <Route path="account" element={<Account />} />
+          <Route path="privacy" element={<DashboardPrivacy />} />
           {/* /app/* child routes added as their tasks complete */}
+        </Route>
+        <Route path="/admin" element={<StaffRoute><AdminLayout /></StaffRoute>}>
+          <Route index element={<AdminOverview />} />
+          <Route path="packages" element={<AdminPackagesQueue />} />
+          <Route path="consolidations" element={<AdminConsolidationsQueue />} />
+          <Route path="data-requests" element={<AdminDataRequestsQueue />} />
+          {/* /admin/* child routes added as their tasks complete */}
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -220,11 +220,26 @@
       "feeLabel": "Tarifa",
       "note": "Estimaciones — los cargos finales se calculan al pagar.",
       "rows": [
-        { "service": "Consolidación (por paquete)", "fee": "US$ 2.00" },
-        { "service": "Fotos adicionales", "fee": "US$ 0.50 cada una" },
-        { "service": "Reembalaje", "fee": "US$ 3.00" },
-        { "service": "Almacenamiento (por día tras el período gratis)", "fee": "US$ 0.15" },
-        { "service": "Protección de valor", "fee": "2% del valor declarado" }
+        {
+          "service": "Consolidación (por paquete)",
+          "fee": "US$ 2.00"
+        },
+        {
+          "service": "Fotos adicionales",
+          "fee": "US$ 0.50 cada una"
+        },
+        {
+          "service": "Reembalaje",
+          "fee": "US$ 3.00"
+        },
+        {
+          "service": "Almacenamiento (por día tras el período gratis)",
+          "fee": "US$ 0.15"
+        },
+        {
+          "service": "Protección de valor",
+          "fee": "2% del valor declarado"
+        }
       ]
     }
   },
@@ -296,7 +311,8 @@
       "eta": "Plazo (días)",
       "cost": "Costo (USD)",
       "note": "Esto es solo una estimación. El costo final del envío se calcula al pagar según el peso y las dimensiones reales de tu paquete consolidado.",
-      "error": "No pudimos calcular una estimación. Verifica los valores e inténtalo de nuevo."
+      "error": "No pudimos calcular una estimación. Verifica los valores e inténtalo de nuevo.",
+      "calculating": "Calculando…"
     }
   },
   "faq": {
@@ -444,10 +460,22 @@
       }
     ],
     "stats": [
-      { "value": "220+", "label": "Países atendidos" },
-      { "value": "80%", "label": "Ahorro promedio en envío" },
-      { "value": "10 mil+", "label": "Paquetes enviados" },
-      { "value": "9:00–17:00", "label": "Horario de soporte (EST)" }
+      {
+        "value": "220+",
+        "label": "Países atendidos"
+      },
+      {
+        "value": "80%",
+        "label": "Ahorro promedio en envío"
+      },
+      {
+        "value": "10 mil+",
+        "label": "Paquetes enviados"
+      },
+      {
+        "value": "9:00–17:00",
+        "label": "Horario de soporte (EST)"
+      }
     ],
     "cta": "Crear mi cuenta gratis"
   },
@@ -547,11 +575,13 @@
     "nav": {
       "overview": "Resumen",
       "address": "Dirección en EE. UU.",
+      "notify": "Avisar compra",
       "inbox": "Bandeja de entrada",
       "ship": "Consolidar y enviar",
       "shipments": "Envíos",
       "shopper": "Personal shopper",
-      "account": "Cuenta"
+      "account": "Cuenta",
+      "privacy": "Mis Datos y Privacidad"
     },
     "signOut": "Cerrar sesión",
     "loading": "Cargando…",
@@ -574,10 +604,7 @@
         "title": "Actividad reciente",
         "empty": "Todavía no hay paquetes. Empieza a comprar y aparecerán aquí."
       },
-      "packageStatus": {
-        "in_box": "En tu caja",
-        "ready": "Listo para enviar"
-      }
+      "loadError": "No pudimos cargar tu resumen. Actualiza la página para intentarlo de nuevo."
     },
     "address": {
       "title": "Mi Dirección en EE. UU.",
@@ -607,6 +634,43 @@
         ]
       }
     },
+    "notify": {
+      "title": "Avisar una compra",
+      "subtitle": "Avísanos que un paquete está en camino antes de que llegue a nuestro almacén. El prealerta agiliza vincularlo a tu cuenta y es una capa extra de protección contra fraudes.",
+      "form": {
+        "title": "Nuevo prealerta",
+        "store": "Tienda",
+        "trackingNumber": "Código de rastreo",
+        "trackingNumberHint": "Opcional — agrégalo después si la tienda aún no te dio uno.",
+        "description": "Descripción",
+        "declaredValue": "Valor declarado (USD)",
+        "submit": "Agregar prealerta",
+        "errors": {
+          "store": "Ingresa el nombre de la tienda.",
+          "description": "Describe el artículo (mínimo 3 caracteres).",
+          "declaredValue": "Ingresa un valor mayor que cero."
+        },
+        "success": "¡Prealerta agregado! Lo vincularemos a tu cuenta en cuanto llegue el paquete.",
+        "error": "No pudimos guardar tu prealerta. Inténtalo de nuevo."
+      },
+      "list": {
+        "title": "Tus prealertas",
+        "empty": "Todavía no hay prealertas. Agrega uno arriba cuando hagas un pedido.",
+        "table": {
+          "store": "Tienda",
+          "description": "Descripción",
+          "status": "Estado"
+        },
+        "cancel": "Cancelar"
+      },
+      "status": {
+        "pending": "Pendiente",
+        "matched": "Vinculado",
+        "cancelled": "Cancelado"
+      },
+      "loadError": "No pudimos cargar tus prealertas. Actualiza la página para intentarlo de nuevo.",
+      "cancelError": "No pudimos cancelar ese prealerta. Inténtalo de nuevo."
+    },
     "inbox": {
       "title": "Bandeja de entrada",
       "subtitle": "Todos los paquetes que recibimos en tu nombre. Selecciona los que quieras combinar en un solo envío.",
@@ -621,11 +685,17 @@
       },
       "noPhoto": "Sin foto",
       "selectPackage": "Seleccionar paquete de {{store}}",
+      "notReady": "Todavía no está listo para enviar",
       "packageStatus": {
-        "in_box": "En tu caja",
-        "ready": "Listo para enviar"
+        "received": "Recibido",
+        "in_review": "En revisión",
+        "ready": "Listo para enviar",
+        "consolidating": "Consolidando",
+        "shipped": "Enviado",
+        "discarded": "Descartado"
       },
-      "consolidate": "Consolidar seleccionados ({{count}})"
+      "consolidate": "Consolidar seleccionados ({{count}})",
+      "loadError": "No pudimos cargar tus paquetes. Actualiza la página para intentarlo de nuevo."
     },
     "ship": {
       "title": "Consolidar y Enviar",
@@ -655,7 +725,21 @@
         "boxNote": "La estimación asume una caja consolidada de 40 x 40 x 40 cm. Las dimensiones reales se confirman una vez empacada tu caja.",
         "chargeableWeight": "Peso facturable: {{weight}} kg",
         "eta": "Plazo: {{days}} días",
-        "cost": "${{cost}}"
+        "cost": "${{cost}}",
+        "calculating": "Calculando opciones de envío…",
+        "estimateError": "No pudimos calcular las opciones de envío. Inténtalo de nuevo.",
+        "addressTitle": "Dirección de entrega",
+        "recipientNameLabel": "Nombre del destinatario",
+        "streetLabel": "Dirección (calle y número)",
+        "cityLabel": "Ciudad",
+        "stateProvinceLabel": "Estado / Provincia (opcional)",
+        "postalCodeLabel": "Código postal",
+        "errors": {
+          "recipientNameRequired": "Ingresa el nombre completo del destinatario",
+          "streetRequired": "Ingresa la dirección",
+          "cityRequired": "Ingresa la ciudad",
+          "postalCodeRequired": "Ingresa el código postal"
+        }
       },
       "customs": {
         "title": "Declaración aduanera",
@@ -680,28 +764,42 @@
         "carrier": "Transportista: {{carrier}}",
         "cost": "Costo total: ${{cost}}"
       },
-      "empty": "No hay paquetes para enviar. Agrega paquetes a tu bandeja de entrada primero."
+      "empty": "No hay paquetes para enviar. Agrega paquetes a tu bandeja de entrada primero.",
+      "loadError": "No pudimos cargar tus paquetes. Actualiza la página para intentarlo de nuevo.",
+      "submitError": "No pudimos finalizar tu pedido. Inténtalo de nuevo."
     },
     "shipments": {
       "title": "Envíos",
-      "subtitle": "Sigue cada envío que hicimos en tu nombre, desde el procesamiento hasta la entrega.",
-      "empty": "Todavía no hay envíos. En cuanto realices un pedido, aparecerá aquí.",
+      "subtitle": "Sigue cada envío consolidado, desde el pago hasta la entrega.",
+      "empty": "Todavía no hay envíos. Consolida paquetes desde tu bandeja de entrada para empezar.",
+      "loadError": "No pudimos cargar tus envíos. Actualiza la página para intentarlo de nuevo.",
       "status": {
-        "processing": "En proceso",
-        "in_transit": "En tránsito",
-        "delivered": "Entregado"
+        "pending": "Esperando pago",
+        "paid": "Pagado",
+        "shipped": "Enviado",
+        "delivered": "Entregado",
+        "cancelled": "Cancelado"
       },
       "table": {
-        "date": "Fecha",
+        "created": "Creado el",
+        "destination": "Destino",
         "carrier": "Transportista",
         "tracking": "Código de rastreo",
-        "items": "Artículos",
         "cost": "Costo"
       },
       "copyTracking": "código de rastreo {{code}}",
-      "showDetails": "Mostrar detalles",
-      "hideDetails": "Ocultar detalles",
-      "detailsLine": "{{count}} artículo(s) enviados vía {{carrier}}"
+      "pendingNote": "Completa el pago para enviar este pedido a nuestro equipo de almacén.",
+      "paidOn": "Pagado el {{date}}",
+      "cancelledNote": "Este envío fue cancelado.",
+      "noTracking": "Rastreo aún no disponible",
+      "payNow": "Pagar ahora",
+      "payingNow": "Redirigiendo al checkout…",
+      "payError": "No pudimos iniciar el checkout. Inténtalo de nuevo.",
+      "banner": {
+        "success": "¡Pago recibido! Tu envío ya se está preparando.",
+        "cancelled": "El checkout fue cancelado — puedes intentar pagar de nuevo cuando quieras.",
+        "dismiss": "Descartar"
+      }
     },
     "shopper": {
       "title": "Personal Shopper",
@@ -776,6 +874,177 @@
         "add": "Agregar dirección",
         "remove": "Eliminar dirección",
         "empty": "Todavía no hay direcciones de entrega. Agrega una arriba."
+      }
+    },
+    "privacy": {
+      "title": "Mis datos y privacidad",
+      "subtitle": "Gestiona solicitudes relacionadas con los datos personales que tenemos sobre ti, conforme a la LGPD y el RGPD.",
+      "rights": {
+        "title": "Tus derechos",
+        "items": [
+          "Acceso — solicitar una copia de los datos personales que tenemos sobre ti.",
+          "Corrección — pedirnos que corrijamos información incorrecta o desactualizada (desde la página Cuenta, o contactando a soporte).",
+          "Exportación — recibir tus datos en un formato portátil para llevarlos a otro lugar.",
+          "Eliminación — pedirnos que borremos tus datos personales, excepto los registros que estamos legalmente obligados a conservar, como el historial de envíos y pagos completados."
+        ]
+      },
+      "actions": {
+        "exportTitle": "Solicitar mis datos (exportación)",
+        "exportDescription": "Compilaremos una copia de los datos de tu cuenta, paquetes y envíos y la enviaremos a tu correo.",
+        "deleteTitle": "Solicitar eliminación de la cuenta",
+        "deleteDescription": "Cerraremos tu cuenta y borraremos lo que sea posible. Algunos registros se conservan por exigencia legal, como envíos y pagos ya completados.",
+        "noteLabel": "Nota para nuestro equipo de soporte (opcional)",
+        "notePlaceholder": "Cualquier cosa que quieras que sepamos sobre esta solicitud",
+        "confirmExport": "Confirmar solicitud de exportación",
+        "confirmDelete": "Confirmar solicitud de eliminación",
+        "cancel": "Cancelar",
+        "submitting": "Enviando…",
+        "success": "Solicitud recibida. La procesaremos y puedes seguir su estado abajo.",
+        "error": "No pudimos enviar tu solicitud. Inténtalo de nuevo."
+      },
+      "list": {
+        "title": "Tus solicitudes",
+        "empty": "Todavía no hay solicitudes.",
+        "table": {
+          "kind": "Tipo",
+          "status": "Estado",
+          "requested": "Solicitado",
+          "completed": "Completado"
+        }
+      },
+      "kind": {
+        "export": "Exportación de datos",
+        "delete": "Eliminación de cuenta"
+      },
+      "status": {
+        "pending": "Pendiente",
+        "processing": "En proceso",
+        "completed": "Completado",
+        "rejected": "Rechazado"
+      },
+      "loadError": "No pudimos cargar tus solicitudes. Actualiza la página para intentarlo de nuevo."
+    }
+  },
+  "admin": {
+    "staffBadge": "Equipo",
+    "nav": {
+      "overview": "Resumen",
+      "packages": "Paquetes",
+      "consolidations": "Consolidaciones",
+      "dataRequests": "Solicitudes de datos"
+    },
+    "overview": {
+      "title": "Resumen de operaciones",
+      "subtitle": "Panorama de lo que necesita atención ahora mismo.",
+      "stats": {
+        "awaitingReview": "Pendientes de revisión",
+        "pendingConsolidations": "Consolidaciones pendientes",
+        "openPreAlerts": "Prealertas abiertas"
+      },
+      "loadError": "No pudimos cargar los datos. Actualiza la página para intentarlo de nuevo."
+    },
+    "packages": {
+      "title": "Cola de paquetes",
+      "subtitle": "Paquetes recibidos o en revisión, a la espera de marcarse como listos para enviar.",
+      "empty": "No hay nada en la cola por ahora.",
+      "loadError": "No pudimos cargar la cola. Actualiza la página para intentarlo de nuevo.",
+      "table": {
+        "store": "Tienda",
+        "description": "Descripción",
+        "weight": "Peso",
+        "customer": "Cliente",
+        "status": "Estado",
+        "actions": "Acciones"
+      },
+      "status": {
+        "received": "Recibido",
+        "in_review": "En revisión"
+      },
+      "markReady": "Marcar como listo",
+      "markingReady": "Actualizando…",
+      "markReadyError": "No pudimos actualizar ese paquete. Inténtalo de nuevo.",
+      "receiveForm": {
+        "title": "Recibir un nuevo paquete",
+        "suiteLabel": "Número de suite del cliente",
+        "suitePlaceholder": "BUF-10001",
+        "lookup": "Buscar cliente",
+        "looking": "Buscando…",
+        "notFound": "No se encontró ningún cliente con esa suite.",
+        "found": "Recibiendo para {{name}} (suite {{suite}})",
+        "storeLabel": "Tienda",
+        "descriptionLabel": "Descripción",
+        "weightLabel": "Peso (kg)",
+        "submit": "Recibir paquete",
+        "submitting": "Guardando…",
+        "success": "Paquete recibido.",
+        "error": "No pudimos guardar este paquete. Inténtalo de nuevo.",
+        "errors": {
+          "suiteRequired": "Ingresa el número de suite del cliente.",
+          "storeRequired": "Ingresa el nombre de la tienda.",
+          "descriptionRequired": "Describe el artículo.",
+          "weightPositive": "Ingresa un peso mayor que cero."
+        }
+      },
+      "compliance": {
+        "title": "Estado de cumplimiento",
+        "kycLabel": "Estado de KYC",
+        "ofacLabel": "Verificación OFAC",
+        "kycStatuses": {
+          "not_started": "No iniciado",
+          "pending": "Pendiente",
+          "verified": "Verificado",
+          "rejected": "Rechazado"
+        },
+        "ofacStatuses": {
+          "not_started": "No iniciado",
+          "clear": "Sin restricción",
+          "flagged": "Marcado"
+        },
+        "saving": "Guardando…",
+        "error": "No pudimos actualizar el estado de cumplimiento. Inténtalo de nuevo.",
+        "updated": "Estado de cumplimiento actualizado."
+      }
+    },
+    "consolidations": {
+      "title": "Cola de consolidaciones",
+      "subtitle": "Consolidaciones a la espera de pago o envío.",
+      "empty": "No hay consolidaciones pendientes por ahora.",
+      "loadError": "No pudimos cargar la cola. Actualiza la página para intentarlo de nuevo.",
+      "table": {
+        "customer": "Cliente",
+        "destination": "Destino",
+        "declaredValue": "Valor declarado",
+        "shipping": "Envío",
+        "carrierLabel": "Transportista",
+        "carrierPlaceholder": "Transportista",
+        "trackingLabel": "Código de seguimiento",
+        "trackingPlaceholder": "Código de seguimiento"
+      },
+      "markShipped": "Marcar como enviado",
+      "shipError": "No pudimos actualizar esa consolidación. Inténtalo de nuevo."
+    },
+    "dataRequests": {
+      "title": "Solicitudes de datos",
+      "subtitle": "Solicitudes abiertas de exportación y eliminación (LGPD/RGPD) a la espera de acción.",
+      "empty": "No hay solicitudes de datos abiertas por ahora.",
+      "loadError": "No pudimos cargar la cola. Actualiza la página para intentarlo de nuevo.",
+      "table": {
+        "customer": "Cliente",
+        "kind": "Tipo",
+        "note": "Nota del cliente",
+        "requested": "Solicitado",
+        "actions": "Acciones"
+      },
+      "kind": {
+        "export": "Exportación",
+        "delete": "Eliminación"
+      },
+      "resolveForm": {
+        "notesLabel": "Notas de resolución",
+        "notesPlaceholder": "Qué se hizo para resolver esta solicitud",
+        "markCompleted": "Marcar como completado",
+        "reject": "Rechazar",
+        "error": "No pudimos actualizar esa solicitud. Inténtalo de nuevo."
       }
     }
   },
