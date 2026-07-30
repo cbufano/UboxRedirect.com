@@ -173,9 +173,12 @@ describe('markPackageReady', () => {
 })
 
 describe('findUserBySuite', () => {
-  it('returns the matching user', async () => {
+  it('returns the matching user with compliance status', async () => {
     const maybeSingle = vi.fn().mockResolvedValue({
-      data: { user_id: 'u1', profiles: { name: 'Ana' } },
+      data: {
+        user_id: 'u1',
+        profiles: { name: 'Ana', kyc_status: 'pending', ofac_screening_status: 'not_started' },
+      },
       error: null,
     })
     const eq = vi.fn().mockReturnValue({ maybeSingle })
@@ -186,7 +189,12 @@ describe('findUserBySuite', () => {
 
     expect(mockedSupabase.from).toHaveBeenCalledWith('suites')
     expect(eq).toHaveBeenCalledWith('suite_number', 'BUF-10001')
-    expect(result).toEqual({ userId: 'u1', name: 'Ana' })
+    expect(result).toEqual({
+      userId: 'u1',
+      name: 'Ana',
+      kycStatus: 'pending',
+      ofacStatus: 'not_started',
+    })
   })
 
   it('returns null when no suite matches', async () => {
@@ -322,5 +330,149 @@ describe('markConsolidationShipped', () => {
     await expect(
       adminService.markConsolidationShipped('c1', { carrier: 'DHL', trackingCode: 'TRK123' }),
     ).rejects.toThrow('boom')
+  })
+})
+
+describe('getOpenDataRequests', () => {
+  it('returns mapped open data requests joined to profiles', async () => {
+    const rows = [
+      {
+        id: 'r1',
+        kind: 'export',
+        status: 'pending',
+        request_note: 'Please send my data',
+        resolution_notes: '',
+        requested_at: '2026-07-01T00:00:00Z',
+        profiles: { name: 'Ana', email: 'ana@example.com' },
+      },
+    ]
+    const order = vi.fn().mockResolvedValue({ data: rows, error: null })
+    const inMock = vi.fn().mockReturnValue({ order })
+    const select = vi.fn().mockReturnValue({ in: inMock })
+    mockedSupabase.from.mockReturnValue({ select } as never)
+
+    const result = await adminService.getOpenDataRequests()
+
+    expect(mockedSupabase.from).toHaveBeenCalledWith('data_requests')
+    expect(inMock).toHaveBeenCalledWith('status', ['pending', 'processing'])
+    expect(result).toEqual([
+      {
+        id: 'r1',
+        kind: 'export',
+        status: 'pending',
+        requestNote: 'Please send my data',
+        resolutionNotes: '',
+        requestedAt: '2026-07-01T00:00:00Z',
+        customerName: 'Ana',
+        customerEmail: 'ana@example.com',
+      },
+    ])
+  })
+
+  it('throws when the query fails', async () => {
+    const order = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
+    const inMock = vi.fn().mockReturnValue({ order })
+    const select = vi.fn().mockReturnValue({ in: inMock })
+    mockedSupabase.from.mockReturnValue({ select } as never)
+
+    await expect(adminService.getOpenDataRequests()).rejects.toThrow('boom')
+  })
+})
+
+describe('resolveDataRequest', () => {
+  it('sets status, resolution notes and completed_at', async () => {
+    mockSession('staff-1')
+    const eq = vi.fn().mockResolvedValue({ data: null, error: null })
+    const update = vi.fn().mockReturnValue({ eq })
+    mockedSupabase.from.mockReturnValue({ update } as never)
+
+    await adminService.resolveDataRequest('r1', { status: 'completed', resolutionNotes: 'Exported and emailed' })
+
+    expect(mockedSupabase.from).toHaveBeenCalledWith('data_requests')
+    expect(update).toHaveBeenCalledWith(
+      expect.objectContaining({ status: 'completed', resolution_notes: 'Exported and emailed' }),
+    )
+    const updateArg = update.mock.calls[0][0] as { completed_at: string }
+    expect(typeof updateArg.completed_at).toBe('string')
+    expect(eq).toHaveBeenCalledWith('id', 'r1')
+  })
+
+  it('throws when signed out', async () => {
+    mockSession(null)
+    await expect(
+      adminService.resolveDataRequest('r1', { status: 'rejected', resolutionNotes: '' }),
+    ).rejects.toThrow('Not authenticated')
+    expect(mockedSupabase.from).not.toHaveBeenCalled()
+  })
+
+  it('throws when the update fails', async () => {
+    mockSession('staff-1')
+    const eq = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
+    const update = vi.fn().mockReturnValue({ eq })
+    mockedSupabase.from.mockReturnValue({ update } as never)
+
+    await expect(
+      adminService.resolveDataRequest('r1', { status: 'rejected', resolutionNotes: 'no basis' }),
+    ).rejects.toThrow('boom')
+  })
+})
+
+describe('setKycStatus', () => {
+  it('updates kyc_status for the target profile', async () => {
+    mockSession('staff-1')
+    const eq = vi.fn().mockResolvedValue({ data: null, error: null })
+    const update = vi.fn().mockReturnValue({ eq })
+    mockedSupabase.from.mockReturnValue({ update } as never)
+
+    await adminService.setKycStatus('cust-1', 'verified')
+
+    expect(mockedSupabase.from).toHaveBeenCalledWith('profiles')
+    expect(update).toHaveBeenCalledWith({ kyc_status: 'verified' })
+    expect(eq).toHaveBeenCalledWith('id', 'cust-1')
+  })
+
+  it('throws when signed out', async () => {
+    mockSession(null)
+    await expect(adminService.setKycStatus('cust-1', 'verified')).rejects.toThrow('Not authenticated')
+    expect(mockedSupabase.from).not.toHaveBeenCalled()
+  })
+
+  it('throws when the update fails', async () => {
+    mockSession('staff-1')
+    const eq = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
+    const update = vi.fn().mockReturnValue({ eq })
+    mockedSupabase.from.mockReturnValue({ update } as never)
+
+    await expect(adminService.setKycStatus('cust-1', 'rejected')).rejects.toThrow('boom')
+  })
+})
+
+describe('setOfacStatus', () => {
+  it('updates ofac_screening_status for the target profile', async () => {
+    mockSession('staff-1')
+    const eq = vi.fn().mockResolvedValue({ data: null, error: null })
+    const update = vi.fn().mockReturnValue({ eq })
+    mockedSupabase.from.mockReturnValue({ update } as never)
+
+    await adminService.setOfacStatus('cust-1', 'clear')
+
+    expect(mockedSupabase.from).toHaveBeenCalledWith('profiles')
+    expect(update).toHaveBeenCalledWith({ ofac_screening_status: 'clear' })
+    expect(eq).toHaveBeenCalledWith('id', 'cust-1')
+  })
+
+  it('throws when signed out', async () => {
+    mockSession(null)
+    await expect(adminService.setOfacStatus('cust-1', 'flagged')).rejects.toThrow('Not authenticated')
+    expect(mockedSupabase.from).not.toHaveBeenCalled()
+  })
+
+  it('throws when the update fails', async () => {
+    mockSession('staff-1')
+    const eq = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
+    const update = vi.fn().mockReturnValue({ eq })
+    mockedSupabase.from.mockReturnValue({ update } as never)
+
+    await expect(adminService.setOfacStatus('cust-1', 'flagged')).rejects.toThrow('boom')
   })
 })

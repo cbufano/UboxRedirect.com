@@ -11,6 +11,8 @@ vi.mock('../../services/adminService', () => ({
     markPackageReady: vi.fn(),
     findUserBySuite: vi.fn(),
     receivePackage: vi.fn(),
+    setKycStatus: vi.fn(),
+    setOfacStatus: vi.fn(),
   },
 }))
 const mocked = vi.mocked(adminService)
@@ -69,7 +71,12 @@ it('shows an alert when loading the queue fails', async () => {
 })
 
 it('looks up a customer by suite, then receives a package for them', async () => {
-  mocked.findUserBySuite.mockResolvedValue({ userId: 'cust-1', name: 'Ana Silva' })
+  mocked.findUserBySuite.mockResolvedValue({
+    userId: 'cust-1',
+    name: 'Ana Silva',
+    kycStatus: 'not_started',
+    ofacStatus: 'not_started',
+  })
   mocked.receivePackage.mockResolvedValue()
   render(<PackagesQueue />)
 
@@ -107,4 +114,68 @@ it('shows a not-found message when the suite has no matching customer', async ()
 
   expect(await screen.findByText(/no customer found/i)).toBeInTheDocument()
   expect(screen.getByRole('button', { name: /receive package/i })).toBeDisabled()
+})
+
+it('shows compliance status controls for the matched customer and updates KYC status', async () => {
+  mocked.findUserBySuite.mockResolvedValue({
+    userId: 'cust-1',
+    name: 'Ana Silva',
+    kycStatus: 'pending',
+    ofacStatus: 'clear',
+  })
+  mocked.setKycStatus.mockResolvedValue()
+  render(<PackagesQueue />)
+
+  await screen.findByText(/nothing in the queue/i)
+  await userEvent.type(screen.getByLabelText(/suite number/i), 'BUF-10001')
+  await userEvent.click(screen.getByRole('button', { name: /find customer/i }))
+
+  await screen.findByText(/Ana Silva/)
+  const kycSelect = screen.getByLabelText(/kyc status/i)
+  expect(kycSelect).toHaveValue('pending')
+
+  await userEvent.selectOptions(kycSelect, 'verified')
+
+  expect(mocked.setKycStatus).toHaveBeenCalledWith('cust-1', 'verified')
+  expect(await screen.findByText(/compliance status updated/i)).toBeInTheDocument()
+})
+
+it('updates OFAC screening status for the matched customer', async () => {
+  mocked.findUserBySuite.mockResolvedValue({
+    userId: 'cust-1',
+    name: 'Ana Silva',
+    kycStatus: 'not_started',
+    ofacStatus: 'not_started',
+  })
+  mocked.setOfacStatus.mockResolvedValue()
+  render(<PackagesQueue />)
+
+  await screen.findByText(/nothing in the queue/i)
+  await userEvent.type(screen.getByLabelText(/suite number/i), 'BUF-10001')
+  await userEvent.click(screen.getByRole('button', { name: /find customer/i }))
+
+  await screen.findByText(/Ana Silva/)
+  await userEvent.selectOptions(screen.getByLabelText(/ofac screening/i), 'flagged')
+
+  expect(mocked.setOfacStatus).toHaveBeenCalledWith('cust-1', 'flagged')
+})
+
+it('shows an alert when updating compliance status fails', async () => {
+  mocked.findUserBySuite.mockResolvedValue({
+    userId: 'cust-1',
+    name: 'Ana Silva',
+    kycStatus: 'pending',
+    ofacStatus: 'clear',
+  })
+  mocked.setKycStatus.mockRejectedValue(new Error('boom'))
+  render(<PackagesQueue />)
+
+  await screen.findByText(/nothing in the queue/i)
+  await userEvent.type(screen.getByLabelText(/suite number/i), 'BUF-10001')
+  await userEvent.click(screen.getByRole('button', { name: /find customer/i }))
+
+  await screen.findByText(/Ana Silva/)
+  await userEvent.selectOptions(screen.getByLabelText(/kyc status/i), 'rejected')
+
+  expect(await screen.findByRole('alert')).toBeInTheDocument()
 })

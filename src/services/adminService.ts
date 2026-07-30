@@ -49,6 +49,29 @@ export interface MarkShippedInput {
   trackingCode: string
 }
 
+export interface CustomerLookup {
+  userId: string
+  name: string
+  kycStatus: 'not_started' | 'pending' | 'verified' | 'rejected'
+  ofacStatus: 'not_started' | 'clear' | 'flagged'
+}
+
+export interface AdminDataRequest {
+  id: string
+  kind: 'export' | 'delete'
+  status: 'pending' | 'processing' | 'completed' | 'rejected'
+  requestNote: string
+  resolutionNotes: string
+  requestedAt: string
+  customerName: string
+  customerEmail: string
+}
+
+export interface ResolveDataRequestInput {
+  status: 'completed' | 'rejected'
+  resolutionNotes: string
+}
+
 type MaybeArray<T> = T | T[] | null
 
 interface SuiteEmbed {
@@ -58,6 +81,22 @@ interface SuiteEmbed {
 interface ProfileEmbed {
   name: string
   suites: MaybeArray<SuiteEmbed>
+}
+
+interface ComplianceProfileEmbed {
+  name: string
+  kyc_status: 'not_started' | 'pending' | 'verified' | 'rejected'
+  ofac_screening_status: 'not_started' | 'clear' | 'flagged'
+}
+
+interface AdminDataRequestRow {
+  id: string
+  kind: AdminDataRequest['kind']
+  status: AdminDataRequest['status']
+  request_note: string
+  resolution_notes: string
+  requested_at: string
+  profiles: MaybeArray<{ name: string; email: string }>
 }
 
 interface PackageNeedingReviewRow {
@@ -100,6 +139,20 @@ function mapPackageNeedingReview(row: PackageNeedingReviewRow): PackageNeedingRe
     status: row.status,
     customerName: profile?.name ?? '',
     customerSuite: suite?.suite_number ?? null,
+  }
+}
+
+function mapAdminDataRequest(row: AdminDataRequestRow): AdminDataRequest {
+  const profile = firstOf(row.profiles)
+  return {
+    id: row.id,
+    kind: row.kind,
+    status: row.status,
+    requestNote: row.request_note,
+    resolutionNotes: row.resolution_notes,
+    requestedAt: row.requested_at,
+    customerName: profile?.name ?? '',
+    customerEmail: profile?.email ?? '',
   }
 }
 
@@ -162,19 +215,29 @@ export const adminService = {
     if (error) throw new Error(error.message)
   },
 
-  /** Localiza o dono de uma suite para preencher `packages.user_id` no recebimento. */
-  async findUserBySuite(suiteNumber: string): Promise<{ userId: string; name: string } | null> {
+  /**
+   * Localiza o dono de uma suite para preencher `packages.user_id` no
+   * recebimento. Também traz kyc_status/ofac_screening_status junto (mesma
+   * consulta, sem round-trip extra) para exibir na etapa de confirmação do
+   * recebimento e permitir staff editar compliance ali mesmo.
+   */
+  async findUserBySuite(suiteNumber: string): Promise<CustomerLookup | null> {
     const { data, error } = await supabase
       .from('suites')
-      .select('user_id, profiles (name)')
+      .select('user_id, profiles (name, kyc_status, ofac_screening_status)')
       .eq('suite_number', suiteNumber)
       .maybeSingle()
     if (error) throw new Error(error.message)
     if (!data) return null
 
-    const row = data as { user_id: string; profiles: MaybeArray<{ name: string }> }
+    const row = data as { user_id: string; profiles: MaybeArray<ComplianceProfileEmbed> }
     const profile = firstOf(row.profiles)
-    return { userId: row.user_id, name: profile?.name ?? '' }
+    return {
+      userId: row.user_id,
+      name: profile?.name ?? '',
+      kycStatus: profile?.kyc_status ?? 'not_started',
+      ofacStatus: profile?.ofac_screening_status ?? 'not_started',
+    }
   },
 
   async receivePackage(input: ReceivePackageInput): Promise<void> {
@@ -213,6 +276,55 @@ export const adminService = {
         shipped_at: new Date().toISOString(),
       })
       .eq('id', id)
+    if (error) throw new Error(error.message)
+  },
+
+  /** Pedidos LGPD/GDPR ainda em aberto (pending/processing), para a fila de atendimento do staff. */
+  async getOpenDataRequests(): Promise<AdminDataRequest[]> {
+    const { data, error } = await supabase
+      .from('data_requests')
+      .select('id, kind, status, request_note, resolution_notes, requested_at, profiles (name, email)')
+      .in('status', ['pending', 'processing'])
+      .order('requested_at', { ascending: true })
+    if (error) throw new Error(error.message)
+    return (data as AdminDataRequestRow[]).map(mapAdminDataRequest)
+  },
+
+  /**
+   * Marca um pedido como concluído ou rejeitado. `completed_at` é setado no
+   * client (ISO string), mesmo padrão de `shipped_at` em
+   * markConsolidationShipped acima — aceitável nesta fase, sem função de
+   * banco dedicada.
+   */
+  async resolveDataRequest(id: string, input: ResolveDataRequestInput): Promise<void> {
+    const userId = await currentUserId()
+    if (!userId) throw new Error('Not authenticated')
+
+    const { error } = await supabase
+      .from('data_requests')
+      .update({
+        status: input.status,
+        resolution_notes: input.resolutionNotes,
+        completed_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+    if (error) throw new Error(error.message)
+  },
+
+  /** Colunas staff-only protegidas por trigger + GRANT (ver migration Fase 5). */
+  async setKycStatus(userId: string, status: 'pending' | 'verified' | 'rejected'): Promise<void> {
+    const staffId = await currentUserId()
+    if (!staffId) throw new Error('Not authenticated')
+
+    const { error } = await supabase.from('profiles').update({ kyc_status: status }).eq('id', userId)
+    if (error) throw new Error(error.message)
+  },
+
+  async setOfacStatus(userId: string, status: 'clear' | 'flagged'): Promise<void> {
+    const staffId = await currentUserId()
+    if (!staffId) throw new Error('Not authenticated')
+
+    const { error } = await supabase.from('profiles').update({ ofac_screening_status: status }).eq('id', userId)
     if (error) throw new Error(error.message)
   },
 }

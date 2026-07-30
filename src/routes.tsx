@@ -29,9 +29,11 @@ const Ship = lazy(() => import('./pages/dashboard/Ship'))
 const Shipments = lazy(() => import('./pages/dashboard/Shipments'))
 const Shopper = lazy(() => import('./pages/dashboard/Shopper'))
 const Account = lazy(() => import('./pages/dashboard/Account'))
+const DashboardPrivacy = lazy(() => import('./pages/dashboard/Privacy'))
 const AdminOverview = lazy(() => import('./pages/admin/Overview'))
 const AdminPackagesQueue = lazy(() => import('./pages/admin/PackagesQueue'))
 const AdminConsolidationsQueue = lazy(() => import('./pages/admin/ConsolidationsQueue'))
+const AdminDataRequestsQueue = lazy(() => import('./pages/admin/DataRequestsQueue'))
 
 export function AppRoutes() {
   return (
@@ -64,12 +66,14 @@ export function AppRoutes() {
           <Route path="shipments" element={<Shipments />} />
           <Route path="shopper" element={<Shopper />} />
           <Route path="account" element={<Account />} />
+          <Route path="privacy" element={<DashboardPrivacy />} />
           {/* /app/* child routes added as their tasks complete */}
         </Route>
         <Route path="/admin" element={<StaffRoute><AdminLayout /></StaffRoute>}>
           <Route index element={<AdminOverview />} />
           <Route path="packages" element={<AdminPackagesQueue />} />
           <Route path="consolidations" element={<AdminConsolidationsQueue />} />
+          <Route path="data-requests" element={<AdminDataRequestsQueue />} />
           {/* /admin/* child routes added as their tasks complete */}
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

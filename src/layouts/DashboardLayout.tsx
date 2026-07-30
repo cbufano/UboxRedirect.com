@@ -10,6 +10,7 @@ import {
   Truck,
   ShoppingBag,
   UserCircle,
+  ShieldCheck,
   Menu,
   X,
 } from 'lucide-react'
@@ -27,6 +28,7 @@ const NAV_ITEMS = [
   { to: '/app/shipments', key: 'dashboard.nav.shipments', icon: Truck, end: false },
   { to: '/app/shopper', key: 'dashboard.nav.shopper', icon: ShoppingBag, end: false },
   { to: '/app/account', key: 'dashboard.nav.account', icon: UserCircle, end: false },
+  { to: '/app/privacy', key: 'dashboard.nav.privacy', icon: ShieldCheck, end: false },
 ] as const
 
 const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
