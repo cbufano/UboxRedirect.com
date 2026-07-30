@@ -6,6 +6,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="index" options={{ title: 'Overview' }} />
       <Tabs.Screen name="notify-purchase" options={{ title: 'Pre-alert' }} />
       <Tabs.Screen name="inbox" options={{ title: 'Inbox' }} />
+      <Tabs.Screen name="shipments" options={{ title: 'Shipments' }} />
     </Tabs>
   )
 }
