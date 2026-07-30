@@ -105,16 +105,6 @@ export default function NotifyPurchase() {
     }
   }
 
-  if (loading) return <p className="text-sm text-slate/60">{t('dashboard.loading')}</p>
-
-  if (loadError) {
-    return (
-      <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
-        {t('dashboard.notify.loadError')}
-      </p>
-    )
-  }
-
   return (
     <div>
       <h1 className="text-2xl font-bold text-navy">{t('dashboard.notify.title')}</h1>
@@ -194,7 +184,16 @@ export default function NotifyPurchase() {
       <Card className="mt-6 max-w-2xl">
         <h2 className="text-lg font-semibold text-navy">{t('dashboard.notify.list.title')}</h2>
 
-        {items.length === 0 ? (
+        {loading ? (
+          <p className="mt-3 text-sm text-slate/60">{t('dashboard.loading')}</p>
+        ) : loadError ? (
+          <p
+            role="alert"
+            className="mt-3 rounded-lg bg-red-50 px-4 py-3 text-sm font-medium text-red-600"
+          >
+            {t('dashboard.notify.loadError')}
+          </p>
+        ) : items.length === 0 ? (
           <p className="mt-3 text-sm text-slate/70">{t('dashboard.notify.list.empty')}</p>
         ) : (
           <div className="mt-4 overflow-x-auto">

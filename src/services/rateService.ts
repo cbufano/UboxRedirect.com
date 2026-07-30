@@ -55,6 +55,13 @@ export const rateService = {
     const specificRows = rows.filter((row) => row.destination_zone === input.destinationCountry)
     const rowsToUse = specificRows.length > 0 ? specificRows : rows.filter((row) => row.destination_zone === DEFAULT_ZONE)
 
+    if (rowsToUse.length === 0) {
+      // A shipping route with zero pricing rows (neither the destination
+      // zone nor DEFAULT) is a rate_tables configuration gap, not a valid
+      // "no options" result — fail loudly so callers surface it clearly.
+      throw new Error('No shipping rates available for this destination')
+    }
+
     const options: RateOption[] = rowsToUse.map((row) => ({
       carrier: row.carrier,
       etaDays: row.eta_days,

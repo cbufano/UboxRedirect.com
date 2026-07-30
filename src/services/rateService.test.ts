@@ -113,6 +113,20 @@ describe('estimateShippingCost', () => {
     expect(result.options).toEqual([{ carrier: 'Economy', etaDays: '8-14', costUsd: 8 + 25 * 6 * 1.0 }])
   })
 
+  it('throws a clear error when neither the destination zone nor DEFAULT have any rate rows', async () => {
+    mockRateRows([])
+
+    await expect(
+      rateService.estimateShippingCost({
+        destinationCountry: 'ZZ',
+        weightKg: 1,
+        lengthCm: 10,
+        widthCm: 10,
+        heightCm: 10,
+      }),
+    ).rejects.toThrow('No shipping rates available for this destination')
+  })
+
   it('throws when weightKg is not positive', async () => {
     await expect(
       rateService.estimateShippingCost({
