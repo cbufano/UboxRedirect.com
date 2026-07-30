@@ -11,6 +11,8 @@ export interface Profile {
   country: string
   preferredLanguage: string
   suiteNumber: string | null
+  /** Não-nulo quando a conta foi suspensa pelo staff (Fase 7.3) — o site usa para bloquear o painel. */
+  suspendedAt: string | null
 }
 
 interface ProfileRow {
@@ -19,6 +21,7 @@ interface ProfileRow {
   email: string
   country: string
   preferred_language: string
+  suspended_at: string | null
   suites: { suite_number: string } | { suite_number: string }[] | null
 }
 
@@ -31,6 +34,7 @@ function mapProfile(row: ProfileRow): Profile {
     country: row.country,
     preferredLanguage: row.preferred_language,
     suiteNumber: suite?.suite_number ?? null,
+    suspendedAt: row.suspended_at,
   }
 }
 
@@ -46,7 +50,7 @@ export const profileService = {
 
     const { data, error } = await supabase
       .from('profiles')
-      .select('id, name, email, country, preferred_language, suites (suite_number)')
+      .select('id, name, email, country, preferred_language, suspended_at, suites (suite_number)')
       .eq('id', userId)
       .single()
     if (error) throw new Error(error.message)

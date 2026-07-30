@@ -20,6 +20,7 @@ it('shows the warehouse address with the real suite from the profile', async () 
     country: 'BR',
     preferredLanguage: 'pt',
     suiteNumber: 'BUF-10482',
+    suspendedAt: null,
   })
   render(
     <MemoryRouter>

@@ -63,6 +63,7 @@ beforeEach(() => {
     country: 'BR',
     preferredLanguage: 'pt',
     suiteNumber: 'BUF-10482',
+    suspendedAt: null,
   })
   mockedPackageService.getMyReceivedPackages.mockResolvedValue([])
   mockedPackageService.getMyConsolidations.mockResolvedValue([])
