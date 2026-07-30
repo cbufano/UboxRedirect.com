@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { LayoutDashboard, PackageSearch, Boxes, Warehouse, CreditCard, Tags, ShieldCheck, FileClock, Settings, Menu, X } from 'lucide-react'
+import { LayoutDashboard, PackageSearch, Boxes, Warehouse, CreditCard, Tags, Users, ShieldCheck, FileClock, Settings, Menu, X } from 'lucide-react'
 import { LanguageSwitcher } from '../components/LanguageSwitcher'
 import { Button } from '../components/ui/Button'
 import { authService } from '../services/authService'
@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { to: '/admin/warehouse', key: 'admin.nav.warehouse', icon: Warehouse, end: false },
   { to: '/admin/payments', key: 'admin.nav.payments', icon: CreditCard, end: false },
   { to: '/admin/rates', key: 'admin.nav.rates', icon: Tags, end: false },
+  { to: '/admin/customers', key: 'admin.nav.customers', icon: Users, end: false },
   { to: '/admin/data-requests', key: 'admin.nav.dataRequests', icon: FileClock, end: false },
   { to: '/admin/settings', key: 'admin.nav.settings', icon: Settings, end: false },
 ] as const

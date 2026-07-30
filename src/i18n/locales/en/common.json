@@ -935,6 +935,7 @@
       "warehouse": "Warehouse",
       "payments": "Payments",
       "rates": "Rates & fees",
+      "customers": "Customers",
       "dataRequests": "Data requests",
       "settings": "Settings"
     },
@@ -999,6 +1000,7 @@
         "looking": "Looking up…",
         "notFound": "No customer found for that suite number.",
         "found": "Receiving for {{name}} (suite {{suite}})",
+        "viewCustomer": "View customer",
         "storeLabel": "Store",
         "descriptionLabel": "Description",
         "weightLabel": "Weight (kg)",
@@ -1045,6 +1047,35 @@
         "noLocation": "NO LOC",
         "print": "Print label",
         "close": "Close"
+      }
+    },
+    "customers": {
+      "title": "Customers",
+      "subtitle": "Search customer accounts and open the full profile: compliance, suspension, internal notes and activity.",
+      "search": {
+        "label": "Name, email or suite",
+        "placeholder": "e.g. Ana, ana@email.com or BUF-10001",
+        "submit": "Search",
+        "searching": "Searching…",
+        "hint": "Search by name, email or suite number to find a customer.",
+        "empty": "No customers found for that search.",
+        "error": "We couldn't run the search. Please try again."
+      },
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "suite": "Suite",
+        "country": "Country",
+        "flags": "Flags"
+      },
+      "badges": {
+        "suspended": "Suspended",
+        "kyc": "KYC: {{status}}",
+        "ofac": "OFAC: {{status}}"
+      },
+      "detail": {
+        "loadError": "We couldn't load this customer. They may not exist, or the link is wrong.",
+        "noSuite": "No suite assigned"
       },
       "compliance": {
         "title": "Compliance status",
@@ -1064,6 +1095,47 @@
         "saving": "Saving…",
         "error": "We couldn't update the compliance status. Please try again.",
         "updated": "Compliance status updated."
+      },
+      "suspension": {
+        "title": "Account suspension",
+        "activeHint": "This account is active.",
+        "suspendedHint": "This account is suspended — the customer cannot use the dashboard.",
+        "suspend": "Suspend account",
+        "reactivate": "Reactivate account",
+        "confirmSuspend": "Suspend this account? The customer will lose access until it is reactivated.",
+        "confirmReactivate": "Reactivate this account? The customer will regain access immediately.",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "working": "Saving…",
+        "error": "We couldn't update this account. Please try again."
+      },
+      "notes": {
+        "title": "Internal notes",
+        "visibilityHint": "Visible to staff only — the customer never sees these notes.",
+        "empty": "No notes yet.",
+        "addLabel": "Add a note",
+        "placeholder": "Write an internal note about this customer…",
+        "submit": "Add note",
+        "submitting": "Saving…",
+        "error": "We couldn't save this note. Please try again."
+      },
+      "summaries": {
+        "packages": {
+          "title": "Live packages",
+          "empty": "No live packages."
+        },
+        "consolidations": {
+          "title": "Consolidations",
+          "empty": "No consolidations yet."
+        },
+        "payments": {
+          "title": "Payments",
+          "empty": "No payments yet."
+        },
+        "dataRequests": {
+          "title": "Privacy requests",
+          "empty": "No privacy requests."
+        }
       }
     },
     "packageDetail": {

@@ -935,6 +935,7 @@
       "warehouse": "Galpão",
       "payments": "Pagamentos",
       "rates": "Tarifas e taxas",
+      "customers": "Clientes",
       "dataRequests": "Pedidos de dados",
       "settings": "Configurações"
     },
@@ -999,6 +1000,7 @@
         "looking": "Buscando…",
         "notFound": "Nenhum cliente encontrado para essa suite.",
         "found": "Recebendo para {{name}} (suite {{suite}})",
+        "viewCustomer": "Ver cliente",
         "storeLabel": "Loja",
         "descriptionLabel": "Descrição",
         "weightLabel": "Peso (kg)",
@@ -1045,6 +1047,35 @@
         "noLocation": "SEM POS",
         "print": "Imprimir etiqueta",
         "close": "Fechar"
+      }
+    },
+    "customers": {
+      "title": "Clientes",
+      "subtitle": "Busque contas de clientes e abra o perfil completo: compliance, suspensão, notas internas e atividade.",
+      "search": {
+        "label": "Nome, e-mail ou suite",
+        "placeholder": "ex.: Ana, ana@email.com ou BUF-10001",
+        "submit": "Buscar",
+        "searching": "Buscando…",
+        "hint": "Busque por nome, e-mail ou número da suite para encontrar um cliente.",
+        "empty": "Nenhum cliente encontrado para essa busca.",
+        "error": "Não foi possível fazer a busca. Tente novamente."
+      },
+      "table": {
+        "name": "Nome",
+        "email": "E-mail",
+        "suite": "Suite",
+        "country": "País",
+        "flags": "Sinalizações"
+      },
+      "badges": {
+        "suspended": "Suspenso",
+        "kyc": "KYC: {{status}}",
+        "ofac": "OFAC: {{status}}"
+      },
+      "detail": {
+        "loadError": "Não foi possível carregar este cliente. Ele pode não existir, ou o link está errado.",
+        "noSuite": "Sem suite atribuída"
       },
       "compliance": {
         "title": "Status de compliance",
@@ -1064,6 +1095,47 @@
         "saving": "Salvando…",
         "error": "Não foi possível atualizar o status de compliance. Tente novamente.",
         "updated": "Status de compliance atualizado."
+      },
+      "suspension": {
+        "title": "Suspensão da conta",
+        "activeHint": "Esta conta está ativa.",
+        "suspendedHint": "Esta conta está suspensa — o cliente não consegue usar o painel.",
+        "suspend": "Suspender conta",
+        "reactivate": "Reativar conta",
+        "confirmSuspend": "Suspender esta conta? O cliente perde o acesso até a reativação.",
+        "confirmReactivate": "Reativar esta conta? O cliente volta a ter acesso imediatamente.",
+        "confirm": "Confirmar",
+        "cancel": "Cancelar",
+        "working": "Salvando…",
+        "error": "Não foi possível atualizar esta conta. Tente novamente."
+      },
+      "notes": {
+        "title": "Notas internas",
+        "visibilityHint": "Visível só para a equipe — o cliente nunca vê estas notas.",
+        "empty": "Nenhuma nota ainda.",
+        "addLabel": "Adicionar nota",
+        "placeholder": "Escreva uma nota interna sobre este cliente…",
+        "submit": "Adicionar nota",
+        "submitting": "Salvando…",
+        "error": "Não foi possível salvar esta nota. Tente novamente."
+      },
+      "summaries": {
+        "packages": {
+          "title": "Pacotes ativos",
+          "empty": "Nenhum pacote ativo."
+        },
+        "consolidations": {
+          "title": "Consolidações",
+          "empty": "Nenhuma consolidação ainda."
+        },
+        "payments": {
+          "title": "Pagamentos",
+          "empty": "Nenhum pagamento ainda."
+        },
+        "dataRequests": {
+          "title": "Pedidos de privacidade",
+          "empty": "Nenhum pedido de privacidade."
+        }
       }
     },
     "packageDetail": {

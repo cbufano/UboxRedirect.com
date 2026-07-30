@@ -37,6 +37,8 @@ const AdminConsolidationsQueue = lazy(() => import('./pages/admin/Consolidations
 const AdminWarehouse = lazy(() => import('./pages/admin/Warehouse'))
 const AdminPayments = lazy(() => import('./pages/admin/Payments'))
 const AdminRates = lazy(() => import('./pages/admin/Rates'))
+const AdminCustomers = lazy(() => import('./pages/admin/Customers'))
+const AdminCustomerDetail = lazy(() => import('./pages/admin/CustomerDetail'))
 const AdminDataRequestsQueue = lazy(() => import('./pages/admin/DataRequestsQueue'))
 const AdminSettings = lazy(() => import('./pages/admin/Settings'))
 
@@ -82,6 +84,8 @@ export function AppRoutes() {
           <Route path="warehouse" element={<AdminWarehouse />} />
           <Route path="payments" element={<AdminPayments />} />
           <Route path="rates" element={<AdminRates />} />
+          <Route path="customers" element={<AdminCustomers />} />
+          <Route path="customers/:id" element={<AdminCustomerDetail />} />
           <Route path="data-requests" element={<AdminDataRequestsQueue />} />
           <Route path="settings" element={<AdminSettings />} />
           {/* /admin/* child routes added as their tasks complete */}

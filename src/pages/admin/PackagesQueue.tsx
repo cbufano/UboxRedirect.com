@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -18,13 +19,6 @@ interface LocationOption {
   id: string
   code: string
 }
-
-// KycStatus/OfacStatus não incluem 'not_started' aqui de propósito — o
-// staff não tem como "desfazer" para not_started pelo select (mesma
-// restrição de adminService.setKycStatus/setOfacStatus); o valor atual
-// aparece desabilitado no topo do select só quando ainda for not_started.
-const KYC_EDITABLE_STATUSES = ['pending', 'verified', 'rejected'] as const
-const OFAC_EDITABLE_STATUSES = ['clear', 'flagged'] as const
 
 const packageStatusClasses: Record<PackageNeedingReview['status'], string> = {
   received: 'bg-slate/10 text-slate',
@@ -153,16 +147,10 @@ export default function PackagesQueue() {
 
   const suiteNumberValue = watch('suiteNumber')
 
-  const [complianceSaving, setComplianceSaving] = useState<'kyc' | 'ofac' | null>(null)
-  const [complianceError, setComplianceError] = useState(false)
-  const [complianceSuccess, setComplianceSuccess] = useState(false)
-
   // Se o número da suite mudar depois de uma busca, invalida o match — a
   // equipe precisa buscar de novo antes de conseguir enviar o formulário.
   useEffect(() => {
     setCustomerMatch(null)
-    setComplianceError(false)
-    setComplianceSuccess(false)
     setPreAlerts([])
     setPreAlertsError(false)
     setSelectedPreAlert(null)
@@ -246,38 +234,6 @@ export default function PackagesQueue() {
     }
     const slot = freeSlots.find((candidate) => candidate.id === locationId)
     if (slot) setLocationChoice(slot)
-  }
-
-  const handleKycChange = async (status: (typeof KYC_EDITABLE_STATUSES)[number]) => {
-    if (!customerMatch || customerMatch === 'not_found') return
-    setComplianceError(false)
-    setComplianceSuccess(false)
-    setComplianceSaving('kyc')
-    try {
-      await adminService.setKycStatus(customerMatch.userId, status)
-      setCustomerMatch((prev) => (prev && prev !== 'not_found' ? { ...prev, kycStatus: status } : prev))
-      setComplianceSuccess(true)
-    } catch {
-      setComplianceError(true)
-    } finally {
-      setComplianceSaving(null)
-    }
-  }
-
-  const handleOfacChange = async (status: (typeof OFAC_EDITABLE_STATUSES)[number]) => {
-    if (!customerMatch || customerMatch === 'not_found') return
-    setComplianceError(false)
-    setComplianceSuccess(false)
-    setComplianceSaving('ofac')
-    try {
-      await adminService.setOfacStatus(customerMatch.userId, status)
-      setCustomerMatch((prev) => (prev && prev !== 'not_found' ? { ...prev, ofacStatus: status } : prev))
-      setComplianceSuccess(true)
-    } catch {
-      setComplianceError(true)
-    } finally {
-      setComplianceSaving(null)
-    }
   }
 
   const onValid: SubmitHandler<FormOutput> = async (values) => {
@@ -368,12 +324,21 @@ export default function PackagesQueue() {
           )}
           {matchFound && (
             <>
-              <p role="status" className="mt-2 text-sm font-medium text-success">
-                {t('admin.packages.receiveForm.found', {
-                  name: matchFound.name,
-                  suite: getValues('suiteNumber'),
-                })}
-              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-3">
+                <p role="status" className="text-sm font-medium text-success">
+                  {t('admin.packages.receiveForm.found', {
+                    name: matchFound.name,
+                    suite: getValues('suiteNumber'),
+                  })}
+                </p>
+                {/* Compliance (KYC/OFAC) agora vive no perfil do cliente. */}
+                <Link
+                  to={`/admin/customers/${matchFound.userId}`}
+                  className="text-sm font-medium text-brand hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                >
+                  {t('admin.packages.receiveForm.viewCustomer')}
+                </Link>
+              </div>
 
               <div className="mt-3 rounded-lg border border-slate/10 p-4">
                 <h3 className="text-sm font-semibold text-navy">{t('admin.packages.preAlerts.title')}</h3>
@@ -465,73 +430,6 @@ export default function PackagesQueue() {
                       ))}
                     </select>
                   </label>
-                )}
-              </div>
-
-              <div className="mt-3 rounded-lg border border-slate/10 p-4">
-                <h3 className="text-sm font-semibold text-navy">{t('admin.packages.compliance.title')}</h3>
-                <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                  <label htmlFor="kycStatus" className="block text-sm text-navy">
-                    {t('admin.packages.compliance.kycLabel')}
-                    <select
-                      id="kycStatus"
-                      value={matchFound.kycStatus}
-                      disabled={complianceSaving !== null}
-                      onChange={(event) =>
-                        handleKycChange(event.target.value as (typeof KYC_EDITABLE_STATUSES)[number])
-                      }
-                      className="mt-1 w-full rounded-lg border border-slate/20 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-                    >
-                      {matchFound.kycStatus === 'not_started' && (
-                        <option value="not_started" disabled>
-                          {t('admin.packages.compliance.kycStatuses.not_started')}
-                        </option>
-                      )}
-                      {KYC_EDITABLE_STATUSES.map((status) => (
-                        <option key={status} value={status}>
-                          {t(`admin.packages.compliance.kycStatuses.${status}`)}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-
-                  <label htmlFor="ofacStatus" className="block text-sm text-navy">
-                    {t('admin.packages.compliance.ofacLabel')}
-                    <select
-                      id="ofacStatus"
-                      value={matchFound.ofacStatus}
-                      disabled={complianceSaving !== null}
-                      onChange={(event) =>
-                        handleOfacChange(event.target.value as (typeof OFAC_EDITABLE_STATUSES)[number])
-                      }
-                      className="mt-1 w-full rounded-lg border border-slate/20 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-                    >
-                      {matchFound.ofacStatus === 'not_started' && (
-                        <option value="not_started" disabled>
-                          {t('admin.packages.compliance.ofacStatuses.not_started')}
-                        </option>
-                      )}
-                      {OFAC_EDITABLE_STATUSES.map((status) => (
-                        <option key={status} value={status}>
-                          {t(`admin.packages.compliance.ofacStatuses.${status}`)}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-
-                {complianceSaving && (
-                  <p className="mt-2 text-xs text-slate/60">{t('admin.packages.compliance.saving')}</p>
-                )}
-                {complianceError && (
-                  <p role="alert" className="mt-2 text-xs text-red-600">
-                    {t('admin.packages.compliance.error')}
-                  </p>
-                )}
-                {complianceSuccess && (
-                  <p role="status" className="mt-2 text-xs font-medium text-success">
-                    {t('admin.packages.compliance.updated')}
-                  </p>
                 )}
               </div>
             </>
