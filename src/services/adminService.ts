@@ -392,6 +392,26 @@ export const adminService = {
   },
 
   /**
+   * Descarta um pacote que ainda está em revisão. O `.eq('status',
+   * 'in_review')` + `.select()` garantem que descartar algo fora de revisão
+   * (ou inexistente) falhe alto em vez de silenciosamente não afetar nenhuma
+   * linha (padrão anti-otimista de markConsolidationShipped).
+   */
+  async discardPackage(packageId: string): Promise<void> {
+    const userId = await currentUserId()
+    if (!userId) throw new Error('Not authenticated')
+
+    const { data, error } = await supabase
+      .from('packages')
+      .update({ status: 'discarded' })
+      .eq('id', packageId)
+      .eq('status', 'in_review')
+      .select('id')
+    if (error) throw new Error(error.message)
+    if (!data || data.length === 0) throw new Error('Package is not in review or was not found')
+  },
+
+  /**
    * Localiza o dono de uma suite para preencher `packages.user_id` no
    * recebimento. Também traz kyc_status/ofac_screening_status junto (mesma
    * consulta, sem round-trip extra) para exibir na etapa de confirmação do

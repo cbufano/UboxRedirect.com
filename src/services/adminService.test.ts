@@ -174,6 +174,52 @@ describe('markPackageReady', () => {
   })
 })
 
+describe('discardPackage', () => {
+  function mockUpdateChain(result: { data: unknown; error: { message: string } | null }) {
+    const select = vi.fn().mockResolvedValue(result)
+    const eqStatus = vi.fn().mockReturnValue({ select })
+    const eqId = vi.fn().mockReturnValue({ eq: eqStatus })
+    const update = vi.fn().mockReturnValue({ eq: eqId })
+    mockedSupabase.from.mockReturnValue({ update } as never)
+    return { update, eqId, eqStatus, select }
+  }
+
+  it('discards only packages that are still in review', async () => {
+    mockSession('staff-1')
+    const { update, eqId, eqStatus, select } = mockUpdateChain({ data: [{ id: 'pkg1' }], error: null })
+
+    await adminService.discardPackage('pkg1')
+
+    expect(mockedSupabase.from).toHaveBeenCalledWith('packages')
+    expect(update).toHaveBeenCalledWith({ status: 'discarded' })
+    expect(eqId).toHaveBeenCalledWith('id', 'pkg1')
+    expect(eqStatus).toHaveBeenCalledWith('status', 'in_review')
+    expect(select).toHaveBeenCalledWith('id')
+  })
+
+  it('throws when no row is affected (package not in review)', async () => {
+    mockSession('staff-1')
+    mockUpdateChain({ data: [], error: null })
+
+    await expect(adminService.discardPackage('pkg1')).rejects.toThrow(
+      'Package is not in review or was not found',
+    )
+  })
+
+  it('throws when signed out', async () => {
+    mockSession(null)
+    await expect(adminService.discardPackage('pkg1')).rejects.toThrow('Not authenticated')
+    expect(mockedSupabase.from).not.toHaveBeenCalled()
+  })
+
+  it('throws when the update fails', async () => {
+    mockSession('staff-1')
+    mockUpdateChain({ data: null, error: { message: 'boom' } })
+
+    await expect(adminService.discardPackage('pkg1')).rejects.toThrow('boom')
+  })
+})
+
 describe('findUserBySuite', () => {
   it('returns the matching user with compliance status', async () => {
     const maybeSingle = vi.fn().mockResolvedValue({

@@ -1038,6 +1038,63 @@
         "updated": "Compliance status updated."
       }
     },
+    "packageDetail": {
+      "title": "Package details",
+      "subtitle": "Everything about this package: data, photos, warehouse position and movement history.",
+      "loadError": "We couldn't load this package. It may not exist, or the link is wrong.",
+      "fields": {
+        "store": "Store",
+        "description": "Description",
+        "weight": "Weight",
+        "dimensions": "Dimensions (cm)",
+        "declaredValue": "Declared value",
+        "customer": "Customer",
+        "receivedAt": "Received"
+      },
+      "status": {
+        "received": "Received",
+        "in_review": "In review",
+        "ready": "Ready to ship",
+        "consolidating": "Consolidating",
+        "shipped": "Shipped",
+        "discarded": "Discarded"
+      },
+      "photos": {
+        "title": "Photos",
+        "empty": "No photos for this package.",
+        "alt": "Package photo {{index}}"
+      },
+      "position": {
+        "title": "Warehouse position",
+        "none": "No position assigned.",
+        "move": "Move",
+        "cancel": "Cancel",
+        "selectLabel": "New position",
+        "slotsLoading": "Loading free positions…",
+        "slotsError": "We couldn't load the free positions. Please try again.",
+        "noFreeSlots": "No free positions available.",
+        "confirm": "Confirm move",
+        "moving": "Moving…",
+        "moveSuccess": "Package moved.",
+        "moveError": "We couldn't move this package. Please try again."
+      },
+      "history": {
+        "title": "Movement history",
+        "empty": "No movements recorded yet.",
+        "from": "From",
+        "to": "To",
+        "by": "By",
+        "when": "When"
+      },
+      "actions": {
+        "markReady": "Mark ready",
+        "discard": "Discard",
+        "working": "Updating…",
+        "success": "Package updated.",
+        "error": "We couldn't update this package. Please try again.",
+        "reprint": "Reprint label"
+      }
+    },
     "consolidations": {
       "title": "Consolidations queue",
       "subtitle": "Consolidations waiting for payment or shipping.",

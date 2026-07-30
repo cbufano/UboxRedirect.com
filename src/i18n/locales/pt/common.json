@@ -1038,6 +1038,63 @@
         "updated": "Status de compliance atualizado."
       }
     },
+    "packageDetail": {
+      "title": "Ficha do pacote",
+      "subtitle": "Tudo sobre este pacote: dados, fotos, posição no galpão e histórico de movimentação.",
+      "loadError": "Não foi possível carregar este pacote. Ele pode não existir, ou o link está errado.",
+      "fields": {
+        "store": "Loja",
+        "description": "Descrição",
+        "weight": "Peso",
+        "dimensions": "Dimensões (cm)",
+        "declaredValue": "Valor declarado",
+        "customer": "Cliente",
+        "receivedAt": "Recebido em"
+      },
+      "status": {
+        "received": "Recebido",
+        "in_review": "Em análise",
+        "ready": "Pronto para envio",
+        "consolidating": "Consolidando",
+        "shipped": "Enviado",
+        "discarded": "Descartado"
+      },
+      "photos": {
+        "title": "Fotos",
+        "empty": "Sem fotos para este pacote.",
+        "alt": "Foto {{index}} do pacote"
+      },
+      "position": {
+        "title": "Posição no galpão",
+        "none": "Sem posição atribuída.",
+        "move": "Mover",
+        "cancel": "Cancelar",
+        "selectLabel": "Nova posição",
+        "slotsLoading": "Carregando posições livres…",
+        "slotsError": "Não foi possível carregar as posições livres. Tente novamente.",
+        "noFreeSlots": "Nenhuma posição livre disponível.",
+        "confirm": "Confirmar movimentação",
+        "moving": "Movendo…",
+        "moveSuccess": "Pacote movido.",
+        "moveError": "Não foi possível mover este pacote. Tente novamente."
+      },
+      "history": {
+        "title": "Histórico de movimentação",
+        "empty": "Nenhuma movimentação registrada ainda.",
+        "from": "De",
+        "to": "Para",
+        "by": "Por",
+        "when": "Quando"
+      },
+      "actions": {
+        "markReady": "Marcar pronto",
+        "discard": "Descartar",
+        "working": "Atualizando…",
+        "success": "Pacote atualizado.",
+        "error": "Não foi possível atualizar este pacote. Tente novamente.",
+        "reprint": "Reimprimir etiqueta"
+      }
+    },
     "consolidations": {
       "title": "Fila de consolidações",
       "subtitle": "Consolidações aguardando pagamento ou envio.",

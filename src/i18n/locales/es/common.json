@@ -1038,6 +1038,63 @@
         "updated": "Estado de cumplimiento actualizado."
       }
     },
+    "packageDetail": {
+      "title": "Ficha del paquete",
+      "subtitle": "Todo sobre este paquete: datos, fotos, posición en el almacén e historial de movimientos.",
+      "loadError": "No pudimos cargar este paquete. Puede que no exista o que el enlace sea incorrecto.",
+      "fields": {
+        "store": "Tienda",
+        "description": "Descripción",
+        "weight": "Peso",
+        "dimensions": "Dimensiones (cm)",
+        "declaredValue": "Valor declarado",
+        "customer": "Cliente",
+        "receivedAt": "Recibido"
+      },
+      "status": {
+        "received": "Recibido",
+        "in_review": "En revisión",
+        "ready": "Listo para enviar",
+        "consolidating": "Consolidando",
+        "shipped": "Enviado",
+        "discarded": "Descartado"
+      },
+      "photos": {
+        "title": "Fotos",
+        "empty": "Sin fotos para este paquete.",
+        "alt": "Foto {{index}} del paquete"
+      },
+      "position": {
+        "title": "Posición en el almacén",
+        "none": "Sin posición asignada.",
+        "move": "Mover",
+        "cancel": "Cancelar",
+        "selectLabel": "Nueva posición",
+        "slotsLoading": "Cargando posiciones libres…",
+        "slotsError": "No pudimos cargar las posiciones libres. Inténtalo de nuevo.",
+        "noFreeSlots": "No hay posiciones libres disponibles.",
+        "confirm": "Confirmar movimiento",
+        "moving": "Moviendo…",
+        "moveSuccess": "Paquete movido.",
+        "moveError": "No pudimos mover este paquete. Inténtalo de nuevo."
+      },
+      "history": {
+        "title": "Historial de movimientos",
+        "empty": "Aún no hay movimientos registrados.",
+        "from": "Desde",
+        "to": "Hacia",
+        "by": "Por",
+        "when": "Cuándo"
+      },
+      "actions": {
+        "markReady": "Marcar listo",
+        "discard": "Descartar",
+        "working": "Actualizando…",
+        "success": "Paquete actualizado.",
+        "error": "No pudimos actualizar este paquete. Inténtalo de nuevo.",
+        "reprint": "Reimprimir etiqueta"
+      }
+    },
     "consolidations": {
       "title": "Cola de consolidaciones",
       "subtitle": "Consolidaciones a la espera de pago o envío.",
