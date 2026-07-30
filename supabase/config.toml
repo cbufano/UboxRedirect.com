@@ -1,0 +1,19 @@
+# Configuração do projeto Supabase (CLI). Usada por `supabase functions deploy`
+# e `supabase db push` para saber a qual projeto remoto se referir e como
+# implantar cada Edge Function.
+project_id = "iyxgrvqvthuvvxautrgm"
+
+# create-checkout-session é chamada pelo navegador do cliente logado — o
+# comportamento padrão (exigir um JWT válido do Supabase Auth no gateway,
+# antes mesmo da função rodar) é o correto aqui, então NÃO desabilitamos
+# verify_jwt para ela.
+
+# stripe-webhook é chamada diretamente pelos servidores da Stripe, que
+# nunca terão um JWT do Supabase — eles autenticam com o cabeçalho
+# `stripe-signature`, verificado dentro da própria função
+# (stripe.webhooks.constructEventAsync). Sem verify_jwt = false aqui, o
+# gateway do Supabase rejeitaria toda chamada da Stripe com 401 antes de a
+# função sequer rodar, e o pagamento nunca seria confirmado no banco mesmo
+# a cobrança tendo sido feita de verdade.
+[functions.stripe-webhook]
+verify_jwt = false

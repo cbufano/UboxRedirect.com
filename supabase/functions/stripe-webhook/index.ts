@@ -104,26 +104,46 @@ Deno.serve(async (req: Request) => {
     return jsonResponse({ error: 'Missing client_reference_id' }, 500)
   }
 
-  // Second half: flip the consolidation to 'paid'. protect_consolidation_staff_columns
-  // (migration 20260730000003) explicitly allows service-role writes to
-  // paid_at/status here — without that fix this update would silently
-  // revert itself. If this fails after the payment row already succeeded,
-  // we still return 500 so Stripe retries; the payments update above is a
-  // no-op on retry, and this update is naturally idempotent too (setting the
-  // same status/paid_at again is harmless), so retrying is safe.
+  // Second half: flip the consolidation to 'paid' — but ONLY if it's still
+  // 'pending'. Without this guard, a customer could cancel their own
+  // consolidation directly via the REST API (consolidations_update_own_pending_or_staff
+  // permits status='pending'->'cancelled', which also releases its packages
+  // back to 'ready' via release_cancelled_consolidation_items) *after*
+  // opening a Stripe Checkout session but *before* completing it, then still
+  // complete the now-stale session — flipping an already-cancelled,
+  // zero-package consolidation to 'paid'. Scoping the UPDATE to
+  // status='pending' makes that a no-op instead.
+  //
+  // protect_consolidation_staff_columns (migration 20260730000003)
+  // explicitly allows service-role writes to paid_at/status here — without
+  // that fix this update would silently revert itself.
   const { error: consolidationError, data: updatedConsolidations } = await adminClient
     .from('consolidations')
     .update({ status: 'paid', paid_at: new Date().toISOString() })
     .eq('id', consolidationId)
+    .eq('status', 'pending')
     .select('id')
 
   if (consolidationError) {
     console.error('stripe-webhook: failed to update consolidation', consolidationId, consolidationError)
+    // Retryable failure (e.g. transient DB error) — 500 so Stripe retries.
+    // The payments update above is a no-op on retry, and this update is
+    // naturally idempotent too (setting the same status/paid_at again is
+    // harmless), so retrying is safe.
     return jsonResponse({ error: 'Failed to update consolidation' }, 500)
   }
   if (!updatedConsolidations || updatedConsolidations.length === 0) {
-    console.error('stripe-webhook: no consolidation row found for id', consolidationId)
-    return jsonResponse({ error: 'No matching consolidation' }, 500)
+    // Either the id doesn't exist, or the row is no longer 'pending' (e.g.
+    // it was cancelled by the customer while the Stripe session was open).
+    // Neither is fixable by retrying, so we log loudly for manual
+    // reconciliation (a payment succeeded with nothing to ship it against)
+    // and return 200 to stop Stripe from retrying forever.
+    console.error(
+      'stripe-webhook: consolidation not in pending state (or missing) for id',
+      consolidationId,
+      '— payment succeeded but could not be applied; needs manual review',
+    )
+    return jsonResponse({ received: true, warning: 'Consolidation not pending; flagged for review' }, 200)
   }
 
   return jsonResponse({ received: true }, 200)

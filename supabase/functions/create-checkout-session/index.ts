@@ -120,7 +120,7 @@ Deno.serve(async (req: Request) => {
     // service-role client is used for consistency with the writes below.
     const { data: existingPayments, error: existingPaymentsError } = await adminClient
       .from('payments')
-      .select('id, status')
+      .select('id, status, provider_session_id')
       .eq('consolidation_id', consolidationId)
 
     if (existingPaymentsError) {
@@ -130,14 +130,35 @@ Deno.serve(async (req: Request) => {
     if (existingPayments?.some((payment) => payment.status === 'succeeded')) {
       return jsonResponse({ error: 'Already paid' }, 400)
     }
-    // Design choice: we do NOT try to reuse a still-pending payment's Stripe
-    // session. Stripe Checkout Sessions already expire on their own (24h
-    // default), and the unique(provider, provider_session_id) constraint on
-    // `payments` plus the partial unique index on succeeded payments make it
-    // safe to just insert a fresh pending payment row per checkout attempt —
-    // simpler than tracking/validating session freshness here, at the cost
-    // of an occasional orphaned 'pending' row for an abandoned checkout,
-    // which is harmless (never confused for a real charge).
+
+    // Reuse a still-open pending Checkout Session instead of minting a new
+    // one every call. Without this, a double-click or two open tabs each
+    // get their OWN valid Stripe session for the correct price — if a
+    // customer completes both, Stripe charges them twice for the same
+    // consolidation. The webhook can only ever record ONE of those as
+    // 'succeeded' (payments_one_succeeded_per_consolidation blocks the
+    // second), so a genuine double-charge would otherwise go unrecorded and
+    // unrecoverable in the app, even though Stripe took the money twice.
+    const stripeForLookup = new Stripe(stripeSecretKey, {
+      apiVersion: '2024-06-20',
+      httpClient: Stripe.createFetchHttpClient(),
+    })
+    const pendingPayment = existingPayments?.find((payment) => payment.status === 'pending')
+    if (pendingPayment) {
+      try {
+        const existingSession = await stripeForLookup.checkout.sessions.retrieve(pendingPayment.provider_session_id)
+        if (existingSession.status === 'open' && existingSession.url) {
+          return jsonResponse({ url: existingSession.url }, 200)
+        }
+        // Session expired/completed/otherwise not reusable — fall through
+        // and create a fresh one. The old pending row is left as-is; it's
+        // harmless (never counted as a real payment) and useful as a log
+        // of the abandoned attempt.
+      } catch (err) {
+        console.error('create-checkout-session: failed to retrieve existing session, creating a new one', err)
+        // Non-fatal — proceed to create a fresh session below.
+      }
+    }
 
     // 3) Recompute the authoritative price server-side. NEVER trust
     // consolidations.cost_usd — per the migration's comment, that column is
@@ -214,11 +235,9 @@ Deno.serve(async (req: Request) => {
 
     // 4) Create the Stripe Checkout Session using ONLY the server-recomputed
     // amount above — the client-supplied consolidationId only selects WHICH
-    // shipment is being paid for, never the price.
-    const stripe = new Stripe(stripeSecretKey, {
-      apiVersion: '2024-06-20',
-      httpClient: Stripe.createFetchHttpClient(),
-    })
+    // shipment is being paid for, never the price. Reuses the Stripe client
+    // created in step 2 (no need for a second instance).
+    const stripe = stripeForLookup
 
     const origin = req.headers.get('origin') ?? 'https://uboxredirect.com'
 
@@ -264,7 +283,10 @@ Deno.serve(async (req: Request) => {
 
     return jsonResponse({ url: session.url }, 200)
   } catch (err) {
+    // Log the real error server-side only — an unexpected exception here
+    // could be a raw Stripe SDK error or similar, which might contain more
+    // implementation detail than we want to hand back to the browser.
     console.error('create-checkout-session: unexpected error', err)
-    return jsonResponse({ error: err instanceof Error ? err.message : 'Unexpected error' }, 500)
+    return jsonResponse({ error: 'Unexpected error' }, 500)
   }
 })
