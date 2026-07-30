@@ -6,6 +6,10 @@
 
 > **Atualização 29/07/2026 — Fase 2 entregue:** auth real (Supabase Auth + Postgres com RLS em 100% das tabelas), suite gerada automaticamente no cadastro, fluxo completo de recuperação de senha, e o painel (`Address`, `Overview`, `Account`) lendo dados reais via `profileService`. Plano de execução em `docs/superpowers/plans/2026-07-29-fase2-supabase-backend.md`. Pendências manuais para produção estão listadas no fim deste documento.
 
+> **Atualização 30/07/2026 — Fase 3 entregue:** pré-alerta de compra (`expected_packages`), recebimento e triagem de pacotes no galpão (`packages`, com fotos em Storage), consolidação de pacotes em envios (`consolidations`/`consolidation_items`), cotação de frete real (`rate_tables`), e painel admin/ops (fila de pacotes, fila de consolidações, visão geral operacional) com separação de papéis (`customer`/`ops`/`support`/`admin`/`super_admin`) via RLS. `Inbox`, `Ship`, `Calculator`, `Shipments` e `Overview` (este último fechado em 30/07) já leem tudo de dados reais — nenhuma página do painel do cliente usa mais `src/mocks/*`.
+
+> **Atualização 30/07/2026 — Fase 4 entregue:** pagamento via Stripe Checkout (hospedado, sem Stripe Elements no cliente). Edge Functions `create-checkout-session` (recalcula o preço no servidor a partir do peso real + tabela de tarifas, nunca confia no valor enviado pelo cliente) e `stripe-webhook` (confirma pagamento via assinatura Stripe, idempotente). Código completo em `supabase/functions/`; **implantação real pendente** (requer conta Stripe de verdade — ver checklist manual no fim deste documento).
+
 ---
 
 # PARTE 1 — O que já foi construído
@@ -236,3 +240,37 @@ Todos alimentados por dados mock (`src/mocks/`):
 3. **Dias grátis de armazenagem** e preço da diária depois (regra de negócio central)
 4. **Admin no mesmo domínio** (`/admin`) ou subdomínio separado (`admin.uboxredirect.com`)? — subdomínio separado é um pouco mais seguro e limpo
 5. **Advogado** para Termos/Privacidade/compliance de exportação — recomendo escritório em Miami com experiência em logística
+
+---
+
+## Checklist manual consolidado (Fases 2–5)
+
+Tudo abaixo é o que **só você** pode fazer — ou porque exige uma credencial/conta real que não existe neste ambiente, ou porque é uma ação irreversível/de custo real que não deve ser automatizada sem sua aprovação explícita. Todo o resto (schema, RLS, código de UI, Edge Functions) já está pronto e revisado; isto é só o que falta *ligar*.
+
+### Deploy e CI (Fase 1/2)
+- [ ] Fazer `git push` da branch para o GitHub (repositório remoto) se ainda não fez.
+- [ ] Cadastrar os secrets do GitHub Actions em Settings → Secrets and variables → Actions: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD` (deploy do site na Hostinger) e `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (build do frontend com o Supabase real).
+
+### Supabase (Fase 2/3/4/5)
+- [x] Projeto Supabase criado (`iyxgrvqvthuvvxautrgm`) e todas as migrations de Fase 2–5 aplicadas em produção.
+- [ ] Confirmar que o CLI do Supabase está de fato "linkado" a este projeto localmente (`supabase link`) se algum dia quiser rodar `supabase db push`/`supabase functions deploy` — hoje as migrations foram aplicadas manualmente pelo SQL Editor.
+
+### Pagamentos — Stripe (Fase 4)
+- [ ] Criar/confirmar a conta Stripe da empresa (Miami/Doral, FL).
+- [ ] Implantar as Edge Functions: `supabase functions deploy create-checkout-session` e `supabase functions deploy stripe-webhook`.
+- [ ] Configurar os secrets das functions: `supabase secrets set STRIPE_SECRET_KEY=sk_...` e `supabase secrets set STRIPE_WEBHOOK_SECRET=whsec_...`.
+- [ ] Registrar o endpoint do webhook no Stripe Dashboard (URL da function `stripe-webhook`), assinado ao menos em `checkout.session.completed`.
+- [ ] Testar o fluxo ponta a ponta com o Stripe CLI (`stripe listen` + `stripe trigger checkout.session.completed`) antes de liberar para clientes reais — o comentário no topo de `supabase/functions/stripe-webhook/index.ts` documenta uma incerteza pontual sobre a API do SDK em runtime Deno que precisa ser confirmada nesse teste.
+
+### Pagamentos — Pix/BRL (Fase 4, não construído)
+- [ ] Escolher fornecedor (dLocal, EBANX ou PagBrasil — decisão em aberto acima) e negociar contrato/taxas.
+- [ ] Depois de escolhido, a integração em si é um novo bloco de trabalho (services + Edge Function própria, seguindo o mesmo padrão do Stripe).
+
+### Compliance (Fase 5)
+- [ ] KYC automático (ex.: Stripe Identity) e triagem OFAC/SDN automática **não foram construídos** — hoje `kyc_status`/`ofac_screening_status` em `profiles` são só campos que um staff marca manualmente pelo painel admin. Decidir se/quando vale contratar um fornecedor real.
+- [ ] Revisar com um advogado (Termos de Uso, Política de Privacidade, compliance de exportação dos EUA) — item já listado nas "Decisões em aberto" acima.
+
+### Antes de ir ao ar de verdade
+- [ ] Fazer merge das branches `feat/fase2-supabase-backend` → `feat/fase3-packages-admin` → `master` (ou abrir PRs) quando todas as fases estiverem revisadas — nenhuma foi mesclada ainda.
+- [ ] Decidir domínio do admin (mesmo domínio `/admin` vs. subdomínio `admin.uboxredirect.com`).
+- [ ] Definir dias grátis de armazenagem e preço da diária (regra de negócio usada em `rate_tables`/cobrança futura de armazenagem).
