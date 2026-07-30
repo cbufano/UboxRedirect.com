@@ -931,6 +931,7 @@
       "overview": "Visão geral",
       "packages": "Pacotes",
       "consolidations": "Consolidações",
+      "warehouse": "Galpão",
       "dataRequests": "Pedidos de dados"
     },
     "overview": {
@@ -1093,6 +1094,57 @@
         "success": "Pacote atualizado.",
         "error": "Não foi possível atualizar este pacote. Tente novamente.",
         "reprint": "Reimprimir etiqueta"
+      }
+    },
+    "warehouse": {
+      "title": "Galpão",
+      "subtitle": "Mapa físico do galpão: gere a grade de posições e veja o que está livre, ocupado ou inativo.",
+      "loadError": "Não foi possível carregar o mapa do galpão. Atualize a página para tentar novamente.",
+      "generator": {
+        "title": "Gerar grade",
+        "hint": "Cria posições zona-corredor-estante-nível-posição em massa. Posições existentes são mantidas.",
+        "zoneLabel": "Zona",
+        "aislesLabel": "Corredores (separados por vírgula)",
+        "aislesPlaceholder": "A ou A,B",
+        "racksLabel": "Estantes (1-99)",
+        "levelsLabel": "Níveis (1-9)",
+        "binsLabel": "Posições (1-99)",
+        "submit": "Gerar posições",
+        "submitting": "Gerando…",
+        "success": "{{total}} posições criadas.",
+        "error": "Não foi possível gerar a grade. Confira os valores — só admins podem fazer isso.",
+        "errors": {
+          "zoneRequired": "Informe a zona.",
+          "aislesRequired": "Informe pelo menos um corredor.",
+          "racksRange": "Informe um número inteiro entre 1 e 99.",
+          "levelsRange": "Informe um número inteiro entre 1 e 9.",
+          "binsRange": "Informe um número inteiro entre 1 e 99."
+        }
+      },
+      "map": {
+        "title": "Mapa de ocupação",
+        "emptyAdmin": "Nenhuma posição cadastrada ainda — gere a grade acima.",
+        "emptyOps": "Nenhuma posição cadastrada ainda.",
+        "aisle": "Corredor {{aisle}}",
+        "rack": "Estante {{rack}}",
+        "legend": {
+          "free": "Livre",
+          "occupied": "Ocupada",
+          "inactive": "Inativa"
+        },
+        "cellFree": "{{code}} — livre",
+        "cellOccupied": "{{code}} — suite {{suite}}",
+        "cellInactive": "{{code}} — inativa"
+      },
+      "toggle": {
+        "freeHint": "Esta posição está livre. Desativar tira ela das sugestões de posição livre.",
+        "inactiveHint": "Esta posição está inativa. Reative para ela voltar a ficar disponível.",
+        "deactivate": "Desativar",
+        "reactivate": "Reativar",
+        "working": "Salvando…",
+        "success": "Posição atualizada.",
+        "error": "Não foi possível atualizar esta posição. Tente novamente.",
+        "close": "Fechar"
       }
     },
     "consolidations": {

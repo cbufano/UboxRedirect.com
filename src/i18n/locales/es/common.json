@@ -931,6 +931,7 @@
       "overview": "Resumen",
       "packages": "Paquetes",
       "consolidations": "Consolidaciones",
+      "warehouse": "Almacén",
       "dataRequests": "Solicitudes de datos"
     },
     "overview": {
@@ -1093,6 +1094,57 @@
         "success": "Paquete actualizado.",
         "error": "No pudimos actualizar este paquete. Inténtalo de nuevo.",
         "reprint": "Reimprimir etiqueta"
+      }
+    },
+    "warehouse": {
+      "title": "Almacén",
+      "subtitle": "Mapa físico del almacén: genera la cuadrícula de posiciones y ve qué está libre, ocupado o inactivo.",
+      "loadError": "No pudimos cargar el mapa del almacén. Actualiza la página para intentarlo de nuevo.",
+      "generator": {
+        "title": "Generar cuadrícula",
+        "hint": "Crea posiciones zona-pasillo-estante-nivel-posición en masa. Las posiciones existentes se conservan.",
+        "zoneLabel": "Zona",
+        "aislesLabel": "Pasillos (separados por comas)",
+        "aislesPlaceholder": "A o A,B",
+        "racksLabel": "Estantes (1-99)",
+        "levelsLabel": "Niveles (1-9)",
+        "binsLabel": "Posiciones (1-99)",
+        "submit": "Generar posiciones",
+        "submitting": "Generando…",
+        "success": "{{total}} posiciones creadas.",
+        "error": "No pudimos generar la cuadrícula. Revisa los valores — solo los admins pueden hacerlo.",
+        "errors": {
+          "zoneRequired": "Ingresa la zona.",
+          "aislesRequired": "Ingresa al menos un pasillo.",
+          "racksRange": "Ingresa un número entero entre 1 y 99.",
+          "levelsRange": "Ingresa un número entero entre 1 y 9.",
+          "binsRange": "Ingresa un número entero entre 1 y 99."
+        }
+      },
+      "map": {
+        "title": "Mapa de ocupación",
+        "emptyAdmin": "Aún no hay posiciones registradas — genera la cuadrícula arriba.",
+        "emptyOps": "Aún no hay posiciones registradas.",
+        "aisle": "Pasillo {{aisle}}",
+        "rack": "Estante {{rack}}",
+        "legend": {
+          "free": "Libre",
+          "occupied": "Ocupada",
+          "inactive": "Inactiva"
+        },
+        "cellFree": "{{code}} — libre",
+        "cellOccupied": "{{code}} — suite {{suite}}",
+        "cellInactive": "{{code}} — inactiva"
+      },
+      "toggle": {
+        "freeHint": "Esta posición está libre. Desactivarla la quita de las sugerencias de posición libre.",
+        "inactiveHint": "Esta posición está inactiva. Reactívala para que vuelva a estar disponible.",
+        "deactivate": "Desactivar",
+        "reactivate": "Reactivar",
+        "working": "Guardando…",
+        "success": "Posición actualizada.",
+        "error": "No pudimos actualizar esta posición. Inténtalo de nuevo.",
+        "close": "Cerrar"
       }
     },
     "consolidations": {

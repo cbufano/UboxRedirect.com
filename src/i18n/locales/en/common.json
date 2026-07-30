@@ -931,6 +931,7 @@
       "overview": "Overview",
       "packages": "Packages",
       "consolidations": "Consolidations",
+      "warehouse": "Warehouse",
       "dataRequests": "Data requests"
     },
     "overview": {
@@ -1093,6 +1094,57 @@
         "success": "Package updated.",
         "error": "We couldn't update this package. Please try again.",
         "reprint": "Reprint label"
+      }
+    },
+    "warehouse": {
+      "title": "Warehouse",
+      "subtitle": "Physical map of the warehouse: generate the position grid and see what is free, occupied or inactive.",
+      "loadError": "We couldn't load the warehouse map. Refresh the page to try again.",
+      "generator": {
+        "title": "Generate grid",
+        "hint": "Creates positions zone-aisle-rack-level-bin in bulk. Existing positions are kept.",
+        "zoneLabel": "Zone",
+        "aislesLabel": "Aisles (comma-separated)",
+        "aislesPlaceholder": "A or A,B",
+        "racksLabel": "Racks (1-99)",
+        "levelsLabel": "Levels (1-9)",
+        "binsLabel": "Bins (1-99)",
+        "submit": "Generate positions",
+        "submitting": "Generating…",
+        "success": "{{total}} positions created.",
+        "error": "We couldn't generate the grid. Check the values — only admins can do this.",
+        "errors": {
+          "zoneRequired": "Enter the zone.",
+          "aislesRequired": "Enter at least one aisle.",
+          "racksRange": "Enter a whole number between 1 and 99.",
+          "levelsRange": "Enter a whole number between 1 and 9.",
+          "binsRange": "Enter a whole number between 1 and 99."
+        }
+      },
+      "map": {
+        "title": "Occupancy map",
+        "emptyAdmin": "No positions registered yet — generate the grid above.",
+        "emptyOps": "No positions registered yet.",
+        "aisle": "Aisle {{aisle}}",
+        "rack": "Rack {{rack}}",
+        "legend": {
+          "free": "Free",
+          "occupied": "Occupied",
+          "inactive": "Inactive"
+        },
+        "cellFree": "{{code}} — free",
+        "cellOccupied": "{{code}} — suite {{suite}}",
+        "cellInactive": "{{code}} — inactive"
+      },
+      "toggle": {
+        "freeHint": "This position is free. Deactivating hides it from the free-position suggestions.",
+        "inactiveHint": "This position is inactive. Reactivate it to make it available again.",
+        "deactivate": "Deactivate",
+        "reactivate": "Reactivate",
+        "working": "Saving…",
+        "success": "Position updated.",
+        "error": "We couldn't update this position. Please try again.",
+        "close": "Close"
       }
     },
     "consolidations": {
