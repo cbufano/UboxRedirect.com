@@ -10,6 +10,8 @@
 
 > **Atualização 30/07/2026 — Fase 4 entregue:** pagamento via Stripe Checkout (hospedado, sem Stripe Elements no cliente). Edge Functions `create-checkout-session` (recalcula o preço no servidor a partir do peso real + tabela de tarifas, nunca confia no valor enviado pelo cliente) e `stripe-webhook` (confirma pagamento via assinatura Stripe, idempotente). Código completo em `supabase/functions/`; **implantação real pendente** (requer conta Stripe de verdade — ver checklist manual no fim deste documento).
 
+> **Atualização 30/07/2026 — Fase 5 entregue:** autoatendimento LGPD/GDPR (`/app/privacy` — cliente solicita exportação/exclusão de dados, `data_requests`) com fila de resolução para staff (`/admin/data-requests`); campos de status de KYC/OFAC em `profiles`, marcados manualmente por staff direto na tela de recebimento de pacote. A revisão de segurança encontrou um achado **Crítico**: faltava a policy de RLS que permitisse staff atualizar `profiles` de outro usuário — `setKycStatus`/`setOfacStatus` reportavam sucesso na tela sem gravar nada no banco. Corrigido e aplicado em produção (migration `20260730000005_profiles_staff_update_policy.sql`). Triagem OFAC/SDN automática e KYC via Stripe Identity **não foram construídos** — são apenas os campos de status manuais, como documentado desde a migration original.
+
 ---
 
 # PARTE 1 — O que já foi construído
