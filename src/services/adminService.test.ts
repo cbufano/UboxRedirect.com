@@ -351,6 +351,54 @@ describe('getPendingPreAlerts', () => {
   })
 })
 
+describe('getPendingConsolidationsForUser', () => {
+  it('returns pending consolidations for the customer, newest first', async () => {
+    const rows = [
+      {
+        id: 'con-1',
+        city: 'São Paulo',
+        country: 'BR',
+        cost_usd: 55.9,
+        created_at: '2026-07-29T00:00:00Z',
+      },
+      {
+        id: 'con-2',
+        city: 'Lisboa',
+        country: 'PT',
+        cost_usd: null,
+        created_at: '2026-07-28T00:00:00Z',
+      },
+    ]
+    const order = vi.fn().mockResolvedValue({ data: rows, error: null })
+    const eqStatus = vi.fn().mockReturnValue({ order })
+    const eqUser = vi.fn().mockReturnValue({ eq: eqStatus })
+    const select = vi.fn().mockReturnValue({ eq: eqUser })
+    mockedSupabase.from.mockReturnValue({ select } as never)
+
+    const result = await adminService.getPendingConsolidationsForUser('cust-1')
+
+    expect(mockedSupabase.from).toHaveBeenCalledWith('consolidations')
+    expect(select).toHaveBeenCalledWith('id, city, country, cost_usd, created_at')
+    expect(eqUser).toHaveBeenCalledWith('user_id', 'cust-1')
+    expect(eqStatus).toHaveBeenCalledWith('status', 'pending')
+    expect(order).toHaveBeenCalledWith('created_at', { ascending: false })
+    expect(result).toEqual([
+      { id: 'con-1', city: 'São Paulo', country: 'BR', costUsd: 55.9, createdAt: '2026-07-29T00:00:00Z' },
+      { id: 'con-2', city: 'Lisboa', country: 'PT', costUsd: null, createdAt: '2026-07-28T00:00:00Z' },
+    ])
+  })
+
+  it('throws when the query fails', async () => {
+    const order = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
+    const eqStatus = vi.fn().mockReturnValue({ order })
+    const eqUser = vi.fn().mockReturnValue({ eq: eqStatus })
+    const select = vi.fn().mockReturnValue({ eq: eqUser })
+    mockedSupabase.from.mockReturnValue({ select } as never)
+
+    await expect(adminService.getPendingConsolidationsForUser('cust-1')).rejects.toThrow('boom')
+  })
+})
+
 describe('uploadPackagePhoto', () => {
   const file = new File(['img'], 'photo.jpg', { type: 'image/jpeg' })
 

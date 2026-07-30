@@ -129,6 +129,14 @@ export interface CustomerLookup {
   ofacStatus: 'not_started' | 'clear' | 'flagged'
 }
 
+export interface PendingConsolidationOption {
+  id: string
+  city: string
+  country: string
+  costUsd: number | null
+  createdAt: string
+}
+
 export interface AdminDataRequest {
   id: string
   kind: 'export' | 'delete'
@@ -255,6 +263,14 @@ interface ShippedConsolidationRow {
   city: string
   country: string
   shipped_at: string | null
+}
+
+interface PendingConsolidationRow {
+  id: string
+  city: string
+  country: string
+  cost_usd: number | null
+  created_at: string
 }
 
 interface PaidConsolidationRow {
@@ -541,6 +557,29 @@ export const adminService = {
       .order('created_at', { ascending: false })
     if (error) throw new Error(error.message)
     return (data as ExpectedPackageRow[]).map(mapExpectedPackage)
+  },
+
+  /**
+   * Consolidações ainda pendentes de UM cliente, para o registro de pagamento
+   * manual em /admin/payments (o operador escolhe qual consolidação o
+   * pagamento quita). `cost_usd` é a cotação exibida ao cliente — pode ser
+   * null quando a consolidação foi criada sem cotação.
+   */
+  async getPendingConsolidationsForUser(userId: string): Promise<PendingConsolidationOption[]> {
+    const { data, error } = await supabase
+      .from('consolidations')
+      .select('id, city, country, cost_usd, created_at')
+      .eq('user_id', userId)
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false })
+    if (error) throw new Error(error.message)
+    return (data as PendingConsolidationRow[]).map((row) => ({
+      id: row.id,
+      city: row.city,
+      country: row.country,
+      costUsd: row.cost_usd,
+      createdAt: row.created_at,
+    }))
   },
 
   /**

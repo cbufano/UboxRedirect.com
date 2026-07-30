@@ -932,6 +932,7 @@
       "packages": "Packages",
       "consolidations": "Consolidations",
       "warehouse": "Warehouse",
+      "payments": "Payments",
       "dataRequests": "Data requests"
     },
     "overview": {
@@ -1228,6 +1229,111 @@
         "markCompleted": "Mark completed",
         "reject": "Reject",
         "error": "We couldn't update that request. Please try again."
+      }
+    },
+    "payments": {
+      "title": "Payments",
+      "subtitle": "Payment history, manual payment registration and refund tracking.",
+      "list": {
+        "title": "Payment history",
+        "loadError": "We couldn't load the payments. Refresh the page to try again.",
+        "empty": "No payments match the current filters.",
+        "filters": {
+          "statusLabel": "Filter by status",
+          "providerLabel": "Filter by provider",
+          "all": "All"
+        },
+        "table": {
+          "date": "Date",
+          "customer": "Customer",
+          "destination": "Destination",
+          "amount": "Amount (USD)",
+          "provider": "Provider",
+          "status": "Status",
+          "actions": "Actions"
+        }
+      },
+      "status": {
+        "pending": "Pending",
+        "succeeded": "Succeeded",
+        "failed": "Failed",
+        "refunded": "Refunded"
+      },
+      "provider": {
+        "stripe": "Stripe",
+        "manual_pix": "Manual PIX",
+        "manual_transfer": "Bank transfer",
+        "manual_other": "Other (manual)"
+      },
+      "manual": {
+        "title": "Register a manual payment",
+        "hint": "For payments received outside Stripe (direct PIX, bank transfer). The consolidation is marked as paid.",
+        "suiteLabel": "Customer suite number",
+        "suitePlaceholder": "BUF-10001",
+        "lookup": "Find customer",
+        "looking": "Looking up…",
+        "notFound": "No customer found for that suite number.",
+        "found": "Registering for {{name}} (suite {{suite}})",
+        "consolidationLabel": "Pending consolidation",
+        "consolidationsLoading": "Loading pending consolidations…",
+        "consolidationsError": "We couldn't load this customer's pending consolidations. Please try again.",
+        "consolidationsEmpty": "This customer has no pending consolidations to pay.",
+        "consolidationPlaceholder": "Choose a consolidation",
+        "consolidationOption": "{{city}}, {{country}} — quoted ${{value}}",
+        "consolidationOptionNoQuote": "{{city}}, {{country}} — no quote",
+        "amountLabel": "Amount received (USD)",
+        "providerLabel": "Payment method",
+        "notesLabel": "Notes (optional)",
+        "notesPlaceholder": "e.g. PIX received in BRL — record the original amount and currency here",
+        "submit": "Register payment",
+        "submitting": "Saving…",
+        "success": "Payment registered and consolidation marked as paid.",
+        "error": "We couldn't register this payment. Please try again.",
+        "inconsistency": "The payment WAS recorded, but the consolidation was no longer pending — review the consolidation manually to resolve the inconsistency.",
+        "errors": {
+          "suiteRequired": "Enter the customer's suite number.",
+          "amountPositive": "Enter an amount greater than zero.",
+          "consolidationRequired": "Choose the pending consolidation this payment settles."
+        }
+      },
+      "refund": {
+        "button": "Refund",
+        "formTitle": "Request a refund",
+        "amountLabel": "Refund amount (USD)",
+        "reasonLabel": "Reason",
+        "reasonPlaceholder": "Why this payment is being refunded",
+        "submit": "Request refund",
+        "submitting": "Saving…",
+        "cancel": "Cancel",
+        "success": "Refund request recorded.",
+        "error": "We couldn't record this refund request. Please try again.",
+        "errors": {
+          "amountPositive": "Enter an amount greater than zero.",
+          "reasonRequired": "Enter the reason for the refund."
+        }
+      },
+      "refunds": {
+        "title": "Refunds",
+        "stripeNotice": "Real Stripe refunds are issued in the Stripe dashboard — this list is the decision trail and reconciliation record only.",
+        "loadError": "We couldn't load the refunds. Refresh the page to try again.",
+        "empty": "No refunds recorded yet.",
+        "table": {
+          "date": "Date",
+          "customer": "Customer",
+          "amount": "Amount (USD)",
+          "reason": "Reason",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "status": {
+          "requested": "Requested",
+          "processed": "Processed",
+          "failed": "Failed"
+        },
+        "markProcessed": "Mark processed",
+        "markFailed": "Mark failed",
+        "working": "Updating…",
+        "actionError": "We couldn't update that refund. Please try again."
       }
     }
   },

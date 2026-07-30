@@ -932,6 +932,7 @@
       "packages": "Pacotes",
       "consolidations": "Consolidações",
       "warehouse": "Galpão",
+      "payments": "Pagamentos",
       "dataRequests": "Pedidos de dados"
     },
     "overview": {
@@ -1228,6 +1229,111 @@
         "markCompleted": "Marcar como concluído",
         "reject": "Rejeitar",
         "error": "Não foi possível atualizar esse pedido. Tente novamente."
+      }
+    },
+    "payments": {
+      "title": "Pagamentos",
+      "subtitle": "Histórico de pagamentos, registro de pagamento manual e acompanhamento de estornos.",
+      "list": {
+        "title": "Histórico de pagamentos",
+        "loadError": "Não foi possível carregar os pagamentos. Atualize a página para tentar novamente.",
+        "empty": "Nenhum pagamento corresponde aos filtros atuais.",
+        "filters": {
+          "statusLabel": "Filtrar por status",
+          "providerLabel": "Filtrar por meio",
+          "all": "Todos"
+        },
+        "table": {
+          "date": "Data",
+          "customer": "Cliente",
+          "destination": "Destino",
+          "amount": "Valor (USD)",
+          "provider": "Meio",
+          "status": "Status",
+          "actions": "Ações"
+        }
+      },
+      "status": {
+        "pending": "Pendente",
+        "succeeded": "Aprovado",
+        "failed": "Falhou",
+        "refunded": "Estornado"
+      },
+      "provider": {
+        "stripe": "Stripe",
+        "manual_pix": "PIX manual",
+        "manual_transfer": "Transferência bancária",
+        "manual_other": "Outro (manual)"
+      },
+      "manual": {
+        "title": "Registrar pagamento manual",
+        "hint": "Para pagamentos recebidos fora do Stripe (PIX direto, transferência). A consolidação é marcada como paga.",
+        "suiteLabel": "Suite do cliente",
+        "suitePlaceholder": "BUF-10001",
+        "lookup": "Buscar cliente",
+        "looking": "Buscando…",
+        "notFound": "Nenhum cliente encontrado para essa suite.",
+        "found": "Registrando para {{name}} (suite {{suite}})",
+        "consolidationLabel": "Consolidação pendente",
+        "consolidationsLoading": "Carregando consolidações pendentes…",
+        "consolidationsError": "Não foi possível carregar as consolidações pendentes deste cliente. Tente novamente.",
+        "consolidationsEmpty": "Este cliente não tem consolidações pendentes de pagamento.",
+        "consolidationPlaceholder": "Escolha uma consolidação",
+        "consolidationOption": "{{city}}, {{country}} — cotado ${{value}}",
+        "consolidationOptionNoQuote": "{{city}}, {{country}} — sem cotação",
+        "amountLabel": "Valor recebido (USD)",
+        "providerLabel": "Meio de pagamento",
+        "notesLabel": "Notas (opcional)",
+        "notesPlaceholder": "ex.: PIX recebido em BRL — registre aqui o valor e a moeda originais",
+        "submit": "Registrar pagamento",
+        "submitting": "Salvando…",
+        "success": "Pagamento registrado e consolidação marcada como paga.",
+        "error": "Não foi possível registrar este pagamento. Tente novamente.",
+        "inconsistency": "O pagamento FOI registrado, mas a consolidação já não estava pendente — revise a consolidação manualmente para resolver a inconsistência.",
+        "errors": {
+          "suiteRequired": "Informe a suite do cliente.",
+          "amountPositive": "Informe um valor maior que zero.",
+          "consolidationRequired": "Escolha a consolidação pendente que este pagamento quita."
+        }
+      },
+      "refund": {
+        "button": "Estornar",
+        "formTitle": "Pedir estorno",
+        "amountLabel": "Valor do estorno (USD)",
+        "reasonLabel": "Motivo",
+        "reasonPlaceholder": "Por que este pagamento está sendo estornado",
+        "submit": "Pedir estorno",
+        "submitting": "Salvando…",
+        "cancel": "Cancelar",
+        "success": "Pedido de estorno registrado.",
+        "error": "Não foi possível registrar este pedido de estorno. Tente novamente.",
+        "errors": {
+          "amountPositive": "Informe um valor maior que zero.",
+          "reasonRequired": "Informe o motivo do estorno."
+        }
+      },
+      "refunds": {
+        "title": "Estornos",
+        "stripeNotice": "O estorno Stripe REAL é feito no dashboard do Stripe — esta lista é só a trilha de decisão e o registro de conciliação.",
+        "loadError": "Não foi possível carregar os estornos. Atualize a página para tentar novamente.",
+        "empty": "Nenhum estorno registrado ainda.",
+        "table": {
+          "date": "Data",
+          "customer": "Cliente",
+          "amount": "Valor (USD)",
+          "reason": "Motivo",
+          "status": "Status",
+          "actions": "Ações"
+        },
+        "status": {
+          "requested": "Solicitado",
+          "processed": "Processado",
+          "failed": "Falhou"
+        },
+        "markProcessed": "Marcar processado",
+        "markFailed": "Marcar falhou",
+        "working": "Atualizando…",
+        "actionError": "Não foi possível atualizar esse estorno. Tente novamente."
       }
     }
   },
