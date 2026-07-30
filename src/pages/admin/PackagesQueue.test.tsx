@@ -77,7 +77,7 @@ it('looks up a customer by suite, then receives a package for them', async () =>
     kycStatus: 'not_started',
     ofacStatus: 'not_started',
   })
-  mocked.receivePackage.mockResolvedValue()
+  mocked.receivePackage.mockResolvedValue('pkg-new')
   render(<PackagesQueue />)
 
   await screen.findByText(/nothing in the queue/i)

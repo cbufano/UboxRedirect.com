@@ -10,6 +10,7 @@
  * há sessão nenhuma.
  */
 import { supabase } from '../lib/supabase'
+import type { ExpectedPackage } from './packageService'
 
 export interface OpsStats {
   awaitingReview: number
@@ -42,6 +43,65 @@ export interface ReceivePackageInput {
   store: string
   description: string
   weightKg: number
+  expectedPackageId?: string
+  lengthCm?: number
+  widthCm?: number
+  heightCm?: number
+  declaredValueUsd?: number
+  locationId?: string
+}
+
+export interface PackagePhoto {
+  id: string
+  url: string
+}
+
+export interface PackageLocationHistoryEntry {
+  id: string
+  fromCode: string | null
+  toCode: string | null
+  movedByName: string
+  movedAt: string
+}
+
+export interface PackageDetail {
+  id: string
+  store: string
+  description: string
+  weightKg: number
+  lengthCm: number | null
+  widthCm: number | null
+  heightCm: number | null
+  declaredValueUsd: number
+  status: 'received' | 'in_review' | 'ready' | 'consolidating' | 'shipped' | 'discarded'
+  receivedAt: string
+  userId: string
+  customerName: string
+  customerSuite: string | null
+  locationId: string | null
+  locationCode: string | null
+  photos: PackagePhoto[]
+  history: PackageLocationHistoryEntry[]
+}
+
+export interface PaidConsolidationItem {
+  packageId: string
+  store: string
+  description: string
+  weightKg: number
+  locationId: string | null
+  locationCode: string | null
+}
+
+export interface PaidConsolidation {
+  id: string
+  customerName: string
+  city: string
+  country: string
+  declaredValueUsd: number
+  carrier: string | null
+  trackingCode: string | null
+  items: PaidConsolidationItem[]
 }
 
 export interface MarkShippedInput {
@@ -118,6 +178,72 @@ interface PendingConsolidationRow {
   profiles: MaybeArray<{ name: string }>
 }
 
+interface ExpectedPackageRow {
+  id: string
+  store: string
+  tracking_number: string
+  description: string
+  declared_value_usd: number
+  status: ExpectedPackage['status']
+  created_at: string
+}
+
+interface LocationCodeEmbed {
+  code: string
+}
+
+interface PackageDetailRow {
+  id: string
+  store: string
+  description: string
+  weight_kg: number
+  length_cm: number | null
+  width_cm: number | null
+  height_cm: number | null
+  declared_value_usd: number
+  status: PackageDetail['status']
+  received_at: string
+  user_id: string
+  location_id: string | null
+  warehouse_locations: MaybeArray<LocationCodeEmbed>
+  profiles: MaybeArray<ProfileEmbed>
+}
+
+interface PackagePhotoRow {
+  id: string
+  storage_path: string
+}
+
+interface PackageLocationHistoryRow {
+  id: string
+  moved_at: string
+  from_location: MaybeArray<LocationCodeEmbed>
+  to_location: MaybeArray<LocationCodeEmbed>
+  profiles: MaybeArray<{ name: string }>
+}
+
+interface PaidConsolidationItemRow {
+  packages: MaybeArray<{
+    id: string
+    store: string
+    description: string
+    weight_kg: number
+    location_id: string | null
+    warehouse_locations: MaybeArray<LocationCodeEmbed>
+  }>
+}
+
+interface PaidConsolidationRow {
+  id: string
+  city: string
+  country: string
+  declared_value_usd: number
+  carrier: string | null
+  tracking_code: string | null
+  profiles: MaybeArray<{ name: string }>
+  consolidation_items: PaidConsolidationItemRow[] | null
+}
+
 /**
  * Embeds do PostgREST podem vir como objeto único ou array de um elemento
  * dependendo de como a relação é inferida — mesmo comportamento tratado em
@@ -166,6 +292,56 @@ function mapPendingConsolidation(row: PendingConsolidationRow): PendingConsolida
     declaredValueUsd: row.declared_value_usd,
     carrier: row.carrier,
     trackingCode: row.tracking_code,
+  }
+}
+
+function mapExpectedPackage(row: ExpectedPackageRow): ExpectedPackage {
+  return {
+    id: row.id,
+    store: row.store,
+    trackingNumber: row.tracking_number,
+    description: row.description,
+    declaredValueUsd: row.declared_value_usd,
+    status: row.status,
+    createdAt: row.created_at,
+  }
+}
+
+function mapLocationHistoryEntry(row: PackageLocationHistoryRow): PackageLocationHistoryEntry {
+  return {
+    id: row.id,
+    fromCode: firstOf(row.from_location)?.code ?? null,
+    toCode: firstOf(row.to_location)?.code ?? null,
+    movedByName: firstOf(row.profiles)?.name ?? '',
+    movedAt: row.moved_at,
+  }
+}
+
+function mapPaidConsolidation(row: PaidConsolidationRow): PaidConsolidation {
+  const profile = firstOf(row.profiles)
+  const items = (row.consolidation_items ?? []).flatMap((item): PaidConsolidationItem[] => {
+    const pkg = firstOf(item.packages)
+    if (!pkg) return []
+    return [
+      {
+        packageId: pkg.id,
+        store: pkg.store,
+        description: pkg.description,
+        weightKg: pkg.weight_kg,
+        locationId: pkg.location_id,
+        locationCode: firstOf(pkg.warehouse_locations)?.code ?? null,
+      },
+    ]
+  })
+  return {
+    id: row.id,
+    customerName: profile?.name ?? '',
+    city: row.city,
+    country: row.country,
+    declaredValueUsd: row.declared_value_usd,
+    carrier: row.carrier,
+    trackingCode: row.tracking_code,
+    items,
   }
 }
 
@@ -240,17 +416,135 @@ export const adminService = {
     }
   },
 
-  async receivePackage(input: ReceivePackageInput): Promise<void> {
+  /**
+   * Pré-alertas pendentes de UM cliente, para o match no recebimento (o
+   * operador escolhe qual pré-alerta corresponde ao pacote que chegou).
+   */
+  async getPendingPreAlerts(userId: string): Promise<ExpectedPackage[]> {
+    const { data, error } = await supabase
+      .from('expected_packages')
+      .select('id, store, tracking_number, description, declared_value_usd, status, created_at')
+      .eq('user_id', userId)
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false })
+    if (error) throw new Error(error.message)
+    return (data as ExpectedPackageRow[]).map(mapExpectedPackage)
+  },
+
+  /**
+   * Registra o pacote físico e retorna o id criado (a UI precisa dele para a
+   * etiqueta QR). `expected_package_id` aciona o trigger de match do
+   * pré-alerta; `location_id` endereça o pacote já no recebimento. Campos
+   * opcionais só entram no INSERT quando informados — os defaults do banco
+   * (declared_value_usd 0, dimensões null) cobrem o resto.
+   */
+  async receivePackage(input: ReceivePackageInput): Promise<string> {
     const userId = await currentUserId()
     if (!userId) throw new Error('Not authenticated')
 
-    const { error } = await supabase.from('packages').insert({
+    const payload: Record<string, unknown> = {
       user_id: input.userId,
       store: input.store,
       description: input.description,
       weight_kg: input.weightKg,
-    })
+    }
+    if (input.expectedPackageId != null) payload.expected_package_id = input.expectedPackageId
+    if (input.lengthCm != null) payload.length_cm = input.lengthCm
+    if (input.widthCm != null) payload.width_cm = input.widthCm
+    if (input.heightCm != null) payload.height_cm = input.heightCm
+    if (input.declaredValueUsd != null) payload.declared_value_usd = input.declaredValueUsd
+    if (input.locationId != null) payload.location_id = input.locationId
+
+    const { data, error } = await supabase.from('packages').insert(payload).select('id').single()
     if (error) throw new Error(error.message)
+    return (data as { id: string }).id
+  },
+
+  /**
+   * Sobe a foto para o bucket privado e registra em package_photos. O caminho
+   * é OBRIGATORIAMENTE `<user_id>/<package_id>/<arquivo>` — a policy de
+   * INSERT do Storage (migration Fase 3) valida os dois primeiros segmentos
+   * contra o dono real do pacote, então buscamos o user_id primeiro.
+   */
+  async uploadPackagePhoto(packageId: string, file: File): Promise<void> {
+    const staffId = await currentUserId()
+    if (!staffId) throw new Error('Not authenticated')
+
+    const { data: pkg, error: pkgError } = await supabase
+      .from('packages')
+      .select('user_id')
+      .eq('id', packageId)
+      .single()
+    if (pkgError) throw new Error(pkgError.message)
+
+    const storagePath = `${(pkg as { user_id: string }).user_id}/${packageId}/${file.name}`
+    const { error: uploadError } = await supabase.storage.from('package-photos').upload(storagePath, file)
+    if (uploadError) throw new Error(uploadError.message)
+
+    const { error } = await supabase
+      .from('package_photos')
+      .insert({ package_id: packageId, storage_path: storagePath })
+    if (error) throw new Error(error.message)
+  },
+
+  /**
+   * Ficha completa do pacote (destino do QR da etiqueta): dados + cliente,
+   * fotos com URLs assinadas (1h) e trilha de movimentação com os códigos
+   * das posições (embed desambiguado pelas duas FKs para
+   * warehouse_locations).
+   */
+  async getPackageDetail(id: string): Promise<PackageDetail> {
+    const [pkgResult, photosResult, historyResult] = await Promise.all([
+      supabase
+        .from('packages')
+        .select(
+          'id, store, description, weight_kg, length_cm, width_cm, height_cm, declared_value_usd, status, received_at, user_id, location_id, warehouse_locations (code), profiles (name, suites (suite_number))',
+        )
+        .eq('id', id)
+        .single(),
+      supabase.from('package_photos').select('id, storage_path').eq('package_id', id).order('created_at', { ascending: true }),
+      supabase
+        .from('package_location_history')
+        .select(
+          'id, moved_at, from_location:warehouse_locations!from_location_id (code), to_location:warehouse_locations!to_location_id (code), profiles (name)',
+        )
+        .eq('package_id', id)
+        .order('moved_at', { ascending: false }),
+    ])
+    if (pkgResult.error) throw new Error(pkgResult.error.message)
+    if (photosResult.error) throw new Error(photosResult.error.message)
+    if (historyResult.error) throw new Error(historyResult.error.message)
+
+    const photos = await Promise.all(
+      (photosResult.data as PackagePhotoRow[]).map(async (photo): Promise<PackagePhoto> => {
+        const { data, error } = await supabase.storage.from('package-photos').createSignedUrl(photo.storage_path, 3600)
+        if (error) throw new Error(error.message)
+        return { id: photo.id, url: (data as { signedUrl: string }).signedUrl }
+      }),
+    )
+
+    const row = pkgResult.data as PackageDetailRow
+    const profile = firstOf(row.profiles)
+    const suite = profile ? firstOf(profile.suites) : null
+    return {
+      id: row.id,
+      store: row.store,
+      description: row.description,
+      weightKg: row.weight_kg,
+      lengthCm: row.length_cm,
+      widthCm: row.width_cm,
+      heightCm: row.height_cm,
+      declaredValueUsd: row.declared_value_usd,
+      status: row.status,
+      receivedAt: row.received_at,
+      userId: row.user_id,
+      customerName: profile?.name ?? '',
+      customerSuite: suite?.suite_number ?? null,
+      locationId: row.location_id,
+      locationCode: firstOf(row.warehouse_locations)?.code ?? null,
+      photos,
+      history: (historyResult.data as PackageLocationHistoryRow[]).map(mapLocationHistoryEntry),
+    }
   },
 
   async getPendingConsolidations(): Promise<PendingConsolidation[]> {
@@ -263,11 +557,34 @@ export const adminService = {
     return (data as PendingConsolidationRow[]).map(mapPendingConsolidation)
   },
 
+  /**
+   * Fila de expedição real: só consolidações PAGAS entram, com os itens (e o
+   * código da posição de cada pacote) para montar a lista de coleta no
+   * galpão. O embed aninhado consolidation_items → packages →
+   * warehouse_locations resolve via FKs diretas (packages.location_id).
+   */
+  async getPaidConsolidations(): Promise<PaidConsolidation[]> {
+    const { data, error } = await supabase
+      .from('consolidations')
+      .select(
+        'id, city, country, declared_value_usd, carrier, tracking_code, profiles (name), consolidation_items ( packages (id, store, description, weight_kg, location_id, warehouse_locations (code)) )',
+      )
+      .eq('status', 'paid')
+      .order('created_at', { ascending: true })
+    if (error) throw new Error(error.message)
+    return (data as PaidConsolidationRow[]).map(mapPaidConsolidation)
+  },
+
+  /**
+   * Só transiciona a partir de 'paid' — o `.eq('status', 'paid')` +
+   * `.select()` garantem que expedir algo não pago (ou já expedido) falhe
+   * alto em vez de silenciosamente não afetar nenhuma linha.
+   */
   async markConsolidationShipped(id: string, input: MarkShippedInput): Promise<void> {
     const userId = await currentUserId()
     if (!userId) throw new Error('Not authenticated')
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('consolidations')
       .update({
         carrier: input.carrier,
@@ -276,7 +593,10 @@ export const adminService = {
         shipped_at: new Date().toISOString(),
       })
       .eq('id', id)
+      .eq('status', 'paid')
+      .select('id')
     if (error) throw new Error(error.message)
+    if (!data || data.length === 0) throw new Error('Consolidation is not paid or was not found')
   },
 
   /** Pedidos LGPD/GDPR ainda em aberto (pending/processing), para a fila de atendimento do staff. */
