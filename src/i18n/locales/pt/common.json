@@ -840,6 +840,85 @@
       }
     }
   },
+  "admin": {
+    "staffBadge": "Equipe",
+    "nav": {
+      "overview": "Visão geral",
+      "packages": "Pacotes",
+      "consolidations": "Consolidações"
+    },
+    "overview": {
+      "title": "Visão geral da operação",
+      "subtitle": "Panorama do que precisa de atenção agora.",
+      "stats": {
+        "awaitingReview": "Aguardando revisão",
+        "pendingConsolidations": "Consolidações pendentes",
+        "openPreAlerts": "Pré-alertas em aberto"
+      },
+      "loadError": "Não foi possível carregar os números. Atualize a página para tentar novamente."
+    },
+    "packages": {
+      "title": "Fila de pacotes",
+      "subtitle": "Pacotes recebidos ou em revisão, aguardando ser marcados como prontos para envio.",
+      "empty": "Nada na fila no momento.",
+      "loadError": "Não foi possível carregar a fila. Atualize a página para tentar novamente.",
+      "table": {
+        "store": "Loja",
+        "description": "Descrição",
+        "weight": "Peso",
+        "customer": "Cliente",
+        "status": "Status",
+        "actions": "Ações"
+      },
+      "status": {
+        "received": "Recebido",
+        "in_review": "Em revisão"
+      },
+      "markReady": "Marcar como pronto",
+      "markingReady": "Atualizando…",
+      "markReadyError": "Não foi possível atualizar esse pacote. Tente novamente.",
+      "receiveForm": {
+        "title": "Receber novo pacote",
+        "suiteLabel": "Número da suite do cliente",
+        "suitePlaceholder": "BUF-10001",
+        "lookup": "Buscar cliente",
+        "looking": "Buscando…",
+        "notFound": "Nenhum cliente encontrado para essa suite.",
+        "found": "Recebendo para {{name}} (suite {{suite}})",
+        "storeLabel": "Loja",
+        "descriptionLabel": "Descrição",
+        "weightLabel": "Peso (kg)",
+        "submit": "Receber pacote",
+        "submitting": "Salvando…",
+        "success": "Pacote recebido.",
+        "error": "Não foi possível salvar esse pacote. Tente novamente.",
+        "errors": {
+          "suiteRequired": "Informe o número da suite do cliente.",
+          "storeRequired": "Informe o nome da loja.",
+          "descriptionRequired": "Descreva o item.",
+          "weightPositive": "Informe um peso maior que zero."
+        }
+      }
+    },
+    "consolidations": {
+      "title": "Fila de consolidações",
+      "subtitle": "Consolidações aguardando pagamento ou envio.",
+      "empty": "Nenhuma consolidação pendente no momento.",
+      "loadError": "Não foi possível carregar a fila. Atualize a página para tentar novamente.",
+      "table": {
+        "customer": "Cliente",
+        "destination": "Destino",
+        "declaredValue": "Valor declarado",
+        "shipping": "Envio",
+        "carrierLabel": "Transportadora",
+        "carrierPlaceholder": "Transportadora",
+        "trackingLabel": "Código de rastreio",
+        "trackingPlaceholder": "Código de rastreio"
+      },
+      "markShipped": "Marcar como enviado",
+      "shipError": "Não foi possível atualizar essa consolidação. Tente novamente."
+    }
+  },
   "privacy": {
     "title": "Política de Privacidade",
     "updated": "Última atualização: julho de 2026",

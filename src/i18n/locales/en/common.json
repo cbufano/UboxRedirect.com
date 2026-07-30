@@ -840,6 +840,85 @@
       }
     }
   },
+  "admin": {
+    "staffBadge": "Staff",
+    "nav": {
+      "overview": "Overview",
+      "packages": "Packages",
+      "consolidations": "Consolidations"
+    },
+    "overview": {
+      "title": "Ops overview",
+      "subtitle": "Snapshot of what needs attention right now.",
+      "stats": {
+        "awaitingReview": "Awaiting review",
+        "pendingConsolidations": "Pending consolidations",
+        "openPreAlerts": "Open pre-alerts"
+      },
+      "loadError": "We couldn't load the stats. Refresh the page to try again."
+    },
+    "packages": {
+      "title": "Packages queue",
+      "subtitle": "Packages received or in review, waiting to be marked ready to ship.",
+      "empty": "Nothing in the queue right now.",
+      "loadError": "We couldn't load the queue. Refresh the page to try again.",
+      "table": {
+        "store": "Store",
+        "description": "Description",
+        "weight": "Weight",
+        "customer": "Customer",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "status": {
+        "received": "Received",
+        "in_review": "In review"
+      },
+      "markReady": "Mark ready",
+      "markingReady": "Updating…",
+      "markReadyError": "We couldn't update that package. Please try again.",
+      "receiveForm": {
+        "title": "Receive a new package",
+        "suiteLabel": "Customer suite number",
+        "suitePlaceholder": "BUF-10001",
+        "lookup": "Find customer",
+        "looking": "Looking up…",
+        "notFound": "No customer found for that suite number.",
+        "found": "Receiving for {{name}} (suite {{suite}})",
+        "storeLabel": "Store",
+        "descriptionLabel": "Description",
+        "weightLabel": "Weight (kg)",
+        "submit": "Receive package",
+        "submitting": "Saving…",
+        "success": "Package received.",
+        "error": "We couldn't save this package. Please try again.",
+        "errors": {
+          "suiteRequired": "Enter the customer's suite number.",
+          "storeRequired": "Enter the store name.",
+          "descriptionRequired": "Describe the item.",
+          "weightPositive": "Enter a weight greater than zero."
+        }
+      }
+    },
+    "consolidations": {
+      "title": "Consolidations queue",
+      "subtitle": "Consolidations waiting for payment or shipping.",
+      "empty": "No pending consolidations right now.",
+      "loadError": "We couldn't load the queue. Refresh the page to try again.",
+      "table": {
+        "customer": "Customer",
+        "destination": "Destination",
+        "declaredValue": "Declared value",
+        "shipping": "Shipping",
+        "carrierLabel": "Carrier",
+        "carrierPlaceholder": "Carrier",
+        "trackingLabel": "Tracking code",
+        "trackingPlaceholder": "Tracking code"
+      },
+      "markShipped": "Mark shipped",
+      "shipError": "We couldn't update that consolidation. Please try again."
+    }
+  },
   "privacy": {
     "title": "Privacy Policy",
     "updated": "Last updated: July 2026",
