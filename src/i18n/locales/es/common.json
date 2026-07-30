@@ -795,6 +795,7 @@
       "payNow": "Pagar ahora",
       "payingNow": "Redirigiendo al checkout…",
       "payError": "No pudimos iniciar el checkout. Inténtalo de nuevo.",
+      "approxEstimate": "Estimación según el tipo de cambio del día — el pago siempre es en USD.",
       "banner": {
         "success": "¡Pago recibido! Tu envío ya se está preparando.",
         "cancelled": "El checkout fue cancelado — puedes intentar pagar de nuevo cuando quieras.",
@@ -934,7 +935,8 @@
       "warehouse": "Almacén",
       "payments": "Pagos",
       "rates": "Tarifas y cargos",
-      "dataRequests": "Solicitudes de datos"
+      "dataRequests": "Solicitudes de datos",
+      "settings": "Configuración"
     },
     "overview": {
       "title": "Panel de pendientes",
@@ -1437,6 +1439,37 @@
           "weightPositive": "Introduce un peso mayor que cero.",
           "dimensionPositive": "Introduce una dimensión mayor que cero."
         }
+      }
+    },
+    "settings": {
+      "title": "Configuración",
+      "subtitle": "Parámetros operativos y el estado de la actualización diaria del tipo de cambio.",
+      "paramsTitle": "Parámetros operativos",
+      "readOnly": "Tienes acceso de solo lectura — solo los admins pueden cambiar estos valores.",
+      "loadError": "No pudimos cargar la configuración. Actualiza la página para intentarlo de nuevo.",
+      "fields": {
+        "freeStorageDays": {
+          "label": "Almacenamiento gratis (días)",
+          "hint": "Cuántos días puede quedarse un paquete en el almacén antes de aparecer como \"almacenamiento vencido\" en el panel de pendientes."
+        },
+        "paidUnshippedAlertDays": {
+          "label": "Alerta de pagado sin envío (días)",
+          "hint": "Cuántos días puede esperar una consolidación pagada sin enviarse antes de destacarse en rojo en el panel de pendientes."
+        }
+      },
+      "save": "Guardar",
+      "saving": "Guardando…",
+      "saved": "Configuración guardada.",
+      "invalid": "Introduce un número entero de cero o más.",
+      "saveError": "No pudimos guardar esta configuración. Inténtalo de nuevo.",
+      "exchange": {
+        "title": "Tipos de cambio",
+        "hint": "Cotizaciones solo de exhibición, usadas para mostrar al cliente un valor local aproximado — todos los pagos son en USD. Las cotizaciones las graba una vez al día la función refresh-exchange-rates; aquí no se edita nada.",
+        "loadError": "No pudimos cargar las cotizaciones. Actualiza la página para intentarlo de nuevo.",
+        "empty": "Aún no hay cotizaciones — la función de actualización diaria todavía debe implementarse. Hasta entonces, los clientes simplemente no ven estimaciones locales.",
+        "perUsd": "{{rate}} por 1 USD",
+        "quotedAt": "Cotizado el {{date}}",
+        "stale": "Desactualizada — la última cotización tiene más de 48 horas."
       }
     }
   },

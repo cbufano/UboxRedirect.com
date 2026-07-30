@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { LayoutDashboard, PackageSearch, Boxes, Warehouse, CreditCard, Tags, ShieldCheck, FileClock, Menu, X } from 'lucide-react'
+import { LayoutDashboard, PackageSearch, Boxes, Warehouse, CreditCard, Tags, ShieldCheck, FileClock, Settings, Menu, X } from 'lucide-react'
 import { LanguageSwitcher } from '../components/LanguageSwitcher'
 import { Button } from '../components/ui/Button'
 import { authService } from '../services/authService'
@@ -15,6 +15,7 @@ const NAV_ITEMS = [
   { to: '/admin/payments', key: 'admin.nav.payments', icon: CreditCard, end: false },
   { to: '/admin/rates', key: 'admin.nav.rates', icon: Tags, end: false },
   { to: '/admin/data-requests', key: 'admin.nav.dataRequests', icon: FileClock, end: false },
+  { to: '/admin/settings', key: 'admin.nav.settings', icon: Settings, end: false },
 ] as const
 
 // Acento âmbar (em vez do azul/navy do dashboard de cliente) + badge "STAFF"

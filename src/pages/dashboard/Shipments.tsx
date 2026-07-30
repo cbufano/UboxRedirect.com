@@ -4,6 +4,8 @@ import { useSearchParams } from 'react-router-dom'
 import { Truck, CheckCircle2, Clock, PackageCheck, XCircle, X } from 'lucide-react'
 import { packageService, type Consolidation } from '../../services/packageService'
 import { paymentService } from '../../services/paymentService'
+import { currencyService, COUNTRY_CURRENCY, type DisplayRate } from '../../services/currencyService'
+import { useAuth } from '../../contexts/AuthContext'
 import { Card } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
 import { CopyButton } from '../../components/ui/CopyButton'
@@ -26,12 +28,14 @@ const STATUS_ICONS: Record<Consolidation['status'], typeof Clock> = {
 
 export default function Shipments() {
   const { t } = useTranslation()
+  const { user } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const [consolidations, setConsolidations] = useState<Consolidation[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
   const [payingId, setPayingId] = useState<string | null>(null)
   const [payError, setPayError] = useState<string | null>(null)
+  const [rates, setRates] = useState<DisplayRate[]>([])
 
   const paymentBanner = searchParams.get('payment')
 
@@ -48,10 +52,29 @@ export default function Shipments() {
       .finally(() => {
         if (active) setLoading(false)
       })
+    // Cotação de exibição, carregada UMA vez. Falha é silenciosa de propósito:
+    // a estimativa em moeda local é um extra — sem cotação, simplesmente não
+    // aparece; nunca quebra nem bloqueia a tela de envios.
+    currencyService
+      .getLatestRates()
+      .then((data) => {
+        if (active) setRates(data)
+      })
+      .catch(() => {
+        /* sem cotação → sem estimativa */
+      })
     return () => {
       active = false
     }
   }, [])
+
+  // Moeda de exibição do país do perfil: só converte quando o país está
+  // mapeado, a moeda é diferente de USD e há cotação carregada.
+  const displayCurrency = user ? COUNTRY_CURRENCY[user.country] : undefined
+  const displayRate =
+    displayCurrency && displayCurrency !== 'USD'
+      ? (rates.find((rate) => rate.code === displayCurrency) ?? null)
+      : null
 
   const dismissBanner = () => {
     const next = new URLSearchParams(searchParams)
@@ -160,6 +183,13 @@ export default function Shipments() {
                           {t('dashboard.shipments.table.cost')}
                         </p>
                         <p className="font-medium text-navy">${consolidation.costUsd.toFixed(2)}</p>
+                        {displayRate && (
+                          <p className="text-xs text-slate/60" title={t('dashboard.shipments.approxEstimate')}>
+                            ≈ {displayRate.symbol}{' '}
+                            {currencyService.approximate(consolidation.costUsd, displayRate.ratePerUsd).toFixed(2)}
+                            <span className="sr-only"> ({t('dashboard.shipments.approxEstimate')})</span>
+                          </p>
+                        )}
                       </div>
                     )}
                   </div>

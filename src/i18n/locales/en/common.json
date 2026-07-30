@@ -795,6 +795,7 @@
       "payNow": "Pay now",
       "payingNow": "Redirecting to checkout…",
       "payError": "We couldn't start checkout. Please try again.",
+      "approxEstimate": "Estimate at today's exchange rate — you always pay in USD.",
       "banner": {
         "success": "Payment received! Your shipment is now being prepared.",
         "cancelled": "Checkout was cancelled — you can try paying again whenever you're ready.",
@@ -934,7 +935,8 @@
       "warehouse": "Warehouse",
       "payments": "Payments",
       "rates": "Rates & fees",
-      "dataRequests": "Data requests"
+      "dataRequests": "Data requests",
+      "settings": "Settings"
     },
     "overview": {
       "title": "Pending actions",
@@ -1437,6 +1439,37 @@
           "weightPositive": "Enter a weight greater than zero.",
           "dimensionPositive": "Enter a dimension greater than zero."
         }
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Operational parameters and the status of the daily exchange-rate refresh.",
+      "paramsTitle": "Operational parameters",
+      "readOnly": "You have read-only access — only admins can change these values.",
+      "loadError": "We couldn't load the settings. Refresh the page to try again.",
+      "fields": {
+        "freeStorageDays": {
+          "label": "Free storage (days)",
+          "hint": "How many days a package can sit in the warehouse before it shows up as \"storage overdue\" on the pending-actions panel."
+        },
+        "paidUnshippedAlertDays": {
+          "label": "Paid-but-unshipped alert (days)",
+          "hint": "How many days a paid consolidation can wait without shipping before it is flagged in red on the pending-actions panel."
+        }
+      },
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Setting saved.",
+      "invalid": "Enter a whole number of zero or more.",
+      "saveError": "We couldn't save this setting. Please try again.",
+      "exchange": {
+        "title": "Exchange rates",
+        "hint": "Display-only quotes used to show customers an approximate local value — all payments stay in USD. Rates are written once a day by the refresh-exchange-rates function; nothing is editable here.",
+        "loadError": "We couldn't load the exchange rates. Refresh the page to try again.",
+        "empty": "No exchange rates yet — the daily refresh function still needs to be deployed. Customers simply won't see local estimates until then.",
+        "perUsd": "{{rate}} per 1 USD",
+        "quotedAt": "Quoted on {{date}}",
+        "stale": "Stale — last quote is more than 48 hours old."
       }
     }
   },
