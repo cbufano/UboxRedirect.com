@@ -4,10 +4,8 @@
  * `packages` é só da equipe do galpão (RLS bloqueia o cliente); aqui só
  * expomos leitura.
  *
- * Porta parcial de `src/services/packageService.ts` (site): cobre leitura
- * mais `createExpectedPackage`/`cancelExpectedPackage`.
- * `createConsolidation`/`addConsolidationItems` entram junto com a tela Ship
- * (Task 5 do plano mobile), quando o `rateService` que os usa for portado.
+ * Porta 1:1 de `src/services/packageService.ts` (site), incluindo
+ * `createConsolidation`/`addConsolidationItems` usados pela tela Ship.
  */
 import { supabase } from '../lib/supabase'
 
@@ -42,6 +40,20 @@ export interface Consolidation {
   createdAt: string
   paidAt: string | null
   shippedAt: string | null
+}
+
+export interface CreateConsolidationInput {
+  recipientName: string
+  street: string
+  city: string
+  stateProvince?: string
+  postalCode: string
+  country: string
+  carrier: string
+  chargeableWeightKg: number
+  costUsd: number
+  contentsDescription: string
+  declaredValueUsd: number
 }
 
 interface ExpectedPackageRow {
@@ -187,6 +199,51 @@ export const packageService = {
       .order('created_at', { ascending: false })
     if (error) throw new Error(error.message)
     return (data as ConsolidationRow[]).map(mapConsolidation)
+  },
+
+  /**
+   * Cria a consolidação em 'pending' (default da tabela). O caminho para
+   * 'paid' é a Task 6 (pagamento via Stripe Checkout), ainda não construída
+   * neste app — a linha fica honestamente parada em 'pending' até lá.
+   */
+  async createConsolidation(input: CreateConsolidationInput): Promise<string> {
+    const userId = await currentUserId()
+    if (!userId) throw new Error('Not authenticated')
+
+    const { data, error } = await supabase
+      .from('consolidations')
+      .insert({
+        user_id: userId,
+        recipient_name: input.recipientName,
+        street: input.street,
+        city: input.city,
+        state_province: input.stateProvince ?? '',
+        postal_code: input.postalCode,
+        country: input.country,
+        carrier: input.carrier,
+        chargeable_weight_kg: input.chargeableWeightKg,
+        cost_usd: input.costUsd,
+        contents_description: input.contentsDescription,
+        declared_value_usd: input.declaredValueUsd,
+      })
+      .select('id')
+      .single()
+    if (error) throw new Error(error.message)
+    return (data as { id: string }).id
+  },
+
+  /**
+   * Um item por pacote selecionado. O trigger consolidation_items_mark_package
+   * (migration Fase 3) já move cada pacote para 'consolidating' — não
+   * precisamos atualizar `packages` aqui.
+   */
+  async addConsolidationItems(consolidationId: string, packageIds: string[]): Promise<void> {
+    if (packageIds.length === 0) return
+
+    const { error } = await supabase
+      .from('consolidation_items')
+      .insert(packageIds.map((packageId) => ({ consolidation_id: consolidationId, package_id: packageId })))
+    if (error) throw new Error(error.message)
   },
 
   async cancelExpectedPackage(id: string): Promise<void> {

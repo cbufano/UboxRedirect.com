@@ -269,6 +269,104 @@ describe('getMyConsolidations', () => {
   })
 })
 
+describe('createConsolidation', () => {
+  const input = {
+    recipientName: 'John Doe',
+    street: '123 Main St',
+    city: 'Springfield',
+    stateProvince: 'IL',
+    postalCode: '62704',
+    country: 'US',
+    carrier: 'Economy',
+    chargeableWeightKg: 2.5,
+    costUsd: 43,
+    contentsDescription: 'Clothing',
+    declaredValueUsd: 100,
+  }
+
+  it('inserts a new consolidation for the current user and returns its id', async () => {
+    mockSession('uuid-1')
+    const single = jest.fn().mockResolvedValue({ data: { id: 'c1' }, error: null })
+    const select = jest.fn().mockReturnValue({ single })
+    const insert = jest.fn().mockReturnValue({ select })
+    mockedSupabase.from.mockReturnValue({ insert } as never)
+
+    const id = await packageService.createConsolidation(input)
+
+    expect(mockedSupabase.from).toHaveBeenCalledWith('consolidations')
+    expect(insert).toHaveBeenCalledWith({
+      user_id: 'uuid-1',
+      recipient_name: 'John Doe',
+      street: '123 Main St',
+      city: 'Springfield',
+      state_province: 'IL',
+      postal_code: '62704',
+      country: 'US',
+      carrier: 'Economy',
+      chargeable_weight_kg: 2.5,
+      cost_usd: 43,
+      contents_description: 'Clothing',
+      declared_value_usd: 100,
+    })
+    expect(id).toBe('c1')
+  })
+
+  it('defaults stateProvince to an empty string when omitted', async () => {
+    mockSession('uuid-1')
+    const single = jest.fn().mockResolvedValue({ data: { id: 'c2' }, error: null })
+    const select = jest.fn().mockReturnValue({ single })
+    const insert = jest.fn().mockReturnValue({ select })
+    mockedSupabase.from.mockReturnValue({ insert } as never)
+
+    await packageService.createConsolidation({ ...input, stateProvince: undefined })
+
+    expect(insert).toHaveBeenCalledWith(expect.objectContaining({ state_province: '' }))
+  })
+
+  it('throws when signed out', async () => {
+    mockSession(null)
+    await expect(packageService.createConsolidation(input)).rejects.toThrow('Not authenticated')
+    expect(mockedSupabase.from).not.toHaveBeenCalled()
+  })
+
+  it('throws when the insert fails', async () => {
+    mockSession('uuid-1')
+    const single = jest.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
+    const select = jest.fn().mockReturnValue({ single })
+    const insert = jest.fn().mockReturnValue({ select })
+    mockedSupabase.from.mockReturnValue({ insert } as never)
+
+    await expect(packageService.createConsolidation(input)).rejects.toThrow('boom')
+  })
+})
+
+describe('addConsolidationItems', () => {
+  it('inserts one row per package id', async () => {
+    const insert = jest.fn().mockResolvedValue({ data: null, error: null })
+    mockedSupabase.from.mockReturnValue({ insert } as never)
+
+    await packageService.addConsolidationItems('c1', ['p1', 'p2'])
+
+    expect(mockedSupabase.from).toHaveBeenCalledWith('consolidation_items')
+    expect(insert).toHaveBeenCalledWith([
+      { consolidation_id: 'c1', package_id: 'p1' },
+      { consolidation_id: 'c1', package_id: 'p2' },
+    ])
+  })
+
+  it('does nothing when there are no package ids', async () => {
+    await packageService.addConsolidationItems('c1', [])
+    expect(mockedSupabase.from).not.toHaveBeenCalled()
+  })
+
+  it('throws when the insert fails', async () => {
+    const insert = jest.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
+    mockedSupabase.from.mockReturnValue({ insert } as never)
+
+    await expect(packageService.addConsolidationItems('c1', ['p1'])).rejects.toThrow('boom')
+  })
+})
+
 describe('cancelExpectedPackage', () => {
   it('updates the status to cancelled scoped to the current user', async () => {
     mockSession('uuid-1')
