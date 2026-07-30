@@ -974,16 +974,49 @@
         "storeLabel": "Loja",
         "descriptionLabel": "Descrição",
         "weightLabel": "Peso (kg)",
+        "lengthLabel": "Comprimento (cm)",
+        "widthLabel": "Largura (cm)",
+        "heightLabel": "Altura (cm)",
+        "declaredValueLabel": "Valor declarado (USD)",
+        "photoLabel": "Foto (opcional)",
         "submit": "Receber pacote",
         "submitting": "Salvando…",
         "success": "Pacote recebido.",
         "error": "Não foi possível salvar esse pacote. Tente novamente.",
+        "photoFailed": "Pacote recebido, mas o upload da foto falhou. Você pode anexá-la depois pela ficha do pacote.",
         "errors": {
           "suiteRequired": "Informe o número da suite do cliente.",
           "storeRequired": "Informe o nome da loja.",
           "descriptionRequired": "Descreva o item.",
-          "weightPositive": "Informe um peso maior que zero."
+          "weightPositive": "Informe um peso maior que zero.",
+          "dimensionPositive": "Informe um número maior que zero.",
+          "valueNonNegative": "Informe um valor igual ou maior que zero."
         }
+      },
+      "preAlerts": {
+        "title": "Pré-alertas pendentes",
+        "loading": "Carregando pré-alertas…",
+        "loadError": "Não foi possível carregar os pré-alertas. Dá para receber sem vincular um.",
+        "empty": "Nenhum pré-alerta pendente para este cliente.",
+        "hint": "Clique em um pré-alerta para vinculá-lo a este pacote.",
+        "declaredValue": "Declarado: ${{value}}",
+        "selected": "Vinculado ao pré-alerta: {{store}} — {{tracking}}",
+        "clear": "Receber sem pré-alerta"
+      },
+      "position": {
+        "title": "Posição no galpão",
+        "loading": "Buscando posição livre…",
+        "loadError": "Não foi possível carregar uma posição. O pacote será recebido sem posição.",
+        "none": "Nenhuma posição livre disponível — o pacote será recebido sem posição.",
+        "changeLabel": "Trocar posição",
+        "noneOption": "Sem posição"
+      },
+      "label": {
+        "title": "Etiqueta de estoque",
+        "qrAlt": "QR code do pacote",
+        "noLocation": "SEM POS",
+        "print": "Imprimir etiqueta",
+        "close": "Fechar"
       },
       "compliance": {
         "title": "Status de compliance",

@@ -974,16 +974,49 @@
         "storeLabel": "Store",
         "descriptionLabel": "Description",
         "weightLabel": "Weight (kg)",
+        "lengthLabel": "Length (cm)",
+        "widthLabel": "Width (cm)",
+        "heightLabel": "Height (cm)",
+        "declaredValueLabel": "Declared value (USD)",
+        "photoLabel": "Photo (optional)",
         "submit": "Receive package",
         "submitting": "Saving…",
         "success": "Package received.",
         "error": "We couldn't save this package. Please try again.",
+        "photoFailed": "Package received, but the photo upload failed. You can add it later from the package page.",
         "errors": {
           "suiteRequired": "Enter the customer's suite number.",
           "storeRequired": "Enter the store name.",
           "descriptionRequired": "Describe the item.",
-          "weightPositive": "Enter a weight greater than zero."
+          "weightPositive": "Enter a weight greater than zero.",
+          "dimensionPositive": "Enter a number greater than zero.",
+          "valueNonNegative": "Enter a value of zero or more."
         }
+      },
+      "preAlerts": {
+        "title": "Pending pre-alerts",
+        "loading": "Loading pre-alerts…",
+        "loadError": "We couldn't load the pre-alerts. You can still receive without one.",
+        "empty": "No pending pre-alerts for this customer.",
+        "hint": "Click a pre-alert to match it to this package.",
+        "declaredValue": "Declared: ${{value}}",
+        "selected": "Matched to pre-alert: {{store}} — {{tracking}}",
+        "clear": "Receive without pre-alert"
+      },
+      "position": {
+        "title": "Warehouse position",
+        "loading": "Finding a free position…",
+        "loadError": "We couldn't load a position. The package will be received without one.",
+        "none": "No free position available — the package will be received without one.",
+        "changeLabel": "Change position",
+        "noneOption": "No position"
+      },
+      "label": {
+        "title": "Stock label",
+        "qrAlt": "Package QR code",
+        "noLocation": "NO LOC",
+        "print": "Print label",
+        "close": "Close"
       },
       "compliance": {
         "title": "Compliance status",

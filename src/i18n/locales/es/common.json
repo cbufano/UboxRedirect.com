@@ -974,16 +974,49 @@
         "storeLabel": "Tienda",
         "descriptionLabel": "Descripción",
         "weightLabel": "Peso (kg)",
+        "lengthLabel": "Largo (cm)",
+        "widthLabel": "Ancho (cm)",
+        "heightLabel": "Alto (cm)",
+        "declaredValueLabel": "Valor declarado (USD)",
+        "photoLabel": "Foto (opcional)",
         "submit": "Recibir paquete",
         "submitting": "Guardando…",
         "success": "Paquete recibido.",
         "error": "No pudimos guardar este paquete. Inténtalo de nuevo.",
+        "photoFailed": "Paquete recibido, pero falló la subida de la foto. Puedes agregarla después desde la ficha del paquete.",
         "errors": {
           "suiteRequired": "Ingresa el número de suite del cliente.",
           "storeRequired": "Ingresa el nombre de la tienda.",
           "descriptionRequired": "Describe el artículo.",
-          "weightPositive": "Ingresa un peso mayor que cero."
+          "weightPositive": "Ingresa un peso mayor que cero.",
+          "dimensionPositive": "Ingresa un número mayor que cero.",
+          "valueNonNegative": "Ingresa un valor igual o mayor que cero."
         }
+      },
+      "preAlerts": {
+        "title": "Preavisos pendientes",
+        "loading": "Cargando preavisos…",
+        "loadError": "No pudimos cargar los preavisos. Puedes recibir sin vincular uno.",
+        "empty": "No hay preavisos pendientes para este cliente.",
+        "hint": "Haz clic en un preaviso para vincularlo a este paquete.",
+        "declaredValue": "Declarado: ${{value}}",
+        "selected": "Vinculado al preaviso: {{store}} — {{tracking}}",
+        "clear": "Recibir sin preaviso"
+      },
+      "position": {
+        "title": "Posición en el almacén",
+        "loading": "Buscando una posición libre…",
+        "loadError": "No pudimos cargar una posición. El paquete se recibirá sin posición.",
+        "none": "No hay posiciones libres — el paquete se recibirá sin posición.",
+        "changeLabel": "Cambiar posición",
+        "noneOption": "Sin posición"
+      },
+      "label": {
+        "title": "Etiqueta de stock",
+        "qrAlt": "Código QR del paquete",
+        "noLocation": "SIN POS",
+        "print": "Imprimir etiqueta",
+        "close": "Cerrar"
       },
       "compliance": {
         "title": "Estado de cumplimiento",
