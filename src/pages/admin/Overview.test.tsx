@@ -16,6 +16,8 @@ const emptyActions: PendingActions = {
   openDataRequests: 0,
   storageOverdue: [],
   unreconciled: [],
+  trackingExceptions: [],
+  failedEmails: 0,
 }
 
 const busyActions: PendingActions = {
@@ -24,6 +26,8 @@ const busyActions: PendingActions = {
   openDataRequests: 7,
   storageOverdue: [{ id: 'p1', store: 'Amazon', suiteNumber: 'BUF-10001', receivedAt: '2026-06-01T10:00:00Z' }],
   unreconciled: [{ id: 'c2', city: 'Lisbon', country: 'PT', shippedAt: '2026-07-10T10:00:00Z' }],
+  trackingExceptions: [],
+  failedEmails: 0,
 }
 
 function renderOverview() {

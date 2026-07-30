@@ -33,12 +33,23 @@ export interface UnreconciledConsolidation {
   shippedAt: string | null
 }
 
+export interface TrackingExceptionAlert {
+  id: string
+  consolidationId: string
+  rawStatus: string
+  occurredAt: string
+  city: string
+  country: string
+}
+
 export interface PendingActions {
   awaitingReview: number
   paidUnshipped: PaidUnshippedConsolidation[]
   openDataRequests: number
   storageOverdue: StorageOverduePackage[]
   unreconciled: UnreconciledConsolidation[]
+  trackingExceptions: TrackingExceptionAlert[]
+  failedEmails: number
 }
 
 export interface PackageNeedingReview {
@@ -265,6 +276,14 @@ interface ShippedConsolidationRow {
   shipped_at: string | null
 }
 
+interface TrackingExceptionRow {
+  id: string
+  consolidation_id: string
+  raw_status: string
+  occurred_at: string
+  consolidations: MaybeArray<{ city: string; country: string }>
+}
+
 interface PendingConsolidationRow {
   id: string
   city: string
@@ -392,6 +411,12 @@ export const adminService = {
    * Conciliação: consolidações 'shipped' sem payment 'succeeded' — derivada
    * no código (anti-join client-side) a partir de duas listas, o PostgREST
    * não expressa "not exists" de forma simples.
+   *
+   * Automação (Fase 7.4): exceções de rastreio (tracking_events com
+   * normalized_status 'exception') das últimas 2 semanas — janela fixa, não
+   * é setting: exceção mais velha que isso já virou atendimento, não alerta
+   * de painel — e o contador de e-mails 'failed' do outbox (falha real de
+   * envio; 'skipped' fica no card do outbox em Settings, não aqui).
    */
   async getPendingActions(): Promise<PendingActions> {
     const { data: settingsData, error: settingsError } = await supabase.from('settings').select('key, value')
@@ -404,8 +429,17 @@ export const adminService = {
     const dayMs = 24 * 60 * 60 * 1000
     const paidCutoff = new Date(Date.now() - paidUnshippedAlertDays * dayMs).toISOString()
     const storageCutoff = new Date(Date.now() - freeStorageDays * dayMs).toISOString()
+    const exceptionCutoff = new Date(Date.now() - 14 * dayMs).toISOString()
 
-    const [awaitingResult, paidUnshippedResult, dataRequestsResult, storageResult, shippedResult] = await Promise.all([
+    const [
+      awaitingResult,
+      paidUnshippedResult,
+      dataRequestsResult,
+      storageResult,
+      shippedResult,
+      exceptionsResult,
+      failedEmailsResult,
+    ] = await Promise.all([
       supabase.from('packages').select('id', { count: 'exact', head: true }).in('status', ['received', 'in_review']),
       supabase
         .from('consolidations')
@@ -425,12 +459,22 @@ export const adminService = {
         .select('id, city, country, shipped_at')
         .eq('status', 'shipped')
         .order('shipped_at', { ascending: true }),
+      supabase
+        .from('tracking_events')
+        .select('id, consolidation_id, raw_status, occurred_at, consolidations (city, country)')
+        .eq('normalized_status', 'exception')
+        .gte('occurred_at', exceptionCutoff)
+        .order('occurred_at', { ascending: false })
+        .limit(10),
+      supabase.from('email_outbox').select('id', { count: 'exact', head: true }).eq('status', 'failed'),
     ])
     if (awaitingResult.error) throw new Error(awaitingResult.error.message)
     if (paidUnshippedResult.error) throw new Error(paidUnshippedResult.error.message)
     if (dataRequestsResult.error) throw new Error(dataRequestsResult.error.message)
     if (storageResult.error) throw new Error(storageResult.error.message)
     if (shippedResult.error) throw new Error(shippedResult.error.message)
+    if (exceptionsResult.error) throw new Error(exceptionsResult.error.message)
+    if (failedEmailsResult.error) throw new Error(failedEmailsResult.error.message)
 
     const shipped = (shippedResult.data ?? []) as ShippedConsolidationRow[]
     let reconciledIds = new Set<string>()
@@ -469,6 +513,18 @@ export const adminService = {
       unreconciled: shipped
         .filter((row) => !reconciledIds.has(row.id))
         .map((row) => ({ id: row.id, city: row.city, country: row.country, shippedAt: row.shipped_at })),
+      trackingExceptions: ((exceptionsResult.data ?? []) as TrackingExceptionRow[]).map((row) => {
+        const consolidation = firstOf(row.consolidations)
+        return {
+          id: row.id,
+          consolidationId: row.consolidation_id,
+          rawStatus: row.raw_status,
+          occurredAt: row.occurred_at,
+          city: consolidation?.city ?? '',
+          country: consolidation?.country ?? '',
+        }
+      }),
+      failedEmails: failedEmailsResult.count ?? 0,
     }
   },
 

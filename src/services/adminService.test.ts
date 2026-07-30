@@ -921,6 +921,8 @@ describe('getPendingActions', () => {
     storageOverdue: { data: unknown; error: { message: string } | null }
     shipped: { data: unknown; error: { message: string } | null }
     payments: { data: unknown; error: { message: string } | null }
+    trackingExceptions: { data: unknown; error: { message: string } | null }
+    failedEmailsCount: { count: number | null; error: { message: string } | null }
   }
 
   function mockPendingActions(overrides: Partial<PendingActionsState> = {}) {
@@ -938,6 +940,8 @@ describe('getPendingActions', () => {
       storageOverdue: { data: [], error: null },
       shipped: { data: [], error: null },
       payments: { data: [], error: null },
+      trackingExceptions: { data: [], error: null },
+      failedEmailsCount: { count: 0, error: null },
       ...overrides,
     }
 
@@ -945,6 +949,11 @@ describe('getPendingActions', () => {
     const storageLt = vi.fn().mockReturnValue({ order: vi.fn().mockResolvedValue(state.storageOverdue) })
     const paymentsIn = vi.fn().mockResolvedValue(state.payments)
     const paymentsEq = vi.fn().mockReturnValue({ in: paymentsIn })
+    const exceptionsLimit = vi.fn().mockResolvedValue(state.trackingExceptions)
+    const exceptionsOrder = vi.fn().mockReturnValue({ limit: exceptionsLimit })
+    const exceptionsGte = vi.fn().mockReturnValue({ order: exceptionsOrder })
+    const exceptionsEq = vi.fn().mockReturnValue({ gte: exceptionsGte })
+    const outboxEq = vi.fn().mockResolvedValue(state.failedEmailsCount)
 
     mockedSupabase.from.mockImplementation((table: unknown) => {
       if (table === 'settings') {
@@ -970,16 +979,23 @@ describe('getPendingActions', () => {
       if (table === 'payments') {
         return { select: vi.fn().mockReturnValue({ eq: paymentsEq }) } as never
       }
+      if (table === 'tracking_events') {
+        return { select: vi.fn().mockReturnValue({ eq: exceptionsEq }) } as never
+      }
+      if (table === 'email_outbox') {
+        return { select: vi.fn().mockReturnValue({ eq: outboxEq }) } as never
+      }
       throw new Error(`unexpected table ${String(table)}`)
     })
 
-    return { paidLt, storageLt, paymentsEq, paymentsIn }
+    return { paidLt, storageLt, paymentsEq, paymentsIn, exceptionsEq, exceptionsGte, exceptionsOrder, exceptionsLimit, outboxEq }
   }
 
   it('returns counts, overdue lists and client-side reconciliation using settings-driven cutoffs', async () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-07-30T12:00:00Z'))
-    const { paidLt, storageLt, paymentsEq, paymentsIn } = mockPendingActions({
+    const { paidLt, storageLt, paymentsEq, paymentsIn, exceptionsEq, exceptionsGte, exceptionsOrder, exceptionsLimit, outboxEq } =
+      mockPendingActions({
       settings: {
         data: [
           { key: 'free_storage_days', value: '10' },
@@ -1013,6 +1029,26 @@ describe('getPendingActions', () => {
         error: null,
       },
       payments: { data: [{ consolidation_id: 'con-A' }], error: null },
+      trackingExceptions: {
+        data: [
+          {
+            id: 'ev-1',
+            consolidation_id: 'con-B',
+            raw_status: 'Held at customs — missing invoice',
+            occurred_at: '2026-07-28T10:00:00Z',
+            consolidations: { city: 'Porto', country: 'PT' },
+          },
+          {
+            id: 'ev-2',
+            consolidation_id: 'con-C',
+            raw_status: 'Delivery attempt failed',
+            occurred_at: '2026-07-27T10:00:00Z',
+            consolidations: [{ city: 'Madrid', country: 'ES' }],
+          },
+        ],
+        error: null,
+      },
+      failedEmailsCount: { count: 4, error: null },
     })
 
     const result = await adminService.getPendingActions()
@@ -1023,6 +1059,13 @@ describe('getPendingActions', () => {
     // Conciliação: só payments 'succeeded' das consolidações shipped
     expect(paymentsEq).toHaveBeenCalledWith('status', 'succeeded')
     expect(paymentsIn).toHaveBeenCalledWith('consolidation_id', ['con-A', 'con-B'])
+    // Exceções de rastreio: janela fixa de 2 semanas, mais recentes primeiro, top 10
+    expect(exceptionsEq).toHaveBeenCalledWith('normalized_status', 'exception')
+    expect(exceptionsGte).toHaveBeenCalledWith('occurred_at', '2026-07-16T12:00:00.000Z')
+    expect(exceptionsOrder).toHaveBeenCalledWith('occurred_at', { ascending: false })
+    expect(exceptionsLimit).toHaveBeenCalledWith(10)
+    // E-mails falhados: count de email_outbox status 'failed'
+    expect(outboxEq).toHaveBeenCalledWith('status', 'failed')
 
     expect(result).toEqual({
       awaitingReview: 3,
@@ -1033,6 +1076,25 @@ describe('getPendingActions', () => {
         { id: 'pkg-2', store: 'Nike', suiteNumber: null, receivedAt: '2026-07-02T08:00:00Z' },
       ],
       unreconciled: [{ id: 'con-B', city: 'Porto', country: 'PT', shippedAt: '2026-07-21T10:00:00Z' }],
+      trackingExceptions: [
+        {
+          id: 'ev-1',
+          consolidationId: 'con-B',
+          rawStatus: 'Held at customs — missing invoice',
+          occurredAt: '2026-07-28T10:00:00Z',
+          city: 'Porto',
+          country: 'PT',
+        },
+        {
+          id: 'ev-2',
+          consolidationId: 'con-C',
+          rawStatus: 'Delivery attempt failed',
+          occurredAt: '2026-07-27T10:00:00Z',
+          city: 'Madrid',
+          country: 'ES',
+        },
+      ],
+      failedEmails: 4,
     })
   })
 
@@ -1051,6 +1113,7 @@ describe('getPendingActions', () => {
     const { paymentsIn } = mockPendingActions({
       packagesCount: { count: null, error: null },
       dataRequestsCount: { count: null, error: null },
+      failedEmailsCount: { count: null, error: null },
     })
 
     const result = await adminService.getPendingActions()
@@ -1063,7 +1126,39 @@ describe('getPendingActions', () => {
       openDataRequests: 0,
       storageOverdue: [],
       unreconciled: [],
+      trackingExceptions: [],
+      failedEmails: 0,
     })
+  })
+
+  it('maps a tracking exception without a consolidations embed to empty city/country', async () => {
+    mockPendingActions({
+      trackingExceptions: {
+        data: [
+          {
+            id: 'ev-1',
+            consolidation_id: 'con-X',
+            raw_status: 'Lost in transit',
+            occurred_at: '2026-07-28T10:00:00Z',
+            consolidations: null,
+          },
+        ],
+        error: null,
+      },
+    })
+
+    const result = await adminService.getPendingActions()
+
+    expect(result.trackingExceptions).toEqual([
+      {
+        id: 'ev-1',
+        consolidationId: 'con-X',
+        rawStatus: 'Lost in transit',
+        occurredAt: '2026-07-28T10:00:00Z',
+        city: '',
+        country: '',
+      },
+    ])
   })
 
   it('marks all shipped consolidations as unreconciled when none has a succeeded payment', async () => {
@@ -1099,6 +1194,18 @@ describe('getPendingActions', () => {
     })
 
     await expect(adminService.getPendingActions()).rejects.toThrow('boom')
+  })
+
+  it('throws when the tracking exceptions query fails', async () => {
+    mockPendingActions({ trackingExceptions: { data: null, error: { message: 'tracking boom' } } })
+
+    await expect(adminService.getPendingActions()).rejects.toThrow('tracking boom')
+  })
+
+  it('throws when the failed emails count query fails', async () => {
+    mockPendingActions({ failedEmailsCount: { count: null, error: { message: 'outbox boom' } } })
+
+    await expect(adminService.getPendingActions()).rejects.toThrow('outbox boom')
   })
 })
 
