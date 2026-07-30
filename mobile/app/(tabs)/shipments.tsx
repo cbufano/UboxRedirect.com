@@ -69,11 +69,8 @@ export default function Shipments() {
     try {
       const { url } = await paymentService.createCheckoutSession(id)
       await WebBrowser.openBrowserAsync(url)
-    } catch (error) {
-      Alert.alert(
-        'Payment unavailable',
-        error instanceof Error ? error.message : 'We could not start the checkout. Please try again later.',
-      )
+    } catch {
+      Alert.alert('Payment unavailable', 'We could not start the checkout. Please try again later.')
     } finally {
       setPayingId(null)
     }
