@@ -220,11 +220,26 @@
       "feeLabel": "Tarifa",
       "note": "Estimaciones — los cargos finales se calculan al pagar.",
       "rows": [
-        { "service": "Consolidación (por paquete)", "fee": "US$ 2.00" },
-        { "service": "Fotos adicionales", "fee": "US$ 0.50 cada una" },
-        { "service": "Reembalaje", "fee": "US$ 3.00" },
-        { "service": "Almacenamiento (por día tras el período gratis)", "fee": "US$ 0.15" },
-        { "service": "Protección de valor", "fee": "2% del valor declarado" }
+        {
+          "service": "Consolidación (por paquete)",
+          "fee": "US$ 2.00"
+        },
+        {
+          "service": "Fotos adicionales",
+          "fee": "US$ 0.50 cada una"
+        },
+        {
+          "service": "Reembalaje",
+          "fee": "US$ 3.00"
+        },
+        {
+          "service": "Almacenamiento (por día tras el período gratis)",
+          "fee": "US$ 0.15"
+        },
+        {
+          "service": "Protección de valor",
+          "fee": "2% del valor declarado"
+        }
       ]
     }
   },
@@ -445,10 +460,22 @@
       }
     ],
     "stats": [
-      { "value": "220+", "label": "Países atendidos" },
-      { "value": "80%", "label": "Ahorro promedio en envío" },
-      { "value": "10 mil+", "label": "Paquetes enviados" },
-      { "value": "9:00–17:00", "label": "Horario de soporte (EST)" }
+      {
+        "value": "220+",
+        "label": "Países atendidos"
+      },
+      {
+        "value": "80%",
+        "label": "Ahorro promedio en envío"
+      },
+      {
+        "value": "10 mil+",
+        "label": "Paquetes enviados"
+      },
+      {
+        "value": "9:00–17:00",
+        "label": "Horario de soporte (EST)"
+      }
     ],
     "cta": "Crear mi cuenta gratis"
   },
@@ -553,7 +580,8 @@
       "ship": "Consolidar y enviar",
       "shipments": "Envíos",
       "shopper": "Personal shopper",
-      "account": "Cuenta"
+      "account": "Cuenta",
+      "privacy": "Mis Datos y Privacidad"
     },
     "signOut": "Cerrar sesión",
     "loading": "Cargando…",
@@ -576,10 +604,7 @@
         "title": "Actividad reciente",
         "empty": "Todavía no hay paquetes. Empieza a comprar y aparecerán aquí."
       },
-      "packageStatus": {
-        "in_box": "En tu caja",
-        "ready": "Listo para enviar"
-      }
+      "loadError": "No pudimos cargar tu resumen. Actualiza la página para intentarlo de nuevo."
     },
     "address": {
       "title": "Mi Dirección en EE. UU.",
@@ -850,6 +875,54 @@
         "remove": "Eliminar dirección",
         "empty": "Todavía no hay direcciones de entrega. Agrega una arriba."
       }
+    },
+    "privacy": {
+      "title": "Mis datos y privacidad",
+      "subtitle": "Gestiona solicitudes relacionadas con los datos personales que tenemos sobre ti, conforme a la LGPD y el RGPD.",
+      "rights": {
+        "title": "Tus derechos",
+        "items": [
+          "Acceso — solicitar una copia de los datos personales que tenemos sobre ti.",
+          "Corrección — pedirnos que corrijamos información incorrecta o desactualizada (desde la página Cuenta, o contactando a soporte).",
+          "Exportación — recibir tus datos en un formato portátil para llevarlos a otro lugar.",
+          "Eliminación — pedirnos que borremos tus datos personales, excepto los registros que estamos legalmente obligados a conservar, como el historial de envíos y pagos completados."
+        ]
+      },
+      "actions": {
+        "exportTitle": "Solicitar mis datos (exportación)",
+        "exportDescription": "Compilaremos una copia de los datos de tu cuenta, paquetes y envíos y la enviaremos a tu correo.",
+        "deleteTitle": "Solicitar eliminación de la cuenta",
+        "deleteDescription": "Cerraremos tu cuenta y borraremos lo que sea posible. Algunos registros se conservan por exigencia legal, como envíos y pagos ya completados.",
+        "noteLabel": "Nota para nuestro equipo de soporte (opcional)",
+        "notePlaceholder": "Cualquier cosa que quieras que sepamos sobre esta solicitud",
+        "confirmExport": "Confirmar solicitud de exportación",
+        "confirmDelete": "Confirmar solicitud de eliminación",
+        "cancel": "Cancelar",
+        "submitting": "Enviando…",
+        "success": "Solicitud recibida. La procesaremos y puedes seguir su estado abajo.",
+        "error": "No pudimos enviar tu solicitud. Inténtalo de nuevo."
+      },
+      "list": {
+        "title": "Tus solicitudes",
+        "empty": "Todavía no hay solicitudes.",
+        "table": {
+          "kind": "Tipo",
+          "status": "Estado",
+          "requested": "Solicitado",
+          "completed": "Completado"
+        }
+      },
+      "kind": {
+        "export": "Exportación de datos",
+        "delete": "Eliminación de cuenta"
+      },
+      "status": {
+        "pending": "Pendiente",
+        "processing": "En proceso",
+        "completed": "Completado",
+        "rejected": "Rechazado"
+      },
+      "loadError": "No pudimos cargar tus solicitudes. Actualiza la página para intentarlo de nuevo."
     }
   },
   "admin": {
@@ -857,7 +930,8 @@
     "nav": {
       "overview": "Resumen",
       "packages": "Paquetes",
-      "consolidations": "Consolidaciones"
+      "consolidations": "Consolidaciones",
+      "dataRequests": "Solicitudes de datos"
     },
     "overview": {
       "title": "Resumen de operaciones",
@@ -910,6 +984,25 @@
           "descriptionRequired": "Describe el artículo.",
           "weightPositive": "Ingresa un peso mayor que cero."
         }
+      },
+      "compliance": {
+        "title": "Estado de cumplimiento",
+        "kycLabel": "Estado de KYC",
+        "ofacLabel": "Verificación OFAC",
+        "kycStatuses": {
+          "not_started": "No iniciado",
+          "pending": "Pendiente",
+          "verified": "Verificado",
+          "rejected": "Rechazado"
+        },
+        "ofacStatuses": {
+          "not_started": "No iniciado",
+          "clear": "Sin restricción",
+          "flagged": "Marcado"
+        },
+        "saving": "Guardando…",
+        "error": "No pudimos actualizar el estado de cumplimiento. Inténtalo de nuevo.",
+        "updated": "Estado de cumplimiento actualizado."
       }
     },
     "consolidations": {
@@ -929,6 +1022,30 @@
       },
       "markShipped": "Marcar como enviado",
       "shipError": "No pudimos actualizar esa consolidación. Inténtalo de nuevo."
+    },
+    "dataRequests": {
+      "title": "Solicitudes de datos",
+      "subtitle": "Solicitudes abiertas de exportación y eliminación (LGPD/RGPD) a la espera de acción.",
+      "empty": "No hay solicitudes de datos abiertas por ahora.",
+      "loadError": "No pudimos cargar la cola. Actualiza la página para intentarlo de nuevo.",
+      "table": {
+        "customer": "Cliente",
+        "kind": "Tipo",
+        "note": "Nota del cliente",
+        "requested": "Solicitado",
+        "actions": "Acciones"
+      },
+      "kind": {
+        "export": "Exportación",
+        "delete": "Eliminación"
+      },
+      "resolveForm": {
+        "notesLabel": "Notas de resolución",
+        "notesPlaceholder": "Qué se hizo para resolver esta solicitud",
+        "markCompleted": "Marcar como completado",
+        "reject": "Rechazar",
+        "error": "No pudimos actualizar esa solicitud. Inténtalo de nuevo."
+      }
     }
   },
   "privacy": {
