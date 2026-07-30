@@ -296,7 +296,8 @@
       "eta": "Plazo (días)",
       "cost": "Costo (USD)",
       "note": "Esto es solo una estimación. El costo final del envío se calcula al pagar según el peso y las dimensiones reales de tu paquete consolidado.",
-      "error": "No pudimos calcular una estimación. Verifica los valores e inténtalo de nuevo."
+      "error": "No pudimos calcular una estimación. Verifica los valores e inténtalo de nuevo.",
+      "calculating": "Calculando…"
     }
   },
   "faq": {
@@ -659,11 +660,17 @@
       },
       "noPhoto": "Sin foto",
       "selectPackage": "Seleccionar paquete de {{store}}",
+      "notReady": "Todavía no está listo para enviar",
       "packageStatus": {
-        "in_box": "En tu caja",
-        "ready": "Listo para enviar"
+        "received": "Recibido",
+        "in_review": "En revisión",
+        "ready": "Listo para enviar",
+        "consolidating": "Consolidando",
+        "shipped": "Enviado",
+        "discarded": "Descartado"
       },
-      "consolidate": "Consolidar seleccionados ({{count}})"
+      "consolidate": "Consolidar seleccionados ({{count}})",
+      "loadError": "No pudimos cargar tus paquetes. Actualiza la página para intentarlo de nuevo."
     },
     "ship": {
       "title": "Consolidar y Enviar",
@@ -693,7 +700,21 @@
         "boxNote": "La estimación asume una caja consolidada de 40 x 40 x 40 cm. Las dimensiones reales se confirman una vez empacada tu caja.",
         "chargeableWeight": "Peso facturable: {{weight}} kg",
         "eta": "Plazo: {{days}} días",
-        "cost": "${{cost}}"
+        "cost": "${{cost}}",
+        "calculating": "Calculando opciones de envío…",
+        "estimateError": "No pudimos calcular las opciones de envío. Inténtalo de nuevo.",
+        "addressTitle": "Dirección de entrega",
+        "recipientNameLabel": "Nombre del destinatario",
+        "streetLabel": "Dirección (calle y número)",
+        "cityLabel": "Ciudad",
+        "stateProvinceLabel": "Estado / Provincia (opcional)",
+        "postalCodeLabel": "Código postal",
+        "errors": {
+          "recipientNameRequired": "Ingresa el nombre completo del destinatario",
+          "streetRequired": "Ingresa la dirección",
+          "cityRequired": "Ingresa la ciudad",
+          "postalCodeRequired": "Ingresa el código postal"
+        }
       },
       "customs": {
         "title": "Declaración aduanera",
@@ -718,7 +739,9 @@
         "carrier": "Transportista: {{carrier}}",
         "cost": "Costo total: ${{cost}}"
       },
-      "empty": "No hay paquetes para enviar. Agrega paquetes a tu bandeja de entrada primero."
+      "empty": "No hay paquetes para enviar. Agrega paquetes a tu bandeja de entrada primero.",
+      "loadError": "No pudimos cargar tus paquetes. Actualiza la página para intentarlo de nuevo.",
+      "submitError": "No pudimos finalizar tu pedido. Inténtalo de nuevo."
     },
     "shipments": {
       "title": "Envíos",

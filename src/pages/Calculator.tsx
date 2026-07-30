@@ -7,14 +7,15 @@ import { Card } from '../components/ui/Card'
 import { Section } from '../components/ui/Section'
 import { Input } from '../components/ui/Input'
 import { Button } from '../components/ui/Button'
-import { estimateShipping, type EstimateResult } from '../lib/shippingEstimator'
+import { rateService, type RateEstimate } from '../services/rateService'
 
 const COUNTRY_CODES = ['BR', 'US', 'PT', 'ES', 'MX', 'AR', 'GB', 'OTHER'] as const
 
 export default function Calculator() {
   const { t } = useTranslation()
-  const [result, setResult] = useState<EstimateResult | null>(null)
+  const [result, setResult] = useState<RateEstimate | null>(null)
   const [calcError, setCalcError] = useState<string | null>(null)
+  const [calculating, setCalculating] = useState(false)
 
   const positiveMessage = t('calculator.form.errors.positive')
   const countryMessage = t('calculator.form.errors.country')
@@ -45,14 +46,18 @@ export default function Calculator() {
     },
   })
 
-  const onSubmit: SubmitHandler<FormOutput> = (values) => {
+  const onSubmit: SubmitHandler<FormOutput> = async (values) => {
     setCalcError(null)
+    setResult(null)
+    setCalculating(true)
     try {
-      const estimate = estimateShipping(values)
+      const estimate = await rateService.estimateShippingCost(values)
       setResult(estimate)
     } catch {
       setResult(null)
       setCalcError(t('calculator.result.error'))
+    } finally {
+      setCalculating(false)
     }
   }
 
@@ -145,6 +150,12 @@ export default function Calculator() {
                 </Button>
               </div>
             </form>
+
+            {calculating && (
+              <p className="mt-4 text-sm text-slate/60" role="status">
+                {t('calculator.result.calculating')}
+              </p>
+            )}
 
             {calcError && (
               <p className="mt-4 text-sm text-red-600" role="alert">

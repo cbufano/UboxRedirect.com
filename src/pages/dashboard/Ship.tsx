@@ -1,12 +1,12 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import { Boxes, Truck, FileText, CheckCircle2 } from 'lucide-react'
-import { packages } from '../../mocks/packages'
-import { estimateShipping, type EstimateResult } from '../../lib/shippingEstimator'
+import { packageService, type ReceivedPackage } from '../../services/packageService'
+import { rateService, type RateEstimate } from '../../services/rateService'
 import { Card } from '../../components/ui/Card'
 import { Input } from '../../components/ui/Input'
 import { Button } from '../../components/ui/Button'
@@ -27,11 +27,37 @@ export default function Ship() {
   const { t } = useTranslation()
   const location = useLocation()
 
+  const [packages, setPackages] = useState<ReceivedPackage[]>([])
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
+
+  useEffect(() => {
+    let active = true
+    packageService
+      .getMyReceivedPackages()
+      .then((data) => {
+        if (active) setPackages(data)
+      })
+      .catch(() => {
+        if (active) setLoadError(true)
+      })
+      .finally(() => {
+        if (active) setLoading(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [])
+
   const selectedIds = (location.state as { selectedIds?: string[] } | null)?.selectedIds
-  const selected =
-    selectedIds && selectedIds.length > 0
-      ? packages.filter((pkg) => selectedIds.includes(pkg.id))
-      : packages
+
+  const selected = useMemo(
+    () =>
+      selectedIds && selectedIds.length > 0
+        ? packages.filter((pkg) => selectedIds.includes(pkg.id))
+        : [],
+    [packages, selectedIds],
+  )
 
   const totalWeightKg = useMemo(
     () => Math.round(selected.reduce((sum, pkg) => sum + pkg.weightKg, 0) * 100) / 100,
@@ -41,19 +67,43 @@ export default function Ship() {
   const [destinationCountry, setDestinationCountry] = useState<string>('BR')
   const [selectedCarrier, setSelectedCarrier] = useState<string | null>(null)
   const [order, setOrder] = useState<OrderConfirmation | null>(null)
+  const [submitError, setSubmitError] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
-  const estimate: EstimateResult | null = useMemo(() => {
-    if (totalWeightKg <= 0) return null
-    try {
-      return estimateShipping({
+  const [estimate, setEstimate] = useState<RateEstimate | null>(null)
+  const [estimateLoading, setEstimateLoading] = useState(false)
+  const [estimateError, setEstimateError] = useState(false)
+
+  useEffect(() => {
+    if (totalWeightKg <= 0) {
+      setEstimate(null)
+      return
+    }
+    let active = true
+    setEstimateLoading(true)
+    setEstimateError(false)
+    rateService
+      .estimateShippingCost({
         destinationCountry,
         weightKg: totalWeightKg,
         lengthCm: BOX_DIMENSION_CM,
         widthCm: BOX_DIMENSION_CM,
         heightCm: BOX_DIMENSION_CM,
       })
-    } catch {
-      return null
+      .then((result) => {
+        if (active) setEstimate(result)
+      })
+      .catch(() => {
+        if (active) {
+          setEstimate(null)
+          setEstimateError(true)
+        }
+      })
+      .finally(() => {
+        if (active) setEstimateLoading(false)
+      })
+    return () => {
+      active = false
     }
   }, [destinationCountry, totalWeightKg])
 
@@ -62,8 +112,17 @@ export default function Ship() {
 
   const contentsRequiredMessage = t('dashboard.ship.customs.errors.contentsRequired')
   const valuePositiveMessage = t('dashboard.ship.customs.errors.valuePositive')
+  const recipientNameRequiredMessage = t('dashboard.ship.destination.errors.recipientNameRequired')
+  const streetRequiredMessage = t('dashboard.ship.destination.errors.streetRequired')
+  const cityRequiredMessage = t('dashboard.ship.destination.errors.cityRequired')
+  const postalCodeRequiredMessage = t('dashboard.ship.destination.errors.postalCodeRequired')
 
   const schema = z.object({
+    recipientName: z.string().min(1, { message: recipientNameRequiredMessage }),
+    street: z.string().min(1, { message: streetRequiredMessage }),
+    city: z.string().min(1, { message: cityRequiredMessage }),
+    stateProvince: z.string().optional(),
+    postalCode: z.string().min(1, { message: postalCodeRequiredMessage }),
     contentsDescription: z.string().min(3, { message: contentsRequiredMessage }),
     declaredValueUsd: z.coerce.number().positive({ message: valuePositiveMessage }),
   })
@@ -78,20 +137,59 @@ export default function Ship() {
   } = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(schema),
     defaultValues: {
+      recipientName: '',
+      street: '',
+      city: '',
+      stateProvince: '',
+      postalCode: '',
       contentsDescription: '',
       declaredValueUsd: undefined,
     },
   })
 
-  const onValid: SubmitHandler<FormOutput> = (values) => {
-    if (!chosenOption) return
-    const reference = `${destinationCountry}${selected.length}-${Math.round(values.declaredValueUsd)}`
-    setOrder({
-      reference,
-      destinationCountry,
-      carrier: chosenOption.carrier,
-      costUsd: chosenOption.costUsd,
-    })
+  const onValid: SubmitHandler<FormOutput> = async (values) => {
+    if (!chosenOption || !estimate) return
+    setSubmitError(false)
+    setSubmitting(true)
+    try {
+      const consolidationId = await packageService.createConsolidation({
+        recipientName: values.recipientName,
+        street: values.street,
+        city: values.city,
+        stateProvince: values.stateProvince || undefined,
+        postalCode: values.postalCode,
+        country: destinationCountry,
+        carrier: chosenOption.carrier,
+        chargeableWeightKg: estimate.chargeableWeightKg,
+        costUsd: chosenOption.costUsd,
+        contentsDescription: values.contentsDescription,
+        declaredValueUsd: values.declaredValueUsd,
+      })
+      await packageService.addConsolidationItems(
+        consolidationId,
+        selected.map((pkg) => pkg.id),
+      )
+      setOrder({
+        reference: `CONS-${consolidationId.slice(0, 8).toUpperCase()}`,
+        destinationCountry,
+        carrier: chosenOption.carrier,
+        costUsd: chosenOption.costUsd,
+      })
+    } catch {
+      setSubmitError(true)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  if (loading) return <p className="text-sm text-slate/60">{t('dashboard.loading')}</p>
+
+  if (loadError) {
+    return (
+      <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+        {t('dashboard.ship.loadError')}
+      </p>
+    )
   }
 
   if (order) {
@@ -176,73 +274,126 @@ export default function Ship() {
         </p>
       </Card>
 
-      <Card className="mt-6">
-        <div className="flex items-center gap-2">
-          <Truck className="h-5 w-5 text-brand" aria-hidden="true" />
-          <h2 className="text-lg font-semibold text-navy">{t('dashboard.ship.destination.title')}</h2>
-        </div>
-
-        <label htmlFor="destinationCountry" className="mt-4 block max-w-xs">
-          {t('dashboard.ship.destination.countryLabel')}
-          <select
-            id="destinationCountry"
-            className="mt-1 w-full rounded-lg border border-slate/20 bg-white px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-            value={destinationCountry}
-            onChange={(event) => setDestinationCountry(event.target.value)}
-          >
-            {COUNTRY_CODES.map((code) => (
-              <option key={code} value={code}>
-                {t(`dashboard.ship.destination.countries.${code}`)}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <p className="mt-3 text-xs text-slate/60">{t('dashboard.ship.destination.boxNote')}</p>
-
-        {estimate && (
-          <>
-            <p className="mt-4 text-sm text-slate">
-              {t('dashboard.ship.destination.chargeableWeight', {
-                weight: estimate.chargeableWeightKg,
-              })}
-            </p>
-            <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              {estimate.options.map((option) => {
-                const isChecked = chosenCarrierName === option.carrier
-                return (
-                  <label
-                    key={option.carrier}
-                    className={`flex cursor-pointer flex-col gap-1 rounded-lg border p-4 transition ${
-                      isChecked ? 'border-brand bg-brand/5' : 'border-slate/20 hover:border-slate/40'
-                    }`}
-                  >
-                    <span className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name="carrier"
-                        value={option.carrier}
-                        checked={isChecked}
-                        onChange={() => setSelectedCarrier(option.carrier)}
-                        className="h-4 w-4 text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-                      />
-                      <span className="font-semibold text-navy">{option.carrier}</span>
-                    </span>
-                    <span className="text-sm text-slate">
-                      {t('dashboard.ship.destination.eta', { days: option.etaDays })}
-                    </span>
-                    <span className="text-lg font-bold text-navy">
-                      {t('dashboard.ship.destination.cost', { cost: option.costUsd.toFixed(2) })}
-                    </span>
-                  </label>
-                )
-              })}
-            </div>
-          </>
-        )}
-      </Card>
-
       <form onSubmit={handleSubmit(onValid)} noValidate>
+        <Card className="mt-6">
+          <div className="flex items-center gap-2">
+            <Truck className="h-5 w-5 text-brand" aria-hidden="true" />
+            <h2 className="text-lg font-semibold text-navy">{t('dashboard.ship.destination.title')}</h2>
+          </div>
+
+          <label htmlFor="destinationCountry" className="mt-4 block max-w-xs">
+            {t('dashboard.ship.destination.countryLabel')}
+            <select
+              id="destinationCountry"
+              className="mt-1 w-full rounded-lg border border-slate/20 bg-white px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              value={destinationCountry}
+              onChange={(event) => setDestinationCountry(event.target.value)}
+            >
+              {COUNTRY_CODES.map((code) => (
+                <option key={code} value={code}>
+                  {t(`dashboard.ship.destination.countries.${code}`)}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <p className="mt-3 text-xs text-slate/60">{t('dashboard.ship.destination.boxNote')}</p>
+
+          {estimateLoading && (
+            <p role="status" className="mt-4 text-sm text-slate/60">
+              {t('dashboard.ship.destination.calculating')}
+            </p>
+          )}
+
+          {estimateError && (
+            <p role="alert" className="mt-4 text-sm text-red-600">
+              {t('dashboard.ship.destination.estimateError')}
+            </p>
+          )}
+
+          {estimate && !estimateLoading && (
+            <>
+              <p className="mt-4 text-sm text-slate">
+                {t('dashboard.ship.destination.chargeableWeight', {
+                  weight: estimate.chargeableWeightKg,
+                })}
+              </p>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                {estimate.options.map((option) => {
+                  const isChecked = chosenCarrierName === option.carrier
+                  return (
+                    <label
+                      key={option.carrier}
+                      className={`flex cursor-pointer flex-col gap-1 rounded-lg border p-4 transition ${
+                        isChecked ? 'border-brand bg-brand/5' : 'border-slate/20 hover:border-slate/40'
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="carrier"
+                          value={option.carrier}
+                          checked={isChecked}
+                          onChange={() => setSelectedCarrier(option.carrier)}
+                          className="h-4 w-4 text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                        />
+                        <span className="font-semibold text-navy">{option.carrier}</span>
+                      </span>
+                      <span className="text-sm text-slate">
+                        {t('dashboard.ship.destination.eta', { days: option.etaDays })}
+                      </span>
+                      <span className="text-lg font-bold text-navy">
+                        {t('dashboard.ship.destination.cost', { cost: option.costUsd.toFixed(2) })}
+                      </span>
+                    </label>
+                  )
+                })}
+              </div>
+            </>
+          )}
+        </Card>
+
+        <Card className="mt-6">
+          <h2 className="text-lg font-semibold text-navy">{t('dashboard.ship.destination.addressTitle')}</h2>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <Input
+              label={t('dashboard.ship.destination.recipientNameLabel')}
+              id="recipientName"
+              type="text"
+              error={errors.recipientName?.message}
+              {...register('recipientName')}
+            />
+            <Input
+              label={t('dashboard.ship.destination.streetLabel')}
+              id="street"
+              type="text"
+              error={errors.street?.message}
+              {...register('street')}
+            />
+            <Input
+              label={t('dashboard.ship.destination.cityLabel')}
+              id="city"
+              type="text"
+              error={errors.city?.message}
+              {...register('city')}
+            />
+            <Input
+              label={t('dashboard.ship.destination.stateProvinceLabel')}
+              id="stateProvince"
+              type="text"
+              error={errors.stateProvince?.message}
+              {...register('stateProvince')}
+            />
+            <Input
+              label={t('dashboard.ship.destination.postalCodeLabel')}
+              id="postalCode"
+              type="text"
+              error={errors.postalCode?.message}
+              {...register('postalCode')}
+            />
+          </div>
+        </Card>
+
         <Card className="mt-6">
           <div className="flex items-center gap-2">
             <FileText className="h-5 w-5 text-brand" aria-hidden="true" />
@@ -287,8 +438,14 @@ export default function Ship() {
           </Card>
         )}
 
+        {submitError && (
+          <Card className="mt-6 max-w-xl" role="alert">
+            <p className="text-sm text-red-600">{t('dashboard.ship.submitError')}</p>
+          </Card>
+        )}
+
         <div className="mt-6">
-          <Button type="submit" variant="primary" size="lg" disabled={!chosenOption}>
+          <Button type="submit" variant="primary" size="lg" disabled={!chosenOption || submitting}>
             {t('dashboard.ship.placeOrder')}
           </Button>
         </div>

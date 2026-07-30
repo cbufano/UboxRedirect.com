@@ -24,6 +24,20 @@ export interface ReceivedPackage {
   receivedAt: string
 }
 
+export interface CreateConsolidationInput {
+  recipientName: string
+  street: string
+  city: string
+  stateProvince?: string
+  postalCode: string
+  country: string
+  carrier: string
+  chargeableWeightKg: number
+  costUsd: number
+  contentsDescription: string
+  declaredValueUsd: number
+}
+
 interface ExpectedPackageRow {
   id: string
   store: string
@@ -115,6 +129,51 @@ export const packageService = {
       .order('received_at', { ascending: false })
     if (error) throw new Error(error.message)
     return (data as ReceivedPackageRow[]).map(mapReceivedPackage)
+  },
+
+  /**
+   * Cria a consolidação em 'pending' (default da tabela). Não há caminho do
+   * cliente para 'paid' nesta fase — isso é Fase 4 (pagamento), ainda não
+   * construída; a linha fica honestamente parada em 'pending' até lá.
+   */
+  async createConsolidation(input: CreateConsolidationInput): Promise<string> {
+    const userId = await currentUserId()
+    if (!userId) throw new Error('Not authenticated')
+
+    const { data, error } = await supabase
+      .from('consolidations')
+      .insert({
+        user_id: userId,
+        recipient_name: input.recipientName,
+        street: input.street,
+        city: input.city,
+        state_province: input.stateProvince ?? '',
+        postal_code: input.postalCode,
+        country: input.country,
+        carrier: input.carrier,
+        chargeable_weight_kg: input.chargeableWeightKg,
+        cost_usd: input.costUsd,
+        contents_description: input.contentsDescription,
+        declared_value_usd: input.declaredValueUsd,
+      })
+      .select('id')
+      .single()
+    if (error) throw new Error(error.message)
+    return (data as { id: string }).id
+  },
+
+  /**
+   * Um item por pacote selecionado. O trigger consolidation_items_mark_package
+   * (migration Fase 3) já move cada pacote para 'consolidating' — não
+   * precisamos atualizar `packages` aqui.
+   */
+  async addConsolidationItems(consolidationId: string, packageIds: string[]): Promise<void> {
+    if (packageIds.length === 0) return
+
+    const { error } = await supabase
+      .from('consolidation_items')
+      .insert(packageIds.map((packageId) => ({ consolidation_id: consolidationId, package_id: packageId })))
+    if (error) throw new Error(error.message)
   },
 
   async cancelExpectedPackage(id: string): Promise<void> {

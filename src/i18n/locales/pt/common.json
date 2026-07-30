@@ -296,7 +296,8 @@
       "eta": "Prazo (dias)",
       "cost": "Custo (USD)",
       "note": "Isto é apenas uma estimativa. O custo final do frete é calculado no checkout com base no peso e nas dimensões reais do seu pacote consolidado.",
-      "error": "Não foi possível calcular uma estimativa. Verifique os valores e tente novamente."
+      "error": "Não foi possível calcular uma estimativa. Verifique os valores e tente novamente.",
+      "calculating": "Calculando…"
     }
   },
   "faq": {
@@ -659,11 +660,17 @@
       },
       "noPhoto": "Sem foto",
       "selectPackage": "Selecionar pacote da {{store}}",
+      "notReady": "Ainda não está pronto para envio",
       "packageStatus": {
-        "in_box": "Na sua caixa",
-        "ready": "Pronto para envio"
+        "received": "Recebido",
+        "in_review": "Em análise",
+        "ready": "Pronto para envio",
+        "consolidating": "Consolidando",
+        "shipped": "Enviado",
+        "discarded": "Descartado"
       },
-      "consolidate": "Consolidar selecionados ({{count}})"
+      "consolidate": "Consolidar selecionados ({{count}})",
+      "loadError": "Não foi possível carregar seus pacotes. Atualize a página para tentar novamente."
     },
     "ship": {
       "title": "Consolidar e Enviar",
@@ -693,7 +700,21 @@
         "boxNote": "A estimativa considera uma caixa consolidada de 40 x 40 x 40 cm. As dimensões reais são confirmadas assim que sua caixa for embalada.",
         "chargeableWeight": "Peso taxável: {{weight}} kg",
         "eta": "Prazo: {{days}} dias",
-        "cost": "${{cost}}"
+        "cost": "${{cost}}",
+        "calculating": "Calculando opções de envio…",
+        "estimateError": "Não foi possível calcular as opções de envio. Tente novamente.",
+        "addressTitle": "Endereço de entrega",
+        "recipientNameLabel": "Nome do destinatário",
+        "streetLabel": "Endereço (rua e número)",
+        "cityLabel": "Cidade",
+        "stateProvinceLabel": "Estado / Província (opcional)",
+        "postalCodeLabel": "CEP",
+        "errors": {
+          "recipientNameRequired": "Informe o nome completo do destinatário",
+          "streetRequired": "Informe o endereço",
+          "cityRequired": "Informe a cidade",
+          "postalCodeRequired": "Informe o CEP"
+        }
       },
       "customs": {
         "title": "Declaração alfandegária",
@@ -718,7 +739,9 @@
         "carrier": "Transportadora: {{carrier}}",
         "cost": "Custo total: ${{cost}}"
       },
-      "empty": "Nenhum pacote para enviar. Adicione pacotes à sua caixa de entrada primeiro."
+      "empty": "Nenhum pacote para enviar. Adicione pacotes à sua caixa de entrada primeiro.",
+      "loadError": "Não foi possível carregar seus pacotes. Atualize a página para tentar novamente.",
+      "submitError": "Não foi possível finalizar seu pedido. Tente novamente."
     },
     "shipments": {
       "title": "Envios",

@@ -296,7 +296,8 @@
       "eta": "ETA (days)",
       "cost": "Cost (USD)",
       "note": "This is only an estimate. Final shipping cost is calculated at checkout based on the actual weight and dimensions of your consolidated package.",
-      "error": "We couldn't calculate an estimate. Please check the values and try again."
+      "error": "We couldn't calculate an estimate. Please check the values and try again.",
+      "calculating": "Calculating…"
     }
   },
   "faq": {
@@ -659,11 +660,17 @@
       },
       "noPhoto": "No photo",
       "selectPackage": "Select package from {{store}}",
+      "notReady": "Not ready to ship yet",
       "packageStatus": {
-        "in_box": "In your box",
-        "ready": "Ready to ship"
+        "received": "Received",
+        "in_review": "In review",
+        "ready": "Ready to ship",
+        "consolidating": "Consolidating",
+        "shipped": "Shipped",
+        "discarded": "Discarded"
       },
-      "consolidate": "Consolidate selected ({{count}})"
+      "consolidate": "Consolidate selected ({{count}})",
+      "loadError": "We couldn't load your packages. Refresh the page to try again."
     },
     "ship": {
       "title": "Consolidate & Ship",
@@ -693,7 +700,21 @@
         "boxNote": "Estimate assumes a consolidated box of 40 x 40 x 40 cm. Actual dimensions are confirmed once your box is packed.",
         "chargeableWeight": "Chargeable weight: {{weight}} kg",
         "eta": "ETA: {{days}} days",
-        "cost": "${{cost}}"
+        "cost": "${{cost}}",
+        "calculating": "Calculating shipping options…",
+        "estimateError": "We couldn't calculate shipping options. Please try again.",
+        "addressTitle": "Delivery address",
+        "recipientNameLabel": "Recipient name",
+        "streetLabel": "Street address",
+        "cityLabel": "City",
+        "stateProvinceLabel": "State / Province (optional)",
+        "postalCodeLabel": "Postal code",
+        "errors": {
+          "recipientNameRequired": "Enter the recipient's full name",
+          "streetRequired": "Enter the street address",
+          "cityRequired": "Enter the city",
+          "postalCodeRequired": "Enter the postal code"
+        }
       },
       "customs": {
         "title": "Customs declaration",
@@ -718,7 +739,9 @@
         "carrier": "Carrier: {{carrier}}",
         "cost": "Total cost: ${{cost}}"
       },
-      "empty": "No packages to ship. Add packages to your inbox first."
+      "empty": "No packages to ship. Add packages to your inbox first.",
+      "loadError": "We couldn't load your packages. Refresh the page to try again.",
+      "submitError": "We couldn't place your order. Please try again."
     },
     "shipments": {
       "title": "Shipments",
