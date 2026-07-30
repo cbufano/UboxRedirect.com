@@ -39,7 +39,8 @@ beforeEach(() => {
 it('shows the signed-in staff name and a staff badge', () => {
   renderLayout()
   expect(screen.getByText('Ana')).toBeInTheDocument()
-  expect(screen.getByText(/staff/i)).toBeInTheDocument()
+  // getAll: além do badge, o item de navegação "Staff" também usa a palavra.
+  expect(screen.getAllByText(/staff/i).length).toBeGreaterThan(0)
 })
 
 it('signs out and navigates home', async () => {

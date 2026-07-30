@@ -585,6 +585,11 @@
     },
     "signOut": "Sign out",
     "loading": "Loading…",
+    "suspended": {
+      "title": "Account suspended",
+      "message": "Your account has been suspended and access to the dashboard is blocked. If you believe this is a mistake, please contact our support team through the contact page.",
+      "signOut": "Sign out"
+    },
     "overview": {
       "title": "Overview",
       "welcome": "Welcome back, {{name}}!",
@@ -936,6 +941,7 @@
       "payments": "Payments",
       "rates": "Rates & fees",
       "customers": "Customers",
+      "staff": "Staff",
       "dataRequests": "Data requests",
       "settings": "Settings"
     },
@@ -1135,6 +1141,54 @@
         "dataRequests": {
           "title": "Privacy requests",
           "empty": "No privacy requests."
+        }
+      }
+    },
+    "staff": {
+      "title": "Staff",
+      "subtitle": "User roles and the audit trail. Every user keeps the customer base role plus at most one staff role.",
+      "adminsOnly": "Only administrators can manage roles and see the audit log.",
+      "usersTitle": "Users & roles",
+      "loadError": "We couldn't load the users. Refresh the page to try again.",
+      "search": {
+        "label": "Filter by name or email",
+        "placeholder": "e.g. Ana or ana@email.com",
+        "empty": "No users match this filter."
+      },
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "roles": "Roles",
+        "changeRole": "Change role"
+      },
+      "roles": {
+        "customer": "Customer",
+        "ops": "Ops",
+        "support": "Support",
+        "admin": "Admin",
+        "super_admin": "Super admin"
+      },
+      "role": {
+        "selectLabel": "New role for {{name}}",
+        "apply": "Apply",
+        "applying": "Applying…",
+        "confirmHint": "This change involves an admin role. Apply anyway?",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "success": "Role updated.",
+        "error": "We couldn't update this role. Please try again."
+      },
+      "audit": {
+        "title": "Audit log",
+        "hint": "Last 100 events, written by database triggers — this trail cannot be edited or deleted.",
+        "loadError": "We couldn't load the audit log. Refresh the page to try again.",
+        "empty": "No audit events yet.",
+        "table": {
+          "when": "When",
+          "actor": "Who",
+          "action": "Action",
+          "entity": "Entity",
+          "detail": "Detail"
         }
       }
     },

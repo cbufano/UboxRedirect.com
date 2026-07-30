@@ -585,6 +585,11 @@
     },
     "signOut": "Sair",
     "loading": "Carregando…",
+    "suspended": {
+      "title": "Conta suspensa",
+      "message": "Sua conta foi suspensa e o acesso ao painel está bloqueado. Se você acredita que isso é um engano, fale com o nosso suporte pela página de contato.",
+      "signOut": "Sair"
+    },
     "overview": {
       "title": "Visão geral",
       "welcome": "Bem-vindo(a) de volta, {{name}}!",
@@ -936,6 +941,7 @@
       "payments": "Pagamentos",
       "rates": "Tarifas e taxas",
       "customers": "Clientes",
+      "staff": "Equipe",
       "dataRequests": "Pedidos de dados",
       "settings": "Configurações"
     },
@@ -1135,6 +1141,54 @@
         "dataRequests": {
           "title": "Pedidos de privacidade",
           "empty": "Nenhum pedido de privacidade."
+        }
+      }
+    },
+    "staff": {
+      "title": "Equipe",
+      "subtitle": "Papéis de usuário e trilha de auditoria. Todo usuário mantém o papel base de cliente e no máximo um papel de equipe.",
+      "adminsOnly": "Somente administradores podem gerenciar papéis e ver o log de auditoria.",
+      "usersTitle": "Usuários e papéis",
+      "loadError": "Não foi possível carregar os usuários. Atualize a página para tentar novamente.",
+      "search": {
+        "label": "Filtrar por nome ou e-mail",
+        "placeholder": "ex.: Ana ou ana@email.com",
+        "empty": "Nenhum usuário corresponde a este filtro."
+      },
+      "table": {
+        "name": "Nome",
+        "email": "E-mail",
+        "roles": "Papéis",
+        "changeRole": "Mudar papel"
+      },
+      "roles": {
+        "customer": "Cliente",
+        "ops": "Operação",
+        "support": "Suporte",
+        "admin": "Admin",
+        "super_admin": "Super admin"
+      },
+      "role": {
+        "selectLabel": "Novo papel para {{name}}",
+        "apply": "Aplicar",
+        "applying": "Aplicando…",
+        "confirmHint": "Esta mudança envolve um papel de admin. Aplicar mesmo assim?",
+        "confirm": "Confirmar",
+        "cancel": "Cancelar",
+        "success": "Papel atualizado.",
+        "error": "Não foi possível atualizar este papel. Tente novamente."
+      },
+      "audit": {
+        "title": "Log de auditoria",
+        "hint": "Últimos 100 eventos, gravados por triggers no banco — esta trilha não pode ser editada nem apagada.",
+        "loadError": "Não foi possível carregar o log de auditoria. Atualize a página para tentar novamente.",
+        "empty": "Nenhum evento de auditoria ainda.",
+        "table": {
+          "when": "Quando",
+          "actor": "Quem",
+          "action": "Ação",
+          "entity": "Entidade",
+          "detail": "Detalhe"
         }
       }
     },

@@ -585,6 +585,11 @@
     },
     "signOut": "Cerrar sesión",
     "loading": "Cargando…",
+    "suspended": {
+      "title": "Cuenta suspendida",
+      "message": "Tu cuenta fue suspendida y el acceso al panel está bloqueado. Si crees que es un error, contacta a nuestro equipo de soporte desde la página de contacto.",
+      "signOut": "Cerrar sesión"
+    },
     "overview": {
       "title": "Resumen",
       "welcome": "¡Bienvenido(a) de nuevo, {{name}}!",
@@ -936,6 +941,7 @@
       "payments": "Pagos",
       "rates": "Tarifas y cargos",
       "customers": "Clientes",
+      "staff": "Equipo",
       "dataRequests": "Solicitudes de datos",
       "settings": "Configuración"
     },
@@ -1135,6 +1141,54 @@
         "dataRequests": {
           "title": "Solicitudes de privacidad",
           "empty": "No hay solicitudes de privacidad."
+        }
+      }
+    },
+    "staff": {
+      "title": "Equipo",
+      "subtitle": "Roles de usuario y registro de auditoría. Cada usuario mantiene el rol base de cliente y como máximo un rol de equipo.",
+      "adminsOnly": "Solo los administradores pueden gestionar roles y ver el registro de auditoría.",
+      "usersTitle": "Usuarios y roles",
+      "loadError": "No pudimos cargar los usuarios. Actualiza la página para intentarlo de nuevo.",
+      "search": {
+        "label": "Filtrar por nombre o email",
+        "placeholder": "p. ej. Ana o ana@email.com",
+        "empty": "Ningún usuario coincide con este filtro."
+      },
+      "table": {
+        "name": "Nombre",
+        "email": "Email",
+        "roles": "Roles",
+        "changeRole": "Cambiar rol"
+      },
+      "roles": {
+        "customer": "Cliente",
+        "ops": "Operaciones",
+        "support": "Soporte",
+        "admin": "Admin",
+        "super_admin": "Súper admin"
+      },
+      "role": {
+        "selectLabel": "Nuevo rol para {{name}}",
+        "apply": "Aplicar",
+        "applying": "Aplicando…",
+        "confirmHint": "Este cambio involucra un rol de admin. ¿Aplicar de todos modos?",
+        "confirm": "Confirmar",
+        "cancel": "Cancelar",
+        "success": "Rol actualizado.",
+        "error": "No pudimos actualizar este rol. Inténtalo de nuevo."
+      },
+      "audit": {
+        "title": "Registro de auditoría",
+        "hint": "Últimos 100 eventos, escritos por triggers en la base de datos — este registro no se puede editar ni borrar.",
+        "loadError": "No pudimos cargar el registro de auditoría. Actualiza la página para intentarlo de nuevo.",
+        "empty": "Aún no hay eventos de auditoría.",
+        "table": {
+          "when": "Cuándo",
+          "actor": "Quién",
+          "action": "Acción",
+          "entity": "Entidad",
+          "detail": "Detalle"
         }
       }
     },

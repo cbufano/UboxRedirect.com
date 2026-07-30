@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import {
@@ -11,12 +11,14 @@ import {
   ShoppingBag,
   UserCircle,
   ShieldCheck,
+  ShieldAlert,
   Menu,
   X,
 } from 'lucide-react'
 import { LanguageSwitcher } from '../components/LanguageSwitcher'
 import { Button } from '../components/ui/Button'
 import { authService } from '../services/authService'
+import { profileService } from '../services/profileService'
 import { useAuth } from '../contexts/AuthContext'
 
 const NAV_ITEMS = [
@@ -41,12 +43,40 @@ export function DashboardLayout() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [suspended, setSuspended] = useState(false)
+
+  // Checagem de suspensão (Fase 7.3). Vive AQUI, e não no ProtectedRoute,
+  // porque o layout monta uma única vez por sessão do painel — as navegações
+  // entre rotas filhas não repetem a chamada. Não bloqueia o painel enquanto
+  // o perfil carrega: só troca para a tela de suspensão se vier suspenso.
+  // Falha na busca segue normal (fail open): isto é UX — a fronteira real de
+  // segurança é a RLS do banco.
+  useEffect(() => {
+    let active = true
+    setSuspended(false)
+    profileService
+      .getMyProfile()
+      .then((profile) => {
+        if (active && profile?.suspendedAt) setSuspended(true)
+      })
+      .catch(() => {
+        /* fail open — ver comentário acima */
+      })
+    return () => {
+      active = false
+    }
+  }, [user?.id])
 
   const closeSidebar = () => setIsSidebarOpen(false)
 
   const handleSignOut = async () => {
     await authService.logout()
     navigate('/')
+  }
+
+  const handleSuspendedSignOut = async () => {
+    await authService.logout()
+    navigate('/login')
   }
 
   const navLinks = (
@@ -68,6 +98,18 @@ export function DashboardLayout() {
       })}
     </nav>
   )
+
+  // Conta suspensa: nada do painel é renderizado — só a orientação e o sair.
+  if (suspended) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-offwhite px-6 text-center">
+        <ShieldAlert className="h-12 w-12 text-red-600" aria-hidden="true" />
+        <h1 className="text-2xl font-bold text-navy">{t('dashboard.suspended.title')}</h1>
+        <p className="max-w-md text-sm text-slate/70">{t('dashboard.suspended.message')}</p>
+        <Button onClick={handleSuspendedSignOut}>{t('dashboard.suspended.signOut')}</Button>
+      </div>
+    )
+  }
 
   return (
     <div className="flex min-h-screen">
