@@ -1,0 +1,39 @@
+{
+  "name": "bufano-redirect-mobile",
+  "description": "Bufano Redirect mobile app (Expo/React Native) for package forwarding customers.",
+  "private": true,
+  "version": "1.0.0",
+  "main": "expo-router/entry",
+  "dependencies": {
+    "@hookform/resolvers": "^5.5.7",
+    "@react-native-async-storage/async-storage": "^3.1.1",
+    "@supabase/supabase-js": "^2.111.0",
+    "expo": "~57.0.9",
+    "expo-constants": "~57.0.8",
+    "expo-linking": "~57.0.4",
+    "expo-router": "~57.0.9",
+    "expo-status-bar": "~57.0.1",
+    "expo-web-browser": "^57.0.2",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-hook-form": "^7.83.0",
+    "react-native": "0.86.2",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-screens": "~4.26.0",
+    "react-native-web": "^0.21.2",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/react": "~19.2.2",
+    "jest-expo": "^57.0.3",
+    "typescript": "~6.0.3"
+  },
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "test": "jest"
+  }
+}
