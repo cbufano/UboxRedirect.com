@@ -17,3 +17,10 @@ project_id = "iyxgrvqvthuvvxautrgm"
 # a cobrança tendo sido feita de verdade.
 [functions.stripe-webhook]
 verify_jwt = false
+
+# tracking-webhook é chamada pelo fornecedor de rastreio (agregador ou
+# adaptador Correios), que não tem JWT do Supabase — autentica pelo header
+# x-webhook-secret validado dentro da função (fail-closed sem o secret).
+# Mesmo raciocínio do stripe-webhook acima.
+[functions.tracking-webhook]
+verify_jwt = false

@@ -277,6 +277,12 @@ Tudo abaixo é o que **só você** pode fazer — ou porque exige uma credencial
 - [ ] Agendar 1×/dia no Dashboard do Supabase (Integrations → Cron), invocando a função com o header de service_role padrão do agendador. Sem isso, o site simplesmente não mostra a estimativa "≈ R$" — nada quebra.
 - Nota: a fonte (frankfurter.app/BCE) não publica ARS — clientes da Argentina não veem estimativa local por enquanto (documentado no código da função).
 
+### Automação — e-mails e rastreio (Fase 7.4)
+- [ ] Implantar as functions: `supabase functions deploy send-emails` e `supabase functions deploy tracking-webhook`.
+- [ ] E-mails reais: criar conta no Resend (resend.com), verificar o domínio de envio, e `supabase secrets set RESEND_API_KEY=re_...` + setting `email_from` no painel admin. **Sem a chave, nada quebra**: os e-mails ficam registrados como "skipped" no outbox, visíveis em `/admin/settings`.
+- [ ] Agendar `send-emails` no Dashboard do Supabase (Integrations → Cron, a cada 15 min).
+- [ ] Rastreio: `supabase secrets set TRACKING_WEBHOOK_SECRET=<valor forte>` e configurar o fornecedor (agregador AfterShip/17TRACK/etc., quando contratado) para enviar eventos à URL da function `tracking-webhook` com o header `x-webhook-secret`. Formato do corpo documentado no topo da function.
+
 ### Pagamentos — Pix/BRL (Fase 4, não construído)
 - [ ] Escolher fornecedor (dLocal, EBANX ou PagBrasil — decisão em aberto acima) e negociar contrato/taxas.
 - [ ] Depois de escolhido, a integração em si é um novo bloco de trabalho (services + Edge Function própria, seguindo o mesmo padrão do Stripe).
