@@ -28,16 +28,6 @@ export interface PackageNeedingReview {
   customerSuite: string | null
 }
 
-export interface PendingConsolidation {
-  id: string
-  customerName: string
-  city: string
-  country: string
-  declaredValueUsd: number
-  carrier: string | null
-  trackingCode: string | null
-}
-
 export interface ReceivePackageInput {
   userId: string
   store: string
@@ -168,16 +158,6 @@ interface PackageNeedingReviewRow {
   profiles: MaybeArray<ProfileEmbed>
 }
 
-interface PendingConsolidationRow {
-  id: string
-  city: string
-  country: string
-  declared_value_usd: number
-  carrier: string | null
-  tracking_code: string | null
-  profiles: MaybeArray<{ name: string }>
-}
-
 interface ExpectedPackageRow {
   id: string
   store: string
@@ -279,19 +259,6 @@ function mapAdminDataRequest(row: AdminDataRequestRow): AdminDataRequest {
     requestedAt: row.requested_at,
     customerName: profile?.name ?? '',
     customerEmail: profile?.email ?? '',
-  }
-}
-
-function mapPendingConsolidation(row: PendingConsolidationRow): PendingConsolidation {
-  const profile = firstOf(row.profiles)
-  return {
-    id: row.id,
-    customerName: profile?.name ?? '',
-    city: row.city,
-    country: row.country,
-    declaredValueUsd: row.declared_value_usd,
-    carrier: row.carrier,
-    trackingCode: row.tracking_code,
   }
 }
 
@@ -565,16 +532,6 @@ export const adminService = {
       photos,
       history: (historyResult.data as PackageLocationHistoryRow[]).map(mapLocationHistoryEntry),
     }
-  },
-
-  async getPendingConsolidations(): Promise<PendingConsolidation[]> {
-    const { data, error } = await supabase
-      .from('consolidations')
-      .select('id, city, country, declared_value_usd, carrier, tracking_code, profiles (name)')
-      .eq('status', 'pending')
-      .order('created_at', { ascending: true })
-    if (error) throw new Error(error.message)
-    return (data as PendingConsolidationRow[]).map(mapPendingConsolidation)
   },
 
   /**

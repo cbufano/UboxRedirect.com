@@ -1148,15 +1148,33 @@
       }
     },
     "consolidations": {
-      "title": "Cola de consolidaciones",
-      "subtitle": "Consolidaciones a la espera de pago o envío.",
-      "empty": "No hay consolidaciones pendientes por ahora.",
+      "title": "Cola de embalaje",
+      "subtitle": "Consolidaciones pagadas, listas para embalar: recorre la lista de recogida en el orden de las posiciones, verifica cada paquete y márcala como enviada.",
+      "empty": "No hay consolidaciones pagadas a la espera de embalaje.",
       "loadError": "No pudimos cargar la cola. Actualiza la página para intentarlo de nuevo.",
-      "table": {
-        "customer": "Cliente",
-        "destination": "Destino",
-        "declaredValue": "Valor declarado",
-        "shipping": "Envío",
+      "destination": "Destino: {{city}}, {{country}}",
+      "declaredValue": "Valor declarado: ${{value}}",
+      "progress": "{{checked}} de {{total}} paquetes verificados",
+      "pickList": {
+        "title": "Lista de recogida",
+        "empty": "Esta consolidación no tiene paquetes.",
+        "noLocation": "Sin posición",
+        "checkboxLabel": "Marcar {{store}} — {{description}} como verificado",
+        "checkedBadge": "Verificado"
+      },
+      "scan": {
+        "label": "Escanea el QR del paquete o escribe su id",
+        "placeholder": "Escanea el QR o pega el id del paquete",
+        "submit": "Verificar paquete",
+        "invalid": "No se encontró ningún id de paquete en el texto escaneado.",
+        "notFound": "Este paquete no pertenece a esta consolidación.",
+        "matched": "Paquete verificado: {{store}}"
+      },
+      "override": {
+        "label": "Enviar sin verificar",
+        "warning": "Enviando sin verificar todos los paquetes — úsalo solo cuando el escáner no esté disponible."
+      },
+      "form": {
         "carrierLabel": "Transportista",
         "carrierPlaceholder": "Transportista",
         "trackingLabel": "Código de seguimiento",

@@ -587,51 +587,6 @@ describe('getPackageDetail', () => {
   })
 })
 
-describe('getPendingConsolidations', () => {
-  it('returns mapped pending consolidations', async () => {
-    const rows = [
-      {
-        id: 'c1',
-        city: 'Springfield',
-        country: 'US',
-        declared_value_usd: 100,
-        carrier: null,
-        tracking_code: null,
-        profiles: { name: 'Ana' },
-      },
-    ]
-    const order = vi.fn().mockResolvedValue({ data: rows, error: null })
-    const eq = vi.fn().mockReturnValue({ order })
-    const select = vi.fn().mockReturnValue({ eq })
-    mockedSupabase.from.mockReturnValue({ select } as never)
-
-    const result = await adminService.getPendingConsolidations()
-
-    expect(mockedSupabase.from).toHaveBeenCalledWith('consolidations')
-    expect(eq).toHaveBeenCalledWith('status', 'pending')
-    expect(result).toEqual([
-      {
-        id: 'c1',
-        customerName: 'Ana',
-        city: 'Springfield',
-        country: 'US',
-        declaredValueUsd: 100,
-        carrier: null,
-        trackingCode: null,
-      },
-    ])
-  })
-
-  it('throws when the query fails', async () => {
-    const order = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
-    const eq = vi.fn().mockReturnValue({ order })
-    const select = vi.fn().mockReturnValue({ eq })
-    mockedSupabase.from.mockReturnValue({ select } as never)
-
-    await expect(adminService.getPendingConsolidations()).rejects.toThrow('boom')
-  })
-})
-
 describe('getPaidConsolidations', () => {
   it('returns paid consolidations with their pick-list items and location codes', async () => {
     const rows = [

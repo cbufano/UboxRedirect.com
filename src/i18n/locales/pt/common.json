@@ -1148,15 +1148,33 @@
       }
     },
     "consolidations": {
-      "title": "Fila de consolidações",
-      "subtitle": "Consolidações aguardando pagamento ou envio.",
-      "empty": "Nenhuma consolidação pendente no momento.",
+      "title": "Fila de embalagem",
+      "subtitle": "Consolidações pagas, prontas para embalar: percorra a lista de coleta na ordem das posições, confira cada pacote e marque como enviado.",
+      "empty": "Nenhuma consolidação paga aguardando embalagem.",
       "loadError": "Não foi possível carregar a fila. Atualize a página para tentar novamente.",
-      "table": {
-        "customer": "Cliente",
-        "destination": "Destino",
-        "declaredValue": "Valor declarado",
-        "shipping": "Envio",
+      "destination": "Destino: {{city}}, {{country}}",
+      "declaredValue": "Valor declarado: ${{value}}",
+      "progress": "{{checked}} de {{total}} pacotes conferidos",
+      "pickList": {
+        "title": "Lista de coleta",
+        "empty": "Esta consolidação não tem pacotes.",
+        "noLocation": "Sem posição",
+        "checkboxLabel": "Marcar {{store}} — {{description}} como conferido",
+        "checkedBadge": "Conferido"
+      },
+      "scan": {
+        "label": "Escaneie o QR do pacote ou digite o id",
+        "placeholder": "Escaneie o QR ou cole o id do pacote",
+        "submit": "Conferir pacote",
+        "invalid": "Nenhum id de pacote encontrado no texto escaneado.",
+        "notFound": "Este pacote não pertence a esta consolidação.",
+        "matched": "Pacote conferido: {{store}}"
+      },
+      "override": {
+        "label": "Enviar sem conferir",
+        "warning": "Enviando sem conferir todos os pacotes — use apenas quando o scanner não estiver disponível."
+      },
+      "form": {
         "carrierLabel": "Transportadora",
         "carrierPlaceholder": "Transportadora",
         "trackingLabel": "Código de rastreio",

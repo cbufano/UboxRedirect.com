@@ -1148,15 +1148,33 @@
       }
     },
     "consolidations": {
-      "title": "Consolidations queue",
-      "subtitle": "Consolidations waiting for payment or shipping.",
-      "empty": "No pending consolidations right now.",
+      "title": "Packing queue",
+      "subtitle": "Paid consolidations, ready to pack: walk the pick list in location order, check each package, then mark it shipped.",
+      "empty": "No paid consolidations waiting to be packed.",
       "loadError": "We couldn't load the queue. Refresh the page to try again.",
-      "table": {
-        "customer": "Customer",
-        "destination": "Destination",
-        "declaredValue": "Declared value",
-        "shipping": "Shipping",
+      "destination": "Destination: {{city}}, {{country}}",
+      "declaredValue": "Declared value: ${{value}}",
+      "progress": "{{checked}} of {{total}} packages checked",
+      "pickList": {
+        "title": "Pick list",
+        "empty": "This consolidation has no packages.",
+        "noLocation": "No location",
+        "checkboxLabel": "Mark {{store}} — {{description}} as checked",
+        "checkedBadge": "Checked"
+      },
+      "scan": {
+        "label": "Scan the package QR or type its id",
+        "placeholder": "Scan QR or paste the package id",
+        "submit": "Check package",
+        "invalid": "No package id found in the scanned text.",
+        "notFound": "This package does not belong to this consolidation.",
+        "matched": "Package checked: {{store}}"
+      },
+      "override": {
+        "label": "Ship without checking",
+        "warning": "Shipping without checking every package — only do this when the scanner is unavailable."
+      },
+      "form": {
         "carrierLabel": "Carrier",
         "carrierPlaceholder": "Carrier",
         "trackingLabel": "Tracking code",
