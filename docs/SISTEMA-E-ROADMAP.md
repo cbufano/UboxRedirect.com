@@ -12,6 +12,8 @@
 
 > **Atualização 30/07/2026 — Fase 5 entregue:** autoatendimento LGPD/GDPR (`/app/privacy` — cliente solicita exportação/exclusão de dados, `data_requests`) com fila de resolução para staff (`/admin/data-requests`); campos de status de KYC/OFAC em `profiles`, marcados manualmente por staff direto na tela de recebimento de pacote. A revisão de segurança encontrou um achado **Crítico**: faltava a policy de RLS que permitisse staff atualizar `profiles` de outro usuário — `setKycStatus`/`setOfacStatus` reportavam sucesso na tela sem gravar nada no banco. Corrigido e aplicado em produção (migration `20260730000005_profiles_staff_update_policy.sql`). Triagem OFAC/SDN automática e KYC via Stripe Identity **não foram construídos** — são apenas os campos de status manuais, como documentado desde a migration original.
 
+> **Atualização 30/07/2026 — Fase 6 entregue:** app mobile (Expo/React Native + TypeScript, projeto independente em `mobile/`, expo-router) reaproveitando o mesmo backend Supabase do site (schema, RLS, Edge Functions), sem nenhuma mudança de banco. Cobre a jornada central do cliente em 5 telas — Overview, Notify Purchase (pré-alerta), Inbox (com seleção múltipla → consolidação em `ship.tsx`), Shipments (pagamento via Stripe Checkout aberto em browser in-app) e Privacy (LGPD/GDPR) — mais um fluxo completo de login/cadastro (auth gate). Camada de serviços em `mobile/src/services/*.ts` espelha 1:1 as convenções do site, testada com Jest/`jest-expo` (76 testes). Plano de execução em `docs/superpowers/plans/2026-07-30-fase6-mobile-app.md`. **Fora do escopo do v1:** publicação nas lojas (Apple App Store / Google Play), i18n (pt/es) no app, recuperação de senha dentro do app, e deep-link de retorno do Stripe Checkout (o app refaz a busca de consolidações ao voltar ao primeiro plano, sem navegação automática via deep link). Ver `mobile/README.md` e o checklist manual no fim deste documento.
+
 ---
 
 # PARTE 1 — O que já foi construído
@@ -245,7 +247,7 @@ Todos alimentados por dados mock (`src/mocks/`):
 
 ---
 
-## Checklist manual consolidado (Fases 2–5)
+## Checklist manual consolidado (Fases 2–6)
 
 Tudo abaixo é o que **só você** pode fazer — ou porque exige uma credencial/conta real que não existe neste ambiente, ou porque é uma ação irreversível/de custo real que não deve ser automatizada sem sua aprovação explícita. Todo o resto (schema, RLS, código de UI, Edge Functions) já está pronto e revisado; isto é só o que falta *ligar*.
 
@@ -276,3 +278,11 @@ Tudo abaixo é o que **só você** pode fazer — ou porque exige uma credencial
 - [ ] Fazer merge das branches `feat/fase2-supabase-backend` → `feat/fase3-packages-admin` → `master` (ou abrir PRs) quando todas as fases estiverem revisadas — nenhuma foi mesclada ainda.
 - [ ] Decidir domínio do admin (mesmo domínio `/admin` vs. subdomínio `admin.uboxredirect.com`).
 - [ ] Definir dias grátis de armazenagem e preço da diária (regra de negócio usada em `rate_tables`/cobrança futura de armazenagem).
+
+### App mobile (Fase 6)
+- [ ] Criar/confirmar conta Apple Developer (US$99/ano) para publicação na App Store.
+- [ ] Criar/confirmar conta Google Play Console (US$25 único) para publicação na Play Store.
+- [ ] Instalar `eas-cli` (`npm install -g eas-cli`), rodar `eas login` e `eas build:configure` (requer conta EAS/Expo) antes de gerar os primeiros builds de produção com `eas build`/`eas submit`.
+- [ ] Substituir o ícone e a splash screen do app (hoje são os placeholders padrão do template Expo em `mobile/assets/`) pelos definitivos da marca Bufano Redirect.
+- [ ] Decidir a prioridade de i18n (pt/es) no app — v1 é inglês apenas; ver "Decisões em aberto" no plano de Fase 6.
+- [ ] Testar o fluxo de pagamento do app ponta a ponta assim que as Edge Functions Stripe (`create-checkout-session`, `stripe-webhook`) forem implantadas com credenciais reais — mesma dependência já listada acima para o site; hoje só o caminho de erro do app foi validado (function ainda não implantada).
