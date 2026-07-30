@@ -8,13 +8,24 @@
  * O gate de papel é só UI (useRole): inputs e salvar aparecem para
  * admin/super_admin; ops vê os valores em modo leitura. Quem barra escrita de
  * verdade é a RLS (settings_write_admin).
+ *
+ * Fase 7.4: card "Email outbox" — leitura dos e-mails enfileirados pelos
+ * triggers do banco (outboxAdminService), com filtro por status. `skipped`
+ * significa RESEND_API_KEY não configurada: aviso âmbar fixo enquanto houver
+ * ao menos um no resultado.
  */
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
-import { SlidersHorizontal, Banknote, TriangleAlert } from 'lucide-react'
+import { SlidersHorizontal, Banknote, TriangleAlert, Mail } from 'lucide-react'
 import { settingsService } from '../../services/settingsService'
 import { currencyService, type DisplayRate } from '../../services/currencyService'
+import {
+  outboxAdminService,
+  type OutboxEmail,
+  type OutboxStatus,
+  type OutboxTemplate,
+} from '../../services/outboxAdminService'
 import { useRole } from '../../contexts/RoleContext'
 import { Card } from '../../components/ui/Card'
 import { Input } from '../../components/ui/Input'
@@ -32,6 +43,25 @@ const SETTING_FIELDS = [
 const settingSchema = z.string().trim().regex(/^\d+$/).transform(Number)
 
 const STALE_MS = 48 * 60 * 60 * 1000
+
+// Chaves de tradução em camelCase para os templates snake_case do banco —
+// mesma convenção de SETTING_FIELDS.i18nKey acima.
+const TEMPLATE_I18N_KEYS: Record<OutboxTemplate, string> = {
+  package_received: 'packageReceived',
+  package_ready: 'packageReady',
+  payment_confirmed: 'paymentConfirmed',
+  shipped: 'shipped',
+  storage_warning: 'storageWarning',
+}
+
+const OUTBOX_STATUSES: OutboxStatus[] = ['pending', 'sent', 'failed', 'skipped']
+
+const OUTBOX_STATUS_CLASSES: Record<OutboxStatus, string> = {
+  pending: 'bg-amber-100 text-amber-700',
+  sent: 'bg-success/10 text-success',
+  failed: 'bg-red-50 text-red-600',
+  skipped: 'bg-slate/10 text-slate/70',
+}
 
 export default function Settings() {
   const { t } = useTranslation()
@@ -51,6 +81,12 @@ export default function Settings() {
   const [rates, setRates] = useState<DisplayRate[]>([])
   const [ratesLoading, setRatesLoading] = useState(true)
   const [ratesError, setRatesError] = useState(false)
+
+  // '' = todos os status (sem filtro no service).
+  const [outbox, setOutbox] = useState<OutboxEmail[]>([])
+  const [outboxFilter, setOutboxFilter] = useState<'' | OutboxStatus>('')
+  const [outboxLoading, setOutboxLoading] = useState(true)
+  const [outboxError, setOutboxError] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -80,6 +116,29 @@ export default function Settings() {
       active = false
     }
   }, [])
+
+  // Efeito próprio, refeito a cada troca de filtro (a primeira execução, com
+  // filtro '', é a carga inicial). Loading/erro isolados: o outbox nunca
+  // bloqueia os cards de parâmetros e câmbio.
+  useEffect(() => {
+    let active = true
+    setOutboxLoading(true)
+    setOutboxError(false)
+    outboxAdminService
+      .getOutbox(outboxFilter === '' ? undefined : outboxFilter)
+      .then((data) => {
+        if (active) setOutbox(data)
+      })
+      .catch(() => {
+        if (active) setOutboxError(true)
+      })
+      .finally(() => {
+        if (active) setOutboxLoading(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [outboxFilter])
 
   const handleSave = async (key: string) => {
     setSavedKey(null)
@@ -223,6 +282,84 @@ export default function Settings() {
               )
             })}
           </ul>
+        )}
+      </Card>
+
+      <Card className="mt-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="flex items-center gap-2 text-lg font-semibold text-navy">
+            <Mail className="h-5 w-5 text-brand" aria-hidden="true" />
+            {t('admin.settings.outbox.title')}
+          </h2>
+          <label htmlFor="outbox-status-filter" className="flex items-center gap-2 text-sm text-navy">
+            {t('admin.settings.outbox.filterLabel')}
+            <select
+              id="outbox-status-filter"
+              value={outboxFilter}
+              onChange={(event) => setOutboxFilter(event.target.value as '' | OutboxStatus)}
+              className="rounded-lg border border-slate/20 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+            >
+              <option value="">{t('admin.settings.outbox.filterAll')}</option>
+              {OUTBOX_STATUSES.map((status) => (
+                <option key={status} value={status}>
+                  {t(`admin.settings.outbox.status.${status}`)}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <p className="mt-1 max-w-2xl text-sm text-slate/70">{t('admin.settings.outbox.hint')}</p>
+
+        {!outboxLoading && !outboxError && outbox.some((email) => email.status === 'skipped') && (
+          <p className="mt-4 flex items-start gap-2 rounded-lg bg-amber-50 px-4 py-3 text-sm font-medium text-amber-700">
+            <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+            {t('admin.settings.outbox.skippedWarning')}
+          </p>
+        )}
+
+        {outboxLoading ? (
+          <p className="mt-4 text-sm text-slate/60">{t('dashboard.loading')}</p>
+        ) : outboxError ? (
+          <p role="alert" className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+            {t('admin.settings.outbox.loadError')}
+          </p>
+        ) : outbox.length === 0 ? (
+          <p className="mt-4 text-sm text-slate/70">{t('admin.settings.outbox.empty')}</p>
+        ) : (
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-slate/10 text-xs font-medium uppercase tracking-wide text-slate/50">
+                  <th scope="col" className="px-3 py-2">{t('admin.settings.outbox.columns.date')}</th>
+                  <th scope="col" className="px-3 py-2">{t('admin.settings.outbox.columns.customer')}</th>
+                  <th scope="col" className="px-3 py-2">{t('admin.settings.outbox.columns.template')}</th>
+                  <th scope="col" className="px-3 py-2">{t('admin.settings.outbox.columns.status')}</th>
+                  <th scope="col" className="px-3 py-2">{t('admin.settings.outbox.columns.error')}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate/10">
+                {outbox.map((email) => (
+                  <tr key={email.id}>
+                    <td className="whitespace-nowrap px-3 py-3 text-slate">{email.createdAt.slice(0, 10)}</td>
+                    <td className="px-3 py-3 font-medium text-navy">{email.customerName}</td>
+                    <td className="px-3 py-3 text-slate">
+                      {t(`admin.settings.outbox.templates.${TEMPLATE_I18N_KEYS[email.template]}`)}
+                    </td>
+                    <td className="px-3 py-3">
+                      <span
+                        className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${OUTBOX_STATUS_CLASSES[email.status]}`}
+                      >
+                        {t(`admin.settings.outbox.status.${email.status}`)}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3">
+                      {email.error !== '' && <span className="text-xs text-red-600">{email.error}</span>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </Card>
     </div>

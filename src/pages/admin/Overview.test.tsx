@@ -26,8 +26,17 @@ const busyActions: PendingActions = {
   openDataRequests: 7,
   storageOverdue: [{ id: 'p1', store: 'Amazon', suiteNumber: 'BUF-10001', receivedAt: '2026-06-01T10:00:00Z' }],
   unreconciled: [{ id: 'c2', city: 'Lisbon', country: 'PT', shippedAt: '2026-07-10T10:00:00Z' }],
-  trackingExceptions: [],
-  failedEmails: 0,
+  trackingExceptions: [
+    {
+      id: 'te1',
+      consolidationId: 'c3',
+      rawStatus: 'address not found',
+      occurredAt: '2026-07-25T10:00:00Z',
+      city: 'Madrid',
+      country: 'ES',
+    },
+  ],
+  failedEmails: 3,
 }
 
 function renderOverview() {
@@ -50,14 +59,18 @@ it('renders each card counter with its target link', async () => {
   mocked.getPendingActions.mockResolvedValue(busyActions)
   renderOverview()
 
-  // Contadores: 4 (a conferir), 7 (LGPD) e três listas de 1 item cada.
+  // Contadores: 4 (a conferir), 7 (LGPD), 3 (e-mails falhados) e quatro
+  // listas de 1 item cada (pagas sem envio, armazenagem, conciliação,
+  // exceções de rastreio).
   expect(await screen.findByText('4')).toBeInTheDocument()
   expect(screen.getByText('7')).toBeInTheDocument()
-  expect(screen.getAllByText('1')).toHaveLength(3)
+  expect(screen.getByText('3')).toBeInTheDocument()
+  expect(screen.getAllByText('1')).toHaveLength(4)
 
   expect(screen.getByRole('link', { name: /packages queue/i })).toHaveAttribute('href', '/admin/packages')
   expect(screen.getByRole('link', { name: /shipping queue/i })).toHaveAttribute('href', '/admin/consolidations')
   expect(screen.getByRole('link', { name: /data requests/i })).toHaveAttribute('href', '/admin/data-requests')
+  expect(screen.getByRole('link', { name: /email outbox/i })).toHaveAttribute('href', '/admin/settings')
 })
 
 it('renders the inline lists with their data', async () => {
@@ -71,6 +84,9 @@ it('renders the inline lists with their data', async () => {
   expect(storageLink).toHaveAttribute('href', '/admin/packages/p1')
   // Conciliação: consolidação enviada sem pagamento registrado.
   expect(screen.getByText(/Lisbon, PT/)).toBeInTheDocument()
+  // Exceção de rastreio: destino + status bruto do fornecedor (informativo,
+  // sem rota própria).
+  expect(screen.getByText(/Madrid, ES.*address not found/)).toBeInTheDocument()
 })
 
 it('shows the all-clear state when nothing is pending', async () => {
@@ -79,6 +95,25 @@ it('shows the all-clear state when nothing is pending', async () => {
 
   expect(await screen.findByText(/all caught up/i)).toBeInTheDocument()
   expect(screen.queryByRole('link')).not.toBeInTheDocument()
+})
+
+it('does not show all-clear when only tracking exceptions are pending', async () => {
+  mocked.getPendingActions.mockResolvedValue({
+    ...emptyActions,
+    trackingExceptions: busyActions.trackingExceptions,
+  })
+  renderOverview()
+
+  expect(await screen.findByText(/Madrid, ES/)).toBeInTheDocument()
+  expect(screen.queryByText(/all caught up/i)).not.toBeInTheDocument()
+})
+
+it('does not show all-clear when only failed emails are pending', async () => {
+  mocked.getPendingActions.mockResolvedValue({ ...emptyActions, failedEmails: 2 })
+  renderOverview()
+
+  expect(await screen.findByText('2')).toBeInTheDocument()
+  expect(screen.queryByText(/all caught up/i)).not.toBeInTheDocument()
 })
 
 it('shows an alert when loading pending actions fails', async () => {

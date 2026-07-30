@@ -805,6 +805,18 @@
         "success": "¡Pago recibido! Tu envío ya se está preparando.",
         "cancelled": "El checkout fue cancelado — puedes intentar pagar de nuevo cuando quieras.",
         "dismiss": "Descartar"
+      },
+      "tracking": {
+        "toggle": "Historial de rastreo",
+        "empty": "Aún no hay eventos de rastreo — vuelve pronto.",
+        "loadError": "No pudimos cargar el historial de rastreo. Inténtalo de nuevo en un momento.",
+        "status": {
+          "in_transit": "En tránsito",
+          "customs": "En aduana",
+          "out_for_delivery": "En reparto",
+          "delivered": "Entregado",
+          "exception": "Excepción en la entrega"
+        }
       }
     },
     "shopper": {
@@ -974,6 +986,15 @@
           "title": "Conciliación",
           "hint": "Consolidaciones marcadas como enviadas sin un pago aprobado registrado. Confirma el pago o investiga la discrepancia.",
           "item": "{{city}}, {{country}} — enviada el {{date}}"
+        },
+        "trackingExceptions": {
+          "title": "Excepciones de rastreo",
+          "hint": "Eventos de excepción reportados por el transportista en las últimas dos semanas. El estado bruto muestra exactamente lo que dijo el transportista.",
+          "item": "{{city}}, {{country}} — {{status}} — {{date}}"
+        },
+        "failedEmails": {
+          "title": "Correos fallidos",
+          "link": "Ir al outbox de correos"
         }
       },
       "loadError": "No pudimos cargar los pendientes. Actualiza la página para intentarlo de nuevo."
@@ -1597,6 +1618,35 @@
         "perUsd": "{{rate}} por 1 USD",
         "quotedAt": "Cotizado el {{date}}",
         "stale": "Desactualizada — la última cotización tiene más de 48 horas."
+      },
+      "outbox": {
+        "title": "Outbox de correos",
+        "hint": "Todos los correos del ciclo de vida que el sistema puso en cola — escritos por triggers de la base de datos y procesados por la función send-emails. Solo lectura.",
+        "loadError": "No pudimos cargar el outbox de correos. Actualiza la página para intentarlo de nuevo.",
+        "empty": "Aún no hay correos en el outbox.",
+        "filterLabel": "Filtrar por estado",
+        "filterAll": "Todos los estados",
+        "skippedWarning": "Los correos se están omitiendo — configura el secret RESEND_API_KEY para que realmente se envíen (ver el checklist de deploy).",
+        "columns": {
+          "date": "Fecha",
+          "customer": "Cliente",
+          "template": "Correo",
+          "status": "Estado",
+          "error": "Error"
+        },
+        "status": {
+          "pending": "Pendiente",
+          "sent": "Enviado",
+          "failed": "Falló",
+          "skipped": "Omitido"
+        },
+        "templates": {
+          "packageReceived": "Paquete recibido",
+          "packageReady": "Paquete listo para enviar",
+          "paymentConfirmed": "Pago confirmado",
+          "shipped": "Envío en camino",
+          "storageWarning": "Aviso de almacenaje"
+        }
       }
     }
   },

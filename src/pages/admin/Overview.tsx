@@ -12,8 +12,10 @@ import {
   CheckCircle2,
   Clock,
   FileClock,
+  MailWarning,
   PackageSearch,
   Scale,
+  TriangleAlert,
   Truck,
   type LucideIcon,
 } from 'lucide-react'
@@ -129,7 +131,9 @@ export default function Overview() {
     actions.paidUnshipped.length === 0 &&
     actions.openDataRequests === 0 &&
     actions.storageOverdue.length === 0 &&
-    actions.unreconciled.length === 0
+    actions.unreconciled.length === 0 &&
+    actions.trackingExceptions.length === 0 &&
+    actions.failedEmails === 0
 
   return (
     <div>
@@ -243,6 +247,38 @@ export default function Overview() {
               </ul>
             )}
           </PendingCard>
+
+          <PendingCard
+            icon={TriangleAlert}
+            count={actions.trackingExceptions.length}
+            tone={actions.trackingExceptions.length > 0 ? 'critical' : 'ok'}
+            title={t('admin.overview.cards.trackingExceptions.title')}
+          >
+            <p className="mt-3 text-xs text-slate/60">{t('admin.overview.cards.trackingExceptions.hint')}</p>
+            {actions.trackingExceptions.length > 0 && (
+              <ul className="mt-3 space-y-1 text-sm">
+                {actions.trackingExceptions.map((item) => (
+                  <li key={item.id} className="text-slate">
+                    {t('admin.overview.cards.trackingExceptions.item', {
+                      city: item.city,
+                      country: item.country,
+                      status: item.rawStatus,
+                      date: formatDate(item.occurredAt),
+                    })}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </PendingCard>
+
+          <PendingCard
+            icon={MailWarning}
+            count={actions.failedEmails}
+            tone={actions.failedEmails > 0 ? 'warn' : 'ok'}
+            title={t('admin.overview.cards.failedEmails.title')}
+            linkTo="/admin/settings"
+            linkLabel={t('admin.overview.cards.failedEmails.link')}
+          />
         </div>
       )}
     </div>

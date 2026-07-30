@@ -7,6 +7,7 @@ import Shipments from './Shipments'
 import { packageService, type Consolidation } from '../../services/packageService'
 import { paymentService } from '../../services/paymentService'
 import { currencyService, type DisplayRate } from '../../services/currencyService'
+import { trackingService, type TrackingEvent } from '../../services/trackingService'
 import { useAuth } from '../../contexts/AuthContext'
 
 vi.mock('../../services/packageService', () => ({
@@ -15,6 +16,10 @@ vi.mock('../../services/packageService', () => ({
 
 vi.mock('../../services/paymentService', () => ({
   paymentService: { createCheckoutSession: vi.fn() },
+}))
+
+vi.mock('../../services/trackingService', () => ({
+  trackingService: { getTrackingEvents: vi.fn() },
 }))
 
 vi.mock('../../services/currencyService', () => ({
@@ -33,6 +38,7 @@ vi.mock('../../contexts/AuthContext', () => ({
 const mockedPackageService = vi.mocked(packageService)
 const mockedPaymentService = vi.mocked(paymentService)
 const mockedCurrencyService = vi.mocked(currencyService)
+const mockedTrackingService = vi.mocked(trackingService)
 const mockedUseAuth = vi.mocked(useAuth)
 
 const usUser = { id: 'u1', name: 'John Doe', email: 'john@example.com', country: 'US' }
@@ -67,6 +73,27 @@ const shippedConsolidation: Consolidation = {
   paidAt: '2026-07-11T00:00:00Z',
   shippedAt: '2026-07-15T00:00:00Z',
 }
+
+const cancelledConsolidation: Consolidation = {
+  ...pendingConsolidation,
+  id: 'c3',
+  status: 'cancelled',
+}
+
+const trackingTimeline: TrackingEvent[] = [
+  {
+    id: 'ev2',
+    rawStatus: 'Held at customs office',
+    normalizedStatus: 'customs',
+    occurredAt: '2026-07-18T14:00:00Z',
+  },
+  {
+    id: 'ev1',
+    rawStatus: 'Departed origin facility',
+    normalizedStatus: 'in_transit',
+    occurredAt: '2026-07-16T09:00:00Z',
+  },
+]
 
 function renderPage(initialEntries: string[] = ['/app/shipments']) {
   return render(
@@ -218,5 +245,65 @@ describe('payment return banners', () => {
     await userEvent.click(within(status).getByRole('button', { name: /dismiss/i }))
 
     expect(screen.queryByRole('status')).not.toBeInTheDocument()
+  })
+})
+
+describe('tracking timeline for shipped/delivered consolidations', () => {
+  it('loads events lazily on expand and renders the timeline (newest first, once)', async () => {
+    mockedPackageService.getMyConsolidations.mockResolvedValue([shippedConsolidation])
+    mockedTrackingService.getTrackingEvents.mockResolvedValue(trackingTimeline)
+    renderPage()
+
+    const toggle = await screen.findByRole('button', { name: /tracking history/i })
+    // lazy: nada é buscado antes de expandir
+    expect(mockedTrackingService.getTrackingEvents).not.toHaveBeenCalled()
+
+    await userEvent.click(toggle)
+    expect(mockedTrackingService.getTrackingEvents).toHaveBeenCalledWith('c2')
+
+    // data + rótulo traduzido do status normalizado + status bruto secundário
+    expect(await screen.findByText('2026-07-18')).toBeInTheDocument()
+    expect(screen.getByText('In customs')).toBeInTheDocument()
+    expect(screen.getByText('Held at customs office')).toBeInTheDocument()
+    expect(screen.getByText('2026-07-16')).toBeInTheDocument()
+    expect(screen.getByText('In transit')).toBeInTheDocument()
+    expect(screen.getByText('Departed origin facility')).toBeInTheDocument()
+
+    // fechar e reabrir usa o cache — a chamada não se repete
+    await userEvent.click(toggle)
+    await userEvent.click(toggle)
+    expect(await screen.findByText('In customs')).toBeInTheDocument()
+    expect(mockedTrackingService.getTrackingEvents).toHaveBeenCalledTimes(1)
+  })
+
+  it('shows the empty message when there are no events yet', async () => {
+    mockedPackageService.getMyConsolidations.mockResolvedValue([shippedConsolidation])
+    mockedTrackingService.getTrackingEvents.mockResolvedValue([])
+    renderPage()
+
+    await userEvent.click(await screen.findByRole('button', { name: /tracking history/i }))
+
+    expect(await screen.findByText(/no tracking events yet/i)).toBeInTheDocument()
+  })
+
+  it('shows a generic handled error when loading events fails', async () => {
+    mockedPackageService.getMyConsolidations.mockResolvedValue([shippedConsolidation])
+    mockedTrackingService.getTrackingEvents.mockRejectedValue(new Error('rls denied'))
+    renderPage()
+
+    await userEvent.click(await screen.findByRole('button', { name: /tracking history/i }))
+
+    const alert = await screen.findByRole('alert')
+    expect(alert).toHaveTextContent(/couldn't load the tracking history/i)
+    // nunca a mensagem crua do erro
+    expect(screen.queryByText(/rls denied/)).not.toBeInTheDocument()
+  })
+
+  it('does not show the toggle for pending or cancelled consolidations', async () => {
+    mockedPackageService.getMyConsolidations.mockResolvedValue([pendingConsolidation, cancelledConsolidation])
+    renderPage()
+
+    expect(await screen.findAllByText('Springfield, US')).toHaveLength(2)
+    expect(screen.queryByRole('button', { name: /tracking history/i })).not.toBeInTheDocument()
   })
 })

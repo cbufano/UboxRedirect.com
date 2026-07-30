@@ -805,6 +805,18 @@
         "success": "Pagamento recebido! Seu envio já está sendo preparado.",
         "cancelled": "O checkout foi cancelado — você pode tentar pagar novamente quando quiser.",
         "dismiss": "Dispensar"
+      },
+      "tracking": {
+        "toggle": "Histórico de rastreio",
+        "empty": "Sem eventos de rastreio ainda — volte em breve.",
+        "loadError": "Não foi possível carregar o histórico de rastreio. Tente novamente em instantes.",
+        "status": {
+          "in_transit": "Em trânsito",
+          "customs": "Na alfândega",
+          "out_for_delivery": "Saiu para entrega",
+          "delivered": "Entregue",
+          "exception": "Exceção na entrega"
+        }
       }
     },
     "shopper": {
@@ -974,6 +986,15 @@
           "title": "Conciliação",
           "hint": "Consolidações marcadas como enviadas sem pagamento aprovado registrado. Confirme o pagamento ou investigue a divergência.",
           "item": "{{city}}, {{country}} — enviada em {{date}}"
+        },
+        "trackingExceptions": {
+          "title": "Exceções de rastreio",
+          "hint": "Eventos de exceção reportados pela transportadora nas últimas duas semanas. O status bruto mostra exatamente o que a transportadora disse.",
+          "item": "{{city}}, {{country}} — {{status}} — {{date}}"
+        },
+        "failedEmails": {
+          "title": "E-mails falhados",
+          "link": "Ir para o outbox de e-mails"
         }
       },
       "loadError": "Não foi possível carregar as pendências. Atualize a página para tentar novamente."
@@ -1597,6 +1618,35 @@
         "perUsd": "{{rate}} por 1 USD",
         "quotedAt": "Cotado em {{date}}",
         "stale": "Desatualizada — a última cotação tem mais de 48 horas."
+      },
+      "outbox": {
+        "title": "Outbox de e-mails",
+        "hint": "Todos os e-mails de ciclo de vida enfileirados pelo sistema — gravados por triggers do banco e processados pela função send-emails. Somente leitura.",
+        "loadError": "Não foi possível carregar o outbox de e-mails. Atualize a página para tentar novamente.",
+        "empty": "Nenhum e-mail no outbox ainda.",
+        "filterLabel": "Filtrar por status",
+        "filterAll": "Todos os status",
+        "skippedWarning": "E-mails estão sendo pulados — configure o secret RESEND_API_KEY para que sejam realmente enviados (ver checklist de deploy).",
+        "columns": {
+          "date": "Data",
+          "customer": "Cliente",
+          "template": "E-mail",
+          "status": "Status",
+          "error": "Erro"
+        },
+        "status": {
+          "pending": "Pendente",
+          "sent": "Enviado",
+          "failed": "Falhou",
+          "skipped": "Pulado"
+        },
+        "templates": {
+          "packageReceived": "Pacote recebido",
+          "packageReady": "Pacote pronto para envio",
+          "paymentConfirmed": "Pagamento confirmado",
+          "shipped": "Envio a caminho",
+          "storageWarning": "Aviso de armazenagem"
+        }
       }
     }
   },

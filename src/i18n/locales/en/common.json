@@ -805,6 +805,18 @@
         "success": "Payment received! Your shipment is now being prepared.",
         "cancelled": "Checkout was cancelled — you can try paying again whenever you're ready.",
         "dismiss": "Dismiss"
+      },
+      "tracking": {
+        "toggle": "Tracking history",
+        "empty": "No tracking events yet — check back soon.",
+        "loadError": "We couldn't load the tracking history. Try again in a moment.",
+        "status": {
+          "in_transit": "In transit",
+          "customs": "In customs",
+          "out_for_delivery": "Out for delivery",
+          "delivered": "Delivered",
+          "exception": "Delivery exception"
+        }
       }
     },
     "shopper": {
@@ -974,6 +986,15 @@
           "title": "Reconciliation",
           "hint": "Consolidations marked as shipped without a successful payment on record. Confirm the payment or investigate the mismatch.",
           "item": "{{city}}, {{country}} — shipped on {{date}}"
+        },
+        "trackingExceptions": {
+          "title": "Tracking exceptions",
+          "hint": "Exception events reported by the carrier in the last two weeks. The raw status shows exactly what the carrier said.",
+          "item": "{{city}}, {{country}} — {{status}} — {{date}}"
+        },
+        "failedEmails": {
+          "title": "Failed emails",
+          "link": "Go to the email outbox"
         }
       },
       "loadError": "We couldn't load the pending actions. Refresh the page to try again."
@@ -1597,6 +1618,35 @@
         "perUsd": "{{rate}} per 1 USD",
         "quotedAt": "Quoted on {{date}}",
         "stale": "Stale — last quote is more than 48 hours old."
+      },
+      "outbox": {
+        "title": "Email outbox",
+        "hint": "Every lifecycle email the system queued — written by database triggers and processed by the send-emails function. Read-only.",
+        "loadError": "We couldn't load the email outbox. Refresh the page to try again.",
+        "empty": "No emails in the outbox yet.",
+        "filterLabel": "Filter by status",
+        "filterAll": "All statuses",
+        "skippedWarning": "Emails are being skipped — configure the RESEND_API_KEY secret so they actually go out (see the deploy checklist).",
+        "columns": {
+          "date": "Date",
+          "customer": "Customer",
+          "template": "Email",
+          "status": "Status",
+          "error": "Error"
+        },
+        "status": {
+          "pending": "Pending",
+          "sent": "Sent",
+          "failed": "Failed",
+          "skipped": "Skipped"
+        },
+        "templates": {
+          "packageReceived": "Package received",
+          "packageReady": "Package ready to ship",
+          "paymentConfirmed": "Payment confirmed",
+          "shipped": "Shipment on the way",
+          "storageWarning": "Storage warning"
+        }
       }
     }
   },
