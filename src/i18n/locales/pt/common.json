@@ -1311,8 +1311,9 @@
         "success": "Pedido de estorno registrado.",
         "error": "Não foi possível registrar este pedido de estorno. Tente novamente.",
         "errors": {
-          "amountPositive": "Informe um valor maior que zero.",
-          "reasonRequired": "Informe o motivo do estorno."
+          "reasonRequired": "Informe o motivo do estorno.",
+          "amountRange": "Informe um valor acima de zero e no máximo igual ao valor do pagamento.",
+          "duplicateRequested": "Já existe um pedido de estorno aberto para este pagamento — resolva-o (processado/falhou) antes de abrir outro."
         }
       },
       "refunds": {

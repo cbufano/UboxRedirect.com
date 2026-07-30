@@ -12,8 +12,13 @@
 //   supabase functions deploy refresh-exchange-rates
 //   Agendar 1×/dia no Dashboard (Integrations → Cron → invocar esta função
 //   com o header Authorization: Bearer <service_role key>, que é o padrão
-//   do agendador do Supabase). A função exige esse token: sem JWT válido o
-//   gateway (verify_jwt padrão) já rejeita — não é um endpoint público.
+//   do agendador do Supabase).
+//
+// Exposição: com verify_jwt padrão o gateway aceita QUALQUER JWT válido do
+// projeto — inclusive a anon key, que é pública no bundle do site. Ou seja,
+// qualquer um PODE invocar esta função. Isso é aceitável de propósito: ela
+// não recebe parâmetros, só faz upsert idempotente de dados públicos da
+// frankfurter; o pior caso de abuso é forçar um refresh extra.
 import { createClient } from 'npm:@supabase/supabase-js@2'
 
 const TARGET_CURRENCIES = ['BRL', 'EUR', 'GBP', 'MXN', 'ARS'] as const

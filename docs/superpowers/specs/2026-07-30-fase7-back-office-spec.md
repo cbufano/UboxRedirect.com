@@ -91,6 +91,8 @@ refunds (nova)
 - `service_fees` (nova): id, key unique (`consolidation_per_package`, `repackaging`, `extra_photo`, `storage_per_day`, `value_protection_pct`), label, amount_usd, active. RLS: leitura pública (o site mostra preços), escrita admin. Substitui os valores hoje fixos no i18n do site.
 - `settings` (nova, chave-valor): `free_storage_days`, `warehouse_address`, `company_name`, etc. RLS: leitura staff (os públicos expostos via view), escrita admin.
 
+> **Dívida registrada para a 7.3 (da revisão da 7.2):** a policy `refunds_update_staff` permite qualquer staff editar qualquer coluna de um refund via API direta (a UI só permite a transição requested→processed|failed). Quando o `audit_log` imutável entrar (7.3), avaliar também um trigger de proteção de colunas em `refunds` (amount_usd/reason/payment_id imutáveis após criação) no mesmo padrão dos triggers de proteção existentes.
+
 ### 4.5 Staff, auditoria e clientes
 
 ```

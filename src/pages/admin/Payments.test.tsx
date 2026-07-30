@@ -253,6 +253,49 @@ it('requires a reason before submitting the refund request', async () => {
   expect(mocked.requestRefund).not.toHaveBeenCalled()
 })
 
+it('rejects a refund amount above the payment amount', async () => {
+  mocked.getPayments.mockResolvedValue([stripePayment])
+  render(<Payments />)
+
+  await screen.findByText('Ana Silva')
+  await userEvent.click(screen.getByRole('button', { name: /^refund$/i }))
+  const amountInput = screen.getByLabelText(/refund amount/i)
+  await userEvent.clear(amountInput)
+  await userEvent.type(amountInput, '250')
+  await userEvent.type(screen.getByLabelText(/^reason$/i), 'typo test')
+  await userEvent.click(screen.getByRole('button', { name: /request refund/i }))
+
+  expect(await screen.findByText(/no higher than the payment amount/i)).toBeInTheDocument()
+  expect(mocked.requestRefund).not.toHaveBeenCalled()
+})
+
+it('blocks a second refund request while one is still open for the same payment', async () => {
+  mocked.getPayments.mockResolvedValue([stripePayment])
+  mocked.getRefunds.mockResolvedValue([
+    {
+      id: 'ref-1',
+      paymentId: 'pay-1',
+      amountUsd: 10,
+      reason: 'first',
+      status: 'requested',
+      createdAt: '2026-07-30T00:00:00Z',
+      processedAt: null,
+      paymentAmountUsd: 42.5,
+      paymentProvider: 'stripe',
+      customerName: 'Ana Silva',
+    },
+  ])
+  render(<Payments />)
+
+  await screen.findAllByText('Ana Silva')
+  await userEvent.click(screen.getByRole('button', { name: /^refund$/i }))
+  await userEvent.type(screen.getByLabelText(/^reason$/i), 'second try')
+  await userEvent.click(screen.getByRole('button', { name: /request refund/i }))
+
+  expect(await screen.findByText(/already an open refund request/i)).toBeInTheDocument()
+  expect(mocked.requestRefund).not.toHaveBeenCalled()
+})
+
 it('does not offer the refund button for non-succeeded payments', async () => {
   mocked.getPayments.mockResolvedValue([manualPayment])
   render(<Payments />)

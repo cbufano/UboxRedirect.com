@@ -95,6 +95,7 @@ export default function Payments() {
   const [refundAmount, setRefundAmount] = useState('')
   const [refundReason, setRefundReason] = useState('')
   const [refundAmountError, setRefundAmountError] = useState(false)
+  const [refundDuplicate, setRefundDuplicate] = useState(false)
   const [refundReasonError, setRefundReasonError] = useState(false)
   const [refundSubmitting, setRefundSubmitting] = useState(false)
   const [refundError, setRefundError] = useState(false)
@@ -276,6 +277,7 @@ export default function Payments() {
     setRefundReason('')
     setRefundAmountError(false)
     setRefundReasonError(false)
+    setRefundDuplicate(false)
     setRefundError(false)
     setRefundSuccess(false)
   }
@@ -284,11 +286,18 @@ export default function Payments() {
     if (!refundFor) return
     const amount = Number(refundAmount)
     const reason = refundReason.trim()
-    const amountInvalid = !(amount > 0)
+    // Teto: a trilha de conciliação nunca deve registrar estorno maior que o
+    // valor pago; duplicidade: um pedido 'requested' já aberto para o mesmo
+    // pagamento precisa ser resolvido (processed/failed) antes de outro.
+    const alreadyRequested = refunds.some(
+      (refund) => refund.paymentId === refundFor.id && refund.status === 'requested',
+    )
+    const amountInvalid = !(amount > 0) || amount > refundFor.amountUsd
     const reasonInvalid = reason.length === 0
     setRefundAmountError(amountInvalid)
     setRefundReasonError(reasonInvalid)
-    if (amountInvalid || reasonInvalid) return
+    setRefundDuplicate(alreadyRequested)
+    if (amountInvalid || reasonInvalid || alreadyRequested) return
 
     setRefundSubmitting(true)
     setRefundError(false)
@@ -592,7 +601,7 @@ export default function Payments() {
                               value={refundAmount}
                               onChange={(event) => setRefundAmount(event.target.value)}
                               error={
-                                refundAmountError ? t('admin.payments.refund.errors.amountPositive') : undefined
+                                refundAmountError ? t('admin.payments.refund.errors.amountRange') : undefined
                               }
                             />
                             <label htmlFor="refundReason" className="block text-navy">
@@ -612,6 +621,11 @@ export default function Payments() {
                               )}
                             </label>
                           </div>
+                          {refundDuplicate && (
+                            <p role="alert" className="mt-3 text-sm text-amber-600">
+                              {t('admin.payments.refund.errors.duplicateRequested')}
+                            </p>
+                          )}
                           {refundError && (
                             <p role="alert" className="mt-3 text-sm text-red-600">
                               {t('admin.payments.refund.error')}

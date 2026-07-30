@@ -1311,8 +1311,9 @@
         "success": "Refund request recorded.",
         "error": "We couldn't record this refund request. Please try again.",
         "errors": {
-          "amountPositive": "Enter an amount greater than zero.",
-          "reasonRequired": "Enter the reason for the refund."
+          "reasonRequired": "Enter the reason for the refund.",
+          "amountRange": "Enter an amount above zero and no higher than the payment amount.",
+          "duplicateRequested": "There is already an open refund request for this payment — resolve it (processed/failed) before opening another."
         }
       },
       "refunds": {

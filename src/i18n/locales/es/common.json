@@ -1311,8 +1311,9 @@
         "success": "Solicitud de reembolso registrada.",
         "error": "No pudimos registrar esta solicitud de reembolso. Inténtalo de nuevo.",
         "errors": {
-          "amountPositive": "Introduce un importe mayor que cero.",
-          "reasonRequired": "Introduce el motivo del reembolso."
+          "reasonRequired": "Introduce el motivo del reembolso.",
+          "amountRange": "Ingresa un monto mayor que cero y no superior al monto del pago.",
+          "duplicateRequested": "Ya existe una solicitud de reembolso abierta para este pago — resuélvela (procesado/fallido) antes de abrir otra."
         }
       },
       "refunds": {
