@@ -21,6 +21,7 @@ const Verify = lazy(() => import('./pages/auth/Verify'))
 const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'))
 const Overview = lazy(() => import('./pages/dashboard/Overview'))
 const Address = lazy(() => import('./pages/dashboard/Address'))
+const NotifyPurchase = lazy(() => import('./pages/dashboard/NotifyPurchase'))
 const Inbox = lazy(() => import('./pages/dashboard/Inbox'))
 const Ship = lazy(() => import('./pages/dashboard/Ship'))
 const Shipments = lazy(() => import('./pages/dashboard/Shipments'))
@@ -52,6 +53,7 @@ export function AppRoutes() {
         <Route path="/app" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
           <Route index element={<Overview />} />
           <Route path="address" element={<Address />} />
+          <Route path="notify" element={<NotifyPurchase />} />
           <Route path="inbox" element={<Inbox />} />
           <Route path="ship" element={<Ship />} />
           <Route path="shipments" element={<Shipments />} />

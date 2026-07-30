@@ -547,6 +547,7 @@
     "nav": {
       "overview": "Visão geral",
       "address": "Endereço nos EUA",
+      "notify": "Avisar compra",
       "inbox": "Caixa de entrada",
       "ship": "Consolidar e enviar",
       "shipments": "Envios",
@@ -606,6 +607,43 @@
           "Assim que um pacote chegar, você verá no seu painel com foto e peso."
         ]
       }
+    },
+    "notify": {
+      "title": "Avisar uma compra",
+      "subtitle": "Avise que um pacote está a caminho antes de ele chegar ao nosso depósito. O pré-alerta agiliza o vínculo do pacote à sua conta e é uma camada extra de proteção contra fraude.",
+      "form": {
+        "title": "Novo pré-alerta",
+        "store": "Loja",
+        "trackingNumber": "Código de rastreio",
+        "trackingNumberHint": "Opcional — adicione depois, se a loja ainda não tiver enviado um.",
+        "description": "Descrição",
+        "declaredValue": "Valor declarado (USD)",
+        "submit": "Adicionar pré-alerta",
+        "errors": {
+          "store": "Informe o nome da loja.",
+          "description": "Descreva o item (pelo menos 3 caracteres).",
+          "declaredValue": "Informe um valor maior que zero."
+        },
+        "success": "Pré-alerta adicionado! Vamos vinculá-lo à sua conta assim que o pacote chegar.",
+        "error": "Não foi possível salvar seu pré-alerta. Tente novamente."
+      },
+      "list": {
+        "title": "Seus pré-alertas",
+        "empty": "Nenhum pré-alerta ainda. Adicione um acima sempre que fizer um pedido.",
+        "table": {
+          "store": "Loja",
+          "description": "Descrição",
+          "status": "Status"
+        },
+        "cancel": "Cancelar"
+      },
+      "status": {
+        "pending": "Pendente",
+        "matched": "Vinculado",
+        "cancelled": "Cancelado"
+      },
+      "loadError": "Não foi possível carregar seus pré-alertas. Atualize a página para tentar novamente.",
+      "cancelError": "Não foi possível cancelar esse pré-alerta. Tente novamente."
     },
     "inbox": {
       "title": "Caixa de entrada",

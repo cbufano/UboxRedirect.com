@@ -547,6 +547,7 @@
     "nav": {
       "overview": "Resumen",
       "address": "Dirección en EE. UU.",
+      "notify": "Avisar compra",
       "inbox": "Bandeja de entrada",
       "ship": "Consolidar y enviar",
       "shipments": "Envíos",
@@ -606,6 +607,43 @@
           "En cuanto llegue un paquete, lo verás en tu panel con una foto y su peso."
         ]
       }
+    },
+    "notify": {
+      "title": "Avisar una compra",
+      "subtitle": "Avísanos que un paquete está en camino antes de que llegue a nuestro almacén. El prealerta agiliza vincularlo a tu cuenta y es una capa extra de protección contra fraudes.",
+      "form": {
+        "title": "Nuevo prealerta",
+        "store": "Tienda",
+        "trackingNumber": "Código de rastreo",
+        "trackingNumberHint": "Opcional — agrégalo después si la tienda aún no te dio uno.",
+        "description": "Descripción",
+        "declaredValue": "Valor declarado (USD)",
+        "submit": "Agregar prealerta",
+        "errors": {
+          "store": "Ingresa el nombre de la tienda.",
+          "description": "Describe el artículo (mínimo 3 caracteres).",
+          "declaredValue": "Ingresa un valor mayor que cero."
+        },
+        "success": "¡Prealerta agregado! Lo vincularemos a tu cuenta en cuanto llegue el paquete.",
+        "error": "No pudimos guardar tu prealerta. Inténtalo de nuevo."
+      },
+      "list": {
+        "title": "Tus prealertas",
+        "empty": "Todavía no hay prealertas. Agrega uno arriba cuando hagas un pedido.",
+        "table": {
+          "store": "Tienda",
+          "description": "Descripción",
+          "status": "Estado"
+        },
+        "cancel": "Cancelar"
+      },
+      "status": {
+        "pending": "Pendiente",
+        "matched": "Vinculado",
+        "cancelled": "Cancelado"
+      },
+      "loadError": "No pudimos cargar tus prealertas. Actualiza la página para intentarlo de nuevo.",
+      "cancelError": "No pudimos cancelar ese prealerta. Inténtalo de nuevo."
     },
     "inbox": {
       "title": "Bandeja de entrada",

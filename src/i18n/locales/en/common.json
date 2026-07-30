@@ -547,6 +547,7 @@
     "nav": {
       "overview": "Overview",
       "address": "US Address",
+      "notify": "Notify Purchase",
       "inbox": "Inbox",
       "ship": "Consolidate & Ship",
       "shipments": "Shipments",
@@ -606,6 +607,43 @@
           "As soon as a package arrives, you'll see it in your dashboard with a photo and its weight."
         ]
       }
+    },
+    "notify": {
+      "title": "Notify a Purchase",
+      "subtitle": "Let us know a package is on its way before it reaches our warehouse. Pre-alerting helps us match it to your account faster and is an extra layer of protection against fraud.",
+      "form": {
+        "title": "New pre-alert",
+        "store": "Store",
+        "trackingNumber": "Tracking number",
+        "trackingNumberHint": "Optional — add it later if the store hasn't given you one yet.",
+        "description": "Description",
+        "declaredValue": "Declared value (USD)",
+        "submit": "Add pre-alert",
+        "errors": {
+          "store": "Please enter the store name.",
+          "description": "Describe the item (at least 3 characters).",
+          "declaredValue": "Enter a value greater than zero."
+        },
+        "success": "Pre-alert added! We'll match it to your account as soon as the package arrives.",
+        "error": "We couldn't save your pre-alert. Please try again."
+      },
+      "list": {
+        "title": "Your pre-alerts",
+        "empty": "No pre-alerts yet. Add one above whenever you place an order.",
+        "table": {
+          "store": "Store",
+          "description": "Description",
+          "status": "Status"
+        },
+        "cancel": "Cancel"
+      },
+      "status": {
+        "pending": "Pending",
+        "matched": "Matched",
+        "cancelled": "Cancelled"
+      },
+      "loadError": "We couldn't load your pre-alerts. Refresh the page to try again.",
+      "cancelError": "We couldn't cancel that pre-alert. Please try again."
     },
     "inbox": {
       "title": "Inbox",
