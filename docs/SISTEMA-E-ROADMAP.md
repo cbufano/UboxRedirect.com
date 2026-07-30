@@ -268,6 +268,11 @@ Tudo abaixo é o que **só você** pode fazer — ou porque exige uma credencial
 - [ ] Registrar o endpoint do webhook no Stripe Dashboard (URL da function `stripe-webhook`), assinado ao menos em `checkout.session.completed`.
 - [ ] Testar o fluxo ponta a ponta com o Stripe CLI (`stripe listen` + `stripe trigger checkout.session.completed`) antes de liberar para clientes reais — o comentário no topo de `supabase/functions/stripe-webhook/index.ts` documenta uma incerteza pontual sobre a API do SDK em runtime Deno que precisa ser confirmada nesse teste.
 
+### Cotações de câmbio para exibição (Fase 7.2)
+- [ ] Implantar a Edge Function: `supabase functions deploy refresh-exchange-rates` (sem secret novo — usa a service_role key padrão do ambiente da function).
+- [ ] Agendar 1×/dia no Dashboard do Supabase (Integrations → Cron), invocando a função com o header de service_role padrão do agendador. Sem isso, o site simplesmente não mostra a estimativa "≈ R$" — nada quebra.
+- Nota: a fonte (frankfurter.app/BCE) não publica ARS — clientes da Argentina não veem estimativa local por enquanto (documentado no código da função).
+
 ### Pagamentos — Pix/BRL (Fase 4, não construído)
 - [ ] Escolher fornecedor (dLocal, EBANX ou PagBrasil — decisão em aberto acima) e negociar contrato/taxas.
 - [ ] Depois de escolhido, a integração em si é um novo bloco de trabalho (services + Edge Function própria, seguindo o mesmo padrão do Stripe).
