@@ -220,11 +220,15 @@ create policy "expected_packages_insert_own" on public.expected_packages
 -- Dono só pode manter 'pending' ou cancelar — nunca se auto-marcar como
 -- 'matched' (isso derrubaria o propósito anti-fraude da tabela: 'matched'
 -- só é setado pelo trigger match_expected_package, quando o pacote chega de
--- verdade). Staff pode transicionar para qualquer status.
+-- verdade). O USING também exige a linha estar 'pending' — sem isso, o
+-- cliente poderia reverter via API direta um pré-alerta que a equipe já
+-- marcou 'matched', mesmo que a UI só mostre o botão de cancelar para
+-- pré-alertas pendentes. Staff pode transicionar qualquer linha para
+-- qualquer status.
 create policy "expected_packages_update_own_or_staff" on public.expected_packages
   for update to authenticated
   using (
-    user_id = (select auth.uid())
+    (user_id = (select auth.uid()) and status = 'pending')
     or private.has_role((select auth.uid()), 'ops')
     or private.has_role((select auth.uid()), 'admin')
   )
