@@ -145,17 +145,26 @@ describe('getPackagesNeedingReview', () => {
 })
 
 describe('markPackageReady', () => {
-  it('updates the package status to ready', async () => {
-    mockSession('staff-1')
-    const eq = vi.fn().mockResolvedValue({ data: null, error: null })
+  function mockReadyChain(result: { data: unknown; error: { message: string } | null }) {
+    const select = vi.fn().mockResolvedValue(result)
+    const inStatus = vi.fn().mockReturnValue({ select })
+    const eq = vi.fn().mockReturnValue({ in: inStatus })
     const update = vi.fn().mockReturnValue({ eq })
     mockedSupabase.from.mockReturnValue({ update } as never)
+    return { update, eq, inStatus, select }
+  }
+
+  it('updates the package status to ready, scoped to received/in_review', async () => {
+    mockSession('staff-1')
+    const { update, eq, inStatus, select } = mockReadyChain({ data: [{ id: 'pkg1' }], error: null })
 
     await adminService.markPackageReady('pkg1')
 
     expect(mockedSupabase.from).toHaveBeenCalledWith('packages')
     expect(update).toHaveBeenCalledWith({ status: 'ready' })
     expect(eq).toHaveBeenCalledWith('id', 'pkg1')
+    expect(inStatus).toHaveBeenCalledWith('status', ['received', 'in_review'])
+    expect(select).toHaveBeenCalledWith('id')
   })
 
   it('throws when signed out', async () => {
@@ -166,11 +175,18 @@ describe('markPackageReady', () => {
 
   it('throws when the update fails', async () => {
     mockSession('staff-1')
-    const eq = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
-    const update = vi.fn().mockReturnValue({ eq })
-    mockedSupabase.from.mockReturnValue({ update } as never)
+    mockReadyChain({ data: null, error: { message: 'boom' } })
 
     await expect(adminService.markPackageReady('pkg1')).rejects.toThrow('boom')
+  })
+
+  it('throws when no rows are affected (wrong status or missing id)', async () => {
+    mockSession('staff-1')
+    mockReadyChain({ data: [], error: null })
+
+    await expect(adminService.markPackageReady('pkg1')).rejects.toThrow(
+      'Package is not awaiting review or was not found',
+    )
   })
 })
 

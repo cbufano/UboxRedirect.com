@@ -354,8 +354,17 @@ export const adminService = {
     const userId = await currentUserId()
     if (!userId) throw new Error('Not authenticated')
 
-    const { error } = await supabase.from('packages').update({ status: 'ready' }).eq('id', packageId)
+    // Só transiciona a partir de received/in_review; 0 linhas afetadas
+    // (status inesperado ou id inexistente) falha alto em vez de reportar
+    // sucesso otimista — mesmo padrão de discardPackage/markConsolidationShipped.
+    const { error, data } = await supabase
+      .from('packages')
+      .update({ status: 'ready' })
+      .eq('id', packageId)
+      .in('status', ['received', 'in_review'])
+      .select('id')
     if (error) throw new Error(error.message)
+    if (!data || data.length === 0) throw new Error('Package is not awaiting review or was not found')
   },
 
   /**
