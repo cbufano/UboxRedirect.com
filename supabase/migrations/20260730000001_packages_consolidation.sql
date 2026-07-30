@@ -206,8 +206,7 @@ create policy "expected_packages_select_own_or_staff" on public.expected_package
   for select to authenticated
   using (
     user_id = (select auth.uid())
-    or private.has_role((select auth.uid()), 'ops')
-    or private.has_role((select auth.uid()), 'admin')
+    or private.is_staff((select auth.uid()))
   );
 
 -- status = 'pending' obrigatório no INSERT: sem isso, o mesmo problema do
@@ -229,13 +228,11 @@ create policy "expected_packages_update_own_or_staff" on public.expected_package
   for update to authenticated
   using (
     (user_id = (select auth.uid()) and status = 'pending')
-    or private.has_role((select auth.uid()), 'ops')
-    or private.has_role((select auth.uid()), 'admin')
+    or private.is_staff((select auth.uid()))
   )
   with check (
     (user_id = (select auth.uid()) and status in ('pending', 'cancelled'))
-    or private.has_role((select auth.uid()), 'ops')
-    or private.has_role((select auth.uid()), 'admin')
+    or private.is_staff((select auth.uid()))
   );
 
 -- packages: dono só lê; ops/admin leem e escrevem tudo (só a equipe do
@@ -244,18 +241,17 @@ create policy "packages_select_own_or_staff" on public.packages
   for select to authenticated
   using (
     user_id = (select auth.uid())
-    or private.has_role((select auth.uid()), 'ops')
-    or private.has_role((select auth.uid()), 'admin')
+    or private.is_staff((select auth.uid()))
   );
 
 create policy "packages_insert_staff" on public.packages
   for insert to authenticated
-  with check (private.has_role((select auth.uid()), 'ops') or private.has_role((select auth.uid()), 'admin'));
+  with check (private.is_staff((select auth.uid())));
 
 create policy "packages_update_staff" on public.packages
   for update to authenticated
-  using (private.has_role((select auth.uid()), 'ops') or private.has_role((select auth.uid()), 'admin'))
-  with check (private.has_role((select auth.uid()), 'ops') or private.has_role((select auth.uid()), 'admin'));
+  using (private.is_staff((select auth.uid())))
+  with check (private.is_staff((select auth.uid())));
 
 -- package_photos: dono do pacote lê; só staff escreve.
 create policy "package_photos_select_own_or_staff" on public.package_photos
@@ -266,15 +262,14 @@ create policy "package_photos_select_own_or_staff" on public.package_photos
       where pkg.id = package_photos.package_id
         and (
           pkg.user_id = (select auth.uid())
-          or private.has_role((select auth.uid()), 'ops')
-          or private.has_role((select auth.uid()), 'admin')
+          or private.is_staff((select auth.uid()))
         )
     )
   );
 
 create policy "package_photos_insert_staff" on public.package_photos
   for insert to authenticated
-  with check (private.has_role((select auth.uid()), 'ops') or private.has_role((select auth.uid()), 'admin'));
+  with check (private.is_staff((select auth.uid())));
 
 -- rate_tables: leitura pública (calculadora anônima no site institucional
 -- também consulta esta tabela); escrita só admin.
@@ -294,8 +289,7 @@ create policy "consolidations_select_own_or_staff" on public.consolidations
   for select to authenticated
   using (
     user_id = (select auth.uid())
-    or private.has_role((select auth.uid()), 'ops')
-    or private.has_role((select auth.uid()), 'admin')
+    or private.is_staff((select auth.uid()))
   );
 
 -- status obrigatoriamente 'pending' no INSERT (mesmo raciocínio do UPDATE:
@@ -330,13 +324,11 @@ create policy "consolidations_update_own_pending_or_staff" on public.consolidati
   for update to authenticated
   using (
     (user_id = (select auth.uid()) and status = 'pending')
-    or private.has_role((select auth.uid()), 'ops')
-    or private.has_role((select auth.uid()), 'admin')
+    or private.is_staff((select auth.uid()))
   )
   with check (
     (user_id = (select auth.uid()) and status in ('pending', 'cancelled'))
-    or private.has_role((select auth.uid()), 'ops')
-    or private.has_role((select auth.uid()), 'admin')
+    or private.is_staff((select auth.uid()))
   );
 
 -- A WITH CHECK acima só restringe o valor de `status`, não as demais
@@ -353,7 +345,7 @@ security definer
 set search_path = ''
 as $$
 begin
-  if not (private.has_role(auth.uid(), 'ops') or private.has_role(auth.uid(), 'admin')) then
+  if not (private.is_staff(auth.uid())) then
     new.carrier = old.carrier;
     new.tracking_code = old.tracking_code;
     new.chargeable_weight_kg = old.chargeable_weight_kg;
@@ -380,8 +372,7 @@ create policy "consolidation_items_select_via_consolidation" on public.consolida
       where c.id = consolidation_items.consolidation_id
         and (
           c.user_id = (select auth.uid())
-          or private.has_role((select auth.uid()), 'ops')
-          or private.has_role((select auth.uid()), 'admin')
+          or private.is_staff((select auth.uid()))
         )
     )
   );
@@ -408,7 +399,7 @@ create policy "consolidation_items_insert_own" on public.consolidation_items
 -- pacote para 'ready' automaticamente quando isso acontece.
 create policy "consolidation_items_delete_staff" on public.consolidation_items
   for delete to authenticated
-  using (private.has_role((select auth.uid()), 'ops') or private.has_role((select auth.uid()), 'admin'));
+  using (private.is_staff((select auth.uid())));
 
 -- 11) Storage: bucket privado para fotos de pacotes. URLs assinadas com
 --     expiração são geradas pela aplicação — nunca público.
@@ -425,8 +416,7 @@ create policy "package_photos_storage_select_own_or_staff" on storage.objects
     bucket_id = 'package-photos'
     and (
       (select auth.uid())::text = (storage.foldername(name))[1]
-      or private.has_role((select auth.uid()), 'ops')
-      or private.has_role((select auth.uid()), 'admin')
+      or private.is_staff((select auth.uid()))
     )
   );
 
@@ -439,7 +429,7 @@ create policy "package_photos_storage_insert_staff" on storage.objects
   for insert to authenticated
   with check (
     bucket_id = 'package-photos'
-    and (private.has_role((select auth.uid()), 'ops') or private.has_role((select auth.uid()), 'admin'))
+    and (private.is_staff((select auth.uid())))
     and exists (
       select 1 from public.packages pkg
       where pkg.id::text = (storage.foldername(name))[2]
