@@ -171,6 +171,95 @@ describe('getMyReceivedPackages', () => {
   })
 })
 
+describe('getMyConsolidations', () => {
+  const rows = [
+    {
+      id: 'c1',
+      status: 'pending',
+      recipient_name: 'John Doe',
+      city: 'Springfield',
+      country: 'US',
+      carrier: 'Economy',
+      tracking_code: null,
+      cost_usd: 43,
+      created_at: '2026-07-20T00:00:00Z',
+      paid_at: null,
+      shipped_at: null,
+    },
+    {
+      id: 'c2',
+      status: 'shipped',
+      recipient_name: 'Jane Doe',
+      city: 'Miami',
+      country: 'BR',
+      carrier: 'Express',
+      tracking_code: 'TRACK123',
+      cost_usd: 88.5,
+      created_at: '2026-07-10T00:00:00Z',
+      paid_at: '2026-07-11T00:00:00Z',
+      shipped_at: '2026-07-15T00:00:00Z',
+    },
+  ]
+
+  it('returns the mapped list ordered by created_at descending', async () => {
+    mockSession('uuid-1')
+    const order = vi.fn().mockResolvedValue({ data: rows, error: null })
+    const eq = vi.fn().mockReturnValue({ order })
+    const select = vi.fn().mockReturnValue({ eq })
+    mockedSupabase.from.mockReturnValue({ select } as never)
+
+    const result = await packageService.getMyConsolidations()
+
+    expect(mockedSupabase.from).toHaveBeenCalledWith('consolidations')
+    expect(eq).toHaveBeenCalledWith('user_id', 'uuid-1')
+    expect(order).toHaveBeenCalledWith('created_at', { ascending: false })
+    expect(result).toEqual([
+      {
+        id: 'c1',
+        status: 'pending',
+        recipientName: 'John Doe',
+        city: 'Springfield',
+        country: 'US',
+        carrier: 'Economy',
+        trackingCode: null,
+        costUsd: 43,
+        createdAt: '2026-07-20T00:00:00Z',
+        paidAt: null,
+        shippedAt: null,
+      },
+      {
+        id: 'c2',
+        status: 'shipped',
+        recipientName: 'Jane Doe',
+        city: 'Miami',
+        country: 'BR',
+        carrier: 'Express',
+        trackingCode: 'TRACK123',
+        costUsd: 88.5,
+        createdAt: '2026-07-10T00:00:00Z',
+        paidAt: '2026-07-11T00:00:00Z',
+        shippedAt: '2026-07-15T00:00:00Z',
+      },
+    ])
+  })
+
+  it('returns an empty array when signed out', async () => {
+    mockSession(null)
+    expect(await packageService.getMyConsolidations()).toEqual([])
+    expect(mockedSupabase.from).not.toHaveBeenCalled()
+  })
+
+  it('throws when the query fails', async () => {
+    mockSession('uuid-1')
+    const order = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
+    const eq = vi.fn().mockReturnValue({ order })
+    const select = vi.fn().mockReturnValue({ eq })
+    mockedSupabase.from.mockReturnValue({ select } as never)
+
+    await expect(packageService.getMyConsolidations()).rejects.toThrow('boom')
+  })
+})
+
 describe('createConsolidation', () => {
   const input = {
     recipientName: 'John Doe',

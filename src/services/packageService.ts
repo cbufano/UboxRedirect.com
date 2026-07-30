@@ -24,6 +24,20 @@ export interface ReceivedPackage {
   receivedAt: string
 }
 
+export interface Consolidation {
+  id: string
+  status: 'pending' | 'paid' | 'shipped' | 'delivered' | 'cancelled'
+  recipientName: string
+  city: string
+  country: string
+  carrier: string | null
+  trackingCode: string | null
+  costUsd: number | null
+  createdAt: string
+  paidAt: string | null
+  shippedAt: string | null
+}
+
 export interface CreateConsolidationInput {
   recipientName: string
   street: string
@@ -57,6 +71,20 @@ interface ReceivedPackageRow {
   received_at: string
 }
 
+interface ConsolidationRow {
+  id: string
+  status: Consolidation['status']
+  recipient_name: string
+  city: string
+  country: string
+  carrier: string | null
+  tracking_code: string | null
+  cost_usd: number | null
+  created_at: string
+  paid_at: string | null
+  shipped_at: string | null
+}
+
 function mapExpectedPackage(row: ExpectedPackageRow): ExpectedPackage {
   return {
     id: row.id,
@@ -77,6 +105,22 @@ function mapReceivedPackage(row: ReceivedPackageRow): ReceivedPackage {
     weightKg: row.weight_kg,
     status: row.status,
     receivedAt: row.received_at,
+  }
+}
+
+function mapConsolidation(row: ConsolidationRow): Consolidation {
+  return {
+    id: row.id,
+    status: row.status,
+    recipientName: row.recipient_name,
+    city: row.city,
+    country: row.country,
+    carrier: row.carrier,
+    trackingCode: row.tracking_code,
+    costUsd: row.cost_usd,
+    createdAt: row.created_at,
+    paidAt: row.paid_at,
+    shippedAt: row.shipped_at,
   }
 }
 
@@ -129,6 +173,27 @@ export const packageService = {
       .order('received_at', { ascending: false })
     if (error) throw new Error(error.message)
     return (data as ReceivedPackageRow[]).map(mapReceivedPackage)
+  },
+
+  /**
+   * Consolidações do cliente logado, em qualquer status. `cost_usd` aqui
+   * ainda é só a cotação de criação (ver comentário na migration Fase 3) —
+   * a Shipments.tsx usa esse valor só para exibição; o preço realmente
+   * cobrado é recalculado no servidor pela Edge Function de pagamento.
+   */
+  async getMyConsolidations(): Promise<Consolidation[]> {
+    const userId = await currentUserId()
+    if (!userId) return []
+
+    const { data, error } = await supabase
+      .from('consolidations')
+      .select(
+        'id, status, recipient_name, city, country, carrier, tracking_code, cost_usd, created_at, paid_at, shipped_at',
+      )
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+    if (error) throw new Error(error.message)
+    return (data as ConsolidationRow[]).map(mapConsolidation)
   },
 
   /**

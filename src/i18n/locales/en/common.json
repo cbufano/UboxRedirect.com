@@ -745,24 +745,36 @@
     },
     "shipments": {
       "title": "Shipments",
-      "subtitle": "Track every shipment we've sent on your behalf, from processing to delivery.",
-      "empty": "No shipments yet. Once you place an order, it will show up here.",
+      "subtitle": "Track every consolidated shipment, from payment to delivery.",
+      "empty": "No shipments yet. Consolidate packages from your inbox to get started.",
+      "loadError": "We couldn't load your shipments. Refresh the page to try again.",
       "status": {
-        "processing": "Processing",
-        "in_transit": "In transit",
-        "delivered": "Delivered"
+        "pending": "Awaiting payment",
+        "paid": "Paid",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
       },
       "table": {
-        "date": "Date",
+        "created": "Created",
+        "destination": "Destination",
         "carrier": "Carrier",
         "tracking": "Tracking code",
-        "items": "Items",
         "cost": "Cost"
       },
       "copyTracking": "tracking code {{code}}",
-      "showDetails": "Show details",
-      "hideDetails": "Hide details",
-      "detailsLine": "{{count}} item(s) shipped via {{carrier}}"
+      "pendingNote": "Complete payment to send this shipment to our warehouse team.",
+      "paidOn": "Paid on {{date}}",
+      "cancelledNote": "This shipment was cancelled.",
+      "noTracking": "Tracking not yet available",
+      "payNow": "Pay now",
+      "payingNow": "Redirecting to checkout…",
+      "payError": "We couldn't start checkout. Please try again.",
+      "banner": {
+        "success": "Payment received! Your shipment is now being prepared.",
+        "cancelled": "Checkout was cancelled — you can try paying again whenever you're ready.",
+        "dismiss": "Dismiss"
+      }
     },
     "shopper": {
       "title": "Personal Shopper",

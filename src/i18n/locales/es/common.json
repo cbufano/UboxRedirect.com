@@ -745,24 +745,36 @@
     },
     "shipments": {
       "title": "Envíos",
-      "subtitle": "Sigue cada envío que hicimos en tu nombre, desde el procesamiento hasta la entrega.",
-      "empty": "Todavía no hay envíos. En cuanto realices un pedido, aparecerá aquí.",
+      "subtitle": "Sigue cada envío consolidado, desde el pago hasta la entrega.",
+      "empty": "Todavía no hay envíos. Consolida paquetes desde tu bandeja de entrada para empezar.",
+      "loadError": "No pudimos cargar tus envíos. Actualiza la página para intentarlo de nuevo.",
       "status": {
-        "processing": "En proceso",
-        "in_transit": "En tránsito",
-        "delivered": "Entregado"
+        "pending": "Esperando pago",
+        "paid": "Pagado",
+        "shipped": "Enviado",
+        "delivered": "Entregado",
+        "cancelled": "Cancelado"
       },
       "table": {
-        "date": "Fecha",
+        "created": "Creado el",
+        "destination": "Destino",
         "carrier": "Transportista",
         "tracking": "Código de rastreo",
-        "items": "Artículos",
         "cost": "Costo"
       },
       "copyTracking": "código de rastreo {{code}}",
-      "showDetails": "Mostrar detalles",
-      "hideDetails": "Ocultar detalles",
-      "detailsLine": "{{count}} artículo(s) enviados vía {{carrier}}"
+      "pendingNote": "Completa el pago para enviar este pedido a nuestro equipo de almacén.",
+      "paidOn": "Pagado el {{date}}",
+      "cancelledNote": "Este envío fue cancelado.",
+      "noTracking": "Rastreo aún no disponible",
+      "payNow": "Pagar ahora",
+      "payingNow": "Redirigiendo al checkout…",
+      "payError": "No pudimos iniciar el checkout. Inténtalo de nuevo.",
+      "banner": {
+        "success": "¡Pago recibido! Tu envío ya se está preparando.",
+        "cancelled": "El checkout fue cancelado — puedes intentar pagar de nuevo cuando quieras.",
+        "dismiss": "Descartar"
+      }
     },
     "shopper": {
       "title": "Personal Shopper",
