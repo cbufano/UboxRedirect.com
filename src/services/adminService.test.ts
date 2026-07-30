@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { adminService } from './adminService'
 import { supabase } from '../lib/supabase'
 
@@ -909,3 +909,196 @@ describe('setOfacStatus', () => {
     await expect(adminService.setOfacStatus('cust-1', 'flagged')).rejects.toThrow('boom')
   })
 })
+
+describe('getPendingActions', () => {
+  afterEach(() => vi.useRealTimers())
+
+  interface PendingActionsState {
+    settings: { data: unknown; error: { message: string } | null }
+    packagesCount: { count: number | null; error: { message: string } | null }
+    paidUnshipped: { data: unknown; error: { message: string } | null }
+    dataRequestsCount: { count: number | null; error: { message: string } | null }
+    storageOverdue: { data: unknown; error: { message: string } | null }
+    shipped: { data: unknown; error: { message: string } | null }
+    payments: { data: unknown; error: { message: string } | null }
+  }
+
+  function mockPendingActions(overrides: Partial<PendingActionsState> = {}) {
+    const state: PendingActionsState = {
+      settings: {
+        data: [
+          { key: 'free_storage_days', value: '30' },
+          { key: 'paid_unshipped_alert_days', value: '2' },
+        ],
+        error: null,
+      },
+      packagesCount: { count: 0, error: null },
+      paidUnshipped: { data: [], error: null },
+      dataRequestsCount: { count: 0, error: null },
+      storageOverdue: { data: [], error: null },
+      shipped: { data: [], error: null },
+      payments: { data: [], error: null },
+      ...overrides,
+    }
+
+    const paidLt = vi.fn().mockReturnValue({ order: vi.fn().mockResolvedValue(state.paidUnshipped) })
+    const storageLt = vi.fn().mockReturnValue({ order: vi.fn().mockResolvedValue(state.storageOverdue) })
+    const paymentsIn = vi.fn().mockResolvedValue(state.payments)
+    const paymentsEq = vi.fn().mockReturnValue({ in: paymentsIn })
+
+    mockedSupabase.from.mockImplementation((table: unknown) => {
+      if (table === 'settings') {
+        return { select: vi.fn().mockResolvedValue(state.settings) } as never
+      }
+      if (table === 'packages') {
+        const select = vi.fn().mockImplementation((_cols: string, opts?: { head?: boolean }) => {
+          if (opts?.head) return { in: vi.fn().mockResolvedValue(state.packagesCount) }
+          return { in: vi.fn().mockReturnValue({ lt: storageLt }) }
+        })
+        return { select } as never
+      }
+      if (table === 'data_requests') {
+        return { select: vi.fn().mockReturnValue({ in: vi.fn().mockResolvedValue(state.dataRequestsCount) }) } as never
+      }
+      if (table === 'consolidations') {
+        const select = vi.fn().mockImplementation((cols: string) => {
+          if (cols.includes('paid_at')) return { eq: vi.fn().mockReturnValue({ lt: paidLt }) }
+          return { eq: vi.fn().mockReturnValue({ order: vi.fn().mockResolvedValue(state.shipped) }) }
+        })
+        return { select } as never
+      }
+      if (table === 'payments') {
+        return { select: vi.fn().mockReturnValue({ eq: paymentsEq }) } as never
+      }
+      throw new Error(`unexpected table ${String(table)}`)
+    })
+
+    return { paidLt, storageLt, paymentsEq, paymentsIn }
+  }
+
+  it('returns counts, overdue lists and client-side reconciliation using settings-driven cutoffs', async () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-07-30T12:00:00Z'))
+    const { paidLt, storageLt, paymentsEq, paymentsIn } = mockPendingActions({
+      settings: {
+        data: [
+          { key: 'free_storage_days', value: '10' },
+          { key: 'paid_unshipped_alert_days', value: '2' },
+        ],
+        error: null,
+      },
+      packagesCount: { count: 3, error: null },
+      paidUnshipped: {
+        data: [{ id: 'con-1', city: 'Lisboa', country: 'PT', paid_at: '2026-07-25T09:00:00Z' }],
+        error: null,
+      },
+      dataRequestsCount: { count: 2, error: null },
+      storageOverdue: {
+        data: [
+          {
+            id: 'pkg-1',
+            store: 'Amazon',
+            received_at: '2026-07-01T08:00:00Z',
+            profiles: { suites: { suite_number: 'BUF-10001' } },
+          },
+          { id: 'pkg-2', store: 'Nike', received_at: '2026-07-02T08:00:00Z', profiles: [{ suites: [] }] },
+        ],
+        error: null,
+      },
+      shipped: {
+        data: [
+          { id: 'con-A', city: 'Madrid', country: 'ES', shipped_at: '2026-07-20T10:00:00Z' },
+          { id: 'con-B', city: 'Porto', country: 'PT', shipped_at: '2026-07-21T10:00:00Z' },
+        ],
+        error: null,
+      },
+      payments: { data: [{ consolidation_id: 'con-A' }], error: null },
+    })
+
+    const result = await adminService.getPendingActions()
+
+    // Cortes de data derivados dos settings (2 e 10 dias antes de agora)
+    expect(paidLt).toHaveBeenCalledWith('paid_at', '2026-07-28T12:00:00.000Z')
+    expect(storageLt).toHaveBeenCalledWith('received_at', '2026-07-20T12:00:00.000Z')
+    // Conciliação: só payments 'succeeded' das consolidações shipped
+    expect(paymentsEq).toHaveBeenCalledWith('status', 'succeeded')
+    expect(paymentsIn).toHaveBeenCalledWith('consolidation_id', ['con-A', 'con-B'])
+
+    expect(result).toEqual({
+      awaitingReview: 3,
+      paidUnshipped: [{ id: 'con-1', city: 'Lisboa', country: 'PT', paidAt: '2026-07-25T09:00:00Z' }],
+      openDataRequests: 2,
+      storageOverdue: [
+        { id: 'pkg-1', store: 'Amazon', suiteNumber: 'BUF-10001', receivedAt: '2026-07-01T08:00:00Z' },
+        { id: 'pkg-2', store: 'Nike', suiteNumber: null, receivedAt: '2026-07-02T08:00:00Z' },
+      ],
+      unreconciled: [{ id: 'con-B', city: 'Porto', country: 'PT', shippedAt: '2026-07-21T10:00:00Z' }],
+    })
+  })
+
+  it('falls back to the seed defaults (30/2 days) when setting keys are missing', async () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-07-30T12:00:00Z'))
+    const { paidLt, storageLt } = mockPendingActions({ settings: { data: [], error: null } })
+
+    await adminService.getPendingActions()
+
+    expect(paidLt).toHaveBeenCalledWith('paid_at', '2026-07-28T12:00:00.000Z')
+    expect(storageLt).toHaveBeenCalledWith('received_at', '2026-06-30T12:00:00.000Z')
+  })
+
+  it('skips the payments query when there is nothing shipped and defaults counts to zero', async () => {
+    const { paymentsIn } = mockPendingActions({
+      packagesCount: { count: null, error: null },
+      dataRequestsCount: { count: null, error: null },
+    })
+
+    const result = await adminService.getPendingActions()
+
+    expect(paymentsIn).not.toHaveBeenCalled()
+    expect(mockedSupabase.from).not.toHaveBeenCalledWith('payments')
+    expect(result).toEqual({
+      awaitingReview: 0,
+      paidUnshipped: [],
+      openDataRequests: 0,
+      storageOverdue: [],
+      unreconciled: [],
+    })
+  })
+
+  it('marks all shipped consolidations as unreconciled when none has a succeeded payment', async () => {
+    mockPendingActions({
+      shipped: {
+        data: [{ id: 'con-A', city: 'Madrid', country: 'ES', shipped_at: null }],
+        error: null,
+      },
+      payments: { data: [], error: null },
+    })
+
+    const result = await adminService.getPendingActions()
+
+    expect(result.unreconciled).toEqual([{ id: 'con-A', city: 'Madrid', country: 'ES', shippedAt: null }])
+  })
+
+  it('throws when the settings query fails', async () => {
+    mockPendingActions({ settings: { data: null, error: { message: 'boom' } } })
+
+    await expect(adminService.getPendingActions()).rejects.toThrow('boom')
+  })
+
+  it('throws when any of the pending queries fails', async () => {
+    mockPendingActions({ paidUnshipped: { data: null, error: { message: 'boom' } } })
+
+    await expect(adminService.getPendingActions()).rejects.toThrow('boom')
+  })
+
+  it('throws when the reconciliation payments query fails', async () => {
+    mockPendingActions({
+      shipped: { data: [{ id: 'con-A', city: 'Madrid', country: 'ES', shipped_at: null }], error: null },
+      payments: { data: null, error: { message: 'boom' } },
+    })
+
+    await expect(adminService.getPendingActions()).rejects.toThrow('boom')
+  })
+})
+

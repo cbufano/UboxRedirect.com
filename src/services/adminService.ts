@@ -18,6 +18,35 @@ export interface OpsStats {
   openPreAlerts: number
 }
 
+export interface PaidUnshippedConsolidation {
+  id: string
+  city: string
+  country: string
+  paidAt: string
+}
+
+export interface StorageOverduePackage {
+  id: string
+  store: string
+  suiteNumber: string | null
+  receivedAt: string
+}
+
+export interface UnreconciledConsolidation {
+  id: string
+  city: string
+  country: string
+  shippedAt: string | null
+}
+
+export interface PendingActions {
+  awaitingReview: number
+  paidUnshipped: PaidUnshippedConsolidation[]
+  openDataRequests: number
+  storageOverdue: StorageOverduePackage[]
+  unreconciled: UnreconciledConsolidation[]
+}
+
 export interface PackageNeedingReview {
   id: string
   store: string
@@ -213,6 +242,27 @@ interface PaidConsolidationItemRow {
   }>
 }
 
+interface PaidUnshippedRow {
+  id: string
+  city: string
+  country: string
+  paid_at: string
+}
+
+interface StorageOverdueRow {
+  id: string
+  store: string
+  received_at: string
+  profiles: MaybeArray<{ suites: MaybeArray<SuiteEmbed> }>
+}
+
+interface ShippedConsolidationRow {
+  id: string
+  city: string
+  country: string
+  shipped_at: string | null
+}
+
 interface PaidConsolidationRow {
   id: string
   city: string
@@ -337,6 +387,96 @@ export const adminService = {
       awaitingReview: packagesResult.count ?? 0,
       pendingConsolidations: consolidationsResult.count ?? 0,
       openPreAlerts: expectedResult.count ?? 0,
+    }
+  },
+
+  /**
+   * Painel de Pendências: tudo que exige ação do operador numa chamada só.
+   * Os prazos (armazenagem grátis, alerta de pago-sem-envio) vêm da tabela
+   * settings (staff pode ler via RLS) — buscada primeiro porque define os
+   * cortes de data das demais queries; chave ausente cai no default do seed
+   * (30/2 dias) para o painel nunca quebrar.
+   *
+   * Conciliação: consolidações 'shipped' sem payment 'succeeded' — derivada
+   * no código (anti-join client-side) a partir de duas listas, o PostgREST
+   * não expressa "not exists" de forma simples.
+   */
+  async getPendingActions(): Promise<PendingActions> {
+    const { data: settingsData, error: settingsError } = await supabase.from('settings').select('key, value')
+    if (settingsError) throw new Error(settingsError.message)
+
+    const settings = new Map(((settingsData ?? []) as { key: string; value: string }[]).map((row) => [row.key, row.value]))
+    const freeStorageDays = Number(settings.get('free_storage_days') ?? '30')
+    const paidUnshippedAlertDays = Number(settings.get('paid_unshipped_alert_days') ?? '2')
+
+    const dayMs = 24 * 60 * 60 * 1000
+    const paidCutoff = new Date(Date.now() - paidUnshippedAlertDays * dayMs).toISOString()
+    const storageCutoff = new Date(Date.now() - freeStorageDays * dayMs).toISOString()
+
+    const [awaitingResult, paidUnshippedResult, dataRequestsResult, storageResult, shippedResult] = await Promise.all([
+      supabase.from('packages').select('id', { count: 'exact', head: true }).in('status', ['received', 'in_review']),
+      supabase
+        .from('consolidations')
+        .select('id, city, country, paid_at')
+        .eq('status', 'paid')
+        .lt('paid_at', paidCutoff)
+        .order('paid_at', { ascending: true }),
+      supabase.from('data_requests').select('id', { count: 'exact', head: true }).in('status', ['pending', 'processing']),
+      supabase
+        .from('packages')
+        .select('id, store, received_at, profiles (suites (suite_number))')
+        .in('status', ['received', 'in_review', 'ready', 'consolidating'])
+        .lt('received_at', storageCutoff)
+        .order('received_at', { ascending: true }),
+      supabase
+        .from('consolidations')
+        .select('id, city, country, shipped_at')
+        .eq('status', 'shipped')
+        .order('shipped_at', { ascending: true }),
+    ])
+    if (awaitingResult.error) throw new Error(awaitingResult.error.message)
+    if (paidUnshippedResult.error) throw new Error(paidUnshippedResult.error.message)
+    if (dataRequestsResult.error) throw new Error(dataRequestsResult.error.message)
+    if (storageResult.error) throw new Error(storageResult.error.message)
+    if (shippedResult.error) throw new Error(shippedResult.error.message)
+
+    const shipped = (shippedResult.data ?? []) as ShippedConsolidationRow[]
+    let reconciledIds = new Set<string>()
+    if (shipped.length > 0) {
+      const { data: paymentsData, error: paymentsError } = await supabase
+        .from('payments')
+        .select('consolidation_id')
+        .eq('status', 'succeeded')
+        .in(
+          'consolidation_id',
+          shipped.map((row) => row.id),
+        )
+      if (paymentsError) throw new Error(paymentsError.message)
+      reconciledIds = new Set(((paymentsData ?? []) as { consolidation_id: string }[]).map((row) => row.consolidation_id))
+    }
+
+    return {
+      awaitingReview: awaitingResult.count ?? 0,
+      paidUnshipped: ((paidUnshippedResult.data ?? []) as PaidUnshippedRow[]).map((row) => ({
+        id: row.id,
+        city: row.city,
+        country: row.country,
+        paidAt: row.paid_at,
+      })),
+      openDataRequests: dataRequestsResult.count ?? 0,
+      storageOverdue: ((storageResult.data ?? []) as StorageOverdueRow[]).map((row) => {
+        const profile = firstOf(row.profiles)
+        const suite = profile ? firstOf(profile.suites) : null
+        return {
+          id: row.id,
+          store: row.store,
+          suiteNumber: suite?.suite_number ?? null,
+          receivedAt: row.received_at,
+        }
+      }),
+      unreconciled: shipped
+        .filter((row) => !reconciledIds.has(row.id))
+        .map((row) => ({ id: row.id, city: row.city, country: row.country, shippedAt: row.shipped_at })),
     }
   },
 
