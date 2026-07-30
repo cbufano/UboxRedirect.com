@@ -935,14 +935,37 @@
       "dataRequests": "Pedidos de dados"
     },
     "overview": {
-      "title": "Visão geral da operação",
-      "subtitle": "Panorama do que precisa de atenção agora.",
-      "stats": {
-        "awaitingReview": "Aguardando revisão",
-        "pendingConsolidations": "Consolidações pendentes",
-        "openPreAlerts": "Pré-alertas em aberto"
+      "title": "Painel de pendências",
+      "subtitle": "Tudo que precisa de ação do operador agora, num lugar só.",
+      "allClear": {
+        "title": "Tudo em dia",
+        "subtitle": "Nenhuma pendência no momento. Novos itens aparecem aqui assim que surgirem."
       },
-      "loadError": "Não foi possível carregar os números. Atualize a página para tentar novamente."
+      "cards": {
+        "awaitingReview": {
+          "title": "A conferir",
+          "link": "Ir para a fila de pacotes"
+        },
+        "paidUnshipped": {
+          "title": "Pagas sem envio",
+          "item": "{{city}}, {{country}} — paga em {{date}}",
+          "link": "Ir para a expedição"
+        },
+        "dataRequests": {
+          "title": "Pedidos LGPD abertos",
+          "link": "Ir para pedidos de dados"
+        },
+        "storageOverdue": {
+          "title": "Armazenagem vencida",
+          "item": "{{store}} — suite {{suite}} — recebido em {{date}}"
+        },
+        "reconciliation": {
+          "title": "Conciliação",
+          "hint": "Consolidações marcadas como enviadas sem pagamento aprovado registrado. Confirme o pagamento ou investigue a divergência.",
+          "item": "{{city}}, {{country}} — enviada em {{date}}"
+        }
+      },
+      "loadError": "Não foi possível carregar as pendências. Atualize a página para tentar novamente."
     },
     "packages": {
       "title": "Fila de pacotes",

@@ -935,14 +935,37 @@
       "dataRequests": "Data requests"
     },
     "overview": {
-      "title": "Ops overview",
-      "subtitle": "Snapshot of what needs attention right now.",
-      "stats": {
-        "awaitingReview": "Awaiting review",
-        "pendingConsolidations": "Pending consolidations",
-        "openPreAlerts": "Open pre-alerts"
+      "title": "Pending actions",
+      "subtitle": "Everything that needs an operator's attention right now, in one place.",
+      "allClear": {
+        "title": "All caught up",
+        "subtitle": "No pending actions right now. New items will show up here as they arrive."
       },
-      "loadError": "We couldn't load the stats. Refresh the page to try again."
+      "cards": {
+        "awaitingReview": {
+          "title": "Awaiting review",
+          "link": "Go to the packages queue"
+        },
+        "paidUnshipped": {
+          "title": "Paid, not shipped",
+          "item": "{{city}}, {{country}} — paid on {{date}}",
+          "link": "Go to the shipping queue"
+        },
+        "dataRequests": {
+          "title": "Open privacy requests",
+          "link": "Go to data requests"
+        },
+        "storageOverdue": {
+          "title": "Storage overdue",
+          "item": "{{store}} — suite {{suite}} — received on {{date}}"
+        },
+        "reconciliation": {
+          "title": "Reconciliation",
+          "hint": "Consolidations marked as shipped without a successful payment on record. Confirm the payment or investigate the mismatch.",
+          "item": "{{city}}, {{country}} — shipped on {{date}}"
+        }
+      },
+      "loadError": "We couldn't load the pending actions. Refresh the page to try again."
     },
     "packages": {
       "title": "Packages queue",

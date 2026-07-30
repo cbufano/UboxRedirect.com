@@ -12,12 +12,6 @@
 import { supabase } from '../lib/supabase'
 import type { ExpectedPackage } from './packageService'
 
-export interface OpsStats {
-  awaitingReview: number
-  pendingConsolidations: number
-  openPreAlerts: number
-}
-
 export interface PaidUnshippedConsolidation {
   id: string
   city: string
@@ -369,29 +363,11 @@ async function currentUserId(): Promise<string | null> {
 
 export const adminService = {
   /**
+   * Painel de Pendências: tudo que exige ação do operador numa chamada só.
    * Leituras não filtram por currentUserId — staff enxerga todo mundo via
    * RLS (packages_select_own_or_staff etc.), diferente das leituras "minhas"
    * de packageService/profileService.
-   */
-  async getOpsStats(): Promise<OpsStats> {
-    const [packagesResult, consolidationsResult, expectedResult] = await Promise.all([
-      supabase.from('packages').select('id', { count: 'exact', head: true }).in('status', ['received', 'in_review']),
-      supabase.from('consolidations').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
-      supabase.from('expected_packages').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
-    ])
-    if (packagesResult.error) throw new Error(packagesResult.error.message)
-    if (consolidationsResult.error) throw new Error(consolidationsResult.error.message)
-    if (expectedResult.error) throw new Error(expectedResult.error.message)
-
-    return {
-      awaitingReview: packagesResult.count ?? 0,
-      pendingConsolidations: consolidationsResult.count ?? 0,
-      openPreAlerts: expectedResult.count ?? 0,
-    }
-  },
-
-  /**
-   * Painel de Pendências: tudo que exige ação do operador numa chamada só.
+   *
    * Os prazos (armazenagem grátis, alerta de pago-sem-envio) vêm da tabela
    * settings (staff pode ler via RLS) — buscada primeiro porque define os
    * cortes de data das demais queries; chave ausente cai no default do seed

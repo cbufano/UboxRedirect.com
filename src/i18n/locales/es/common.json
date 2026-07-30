@@ -935,14 +935,37 @@
       "dataRequests": "Solicitudes de datos"
     },
     "overview": {
-      "title": "Resumen de operaciones",
-      "subtitle": "Panorama de lo que necesita atención ahora mismo.",
-      "stats": {
-        "awaitingReview": "Pendientes de revisión",
-        "pendingConsolidations": "Consolidaciones pendientes",
-        "openPreAlerts": "Prealertas abiertas"
+      "title": "Panel de pendientes",
+      "subtitle": "Todo lo que necesita acción del operador ahora mismo, en un solo lugar.",
+      "allClear": {
+        "title": "Todo al día",
+        "subtitle": "No hay pendientes por ahora. Los nuevos elementos aparecerán aquí."
       },
-      "loadError": "No pudimos cargar los datos. Actualiza la página para intentarlo de nuevo."
+      "cards": {
+        "awaitingReview": {
+          "title": "Por revisar",
+          "link": "Ir a la cola de paquetes"
+        },
+        "paidUnshipped": {
+          "title": "Pagadas sin envío",
+          "item": "{{city}}, {{country}} — pagada el {{date}}",
+          "link": "Ir a la cola de envíos"
+        },
+        "dataRequests": {
+          "title": "Solicitudes de datos abiertas",
+          "link": "Ir a solicitudes de datos"
+        },
+        "storageOverdue": {
+          "title": "Almacenaje vencido",
+          "item": "{{store}} — suite {{suite}} — recibido el {{date}}"
+        },
+        "reconciliation": {
+          "title": "Conciliación",
+          "hint": "Consolidaciones marcadas como enviadas sin un pago aprobado registrado. Confirma el pago o investiga la discrepancia.",
+          "item": "{{city}}, {{country}} — enviada el {{date}}"
+        }
+      },
+      "loadError": "No pudimos cargar los pendientes. Actualiza la página para intentarlo de nuevo."
     },
     "packages": {
       "title": "Cola de paquetes",

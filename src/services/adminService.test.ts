@@ -23,54 +23,6 @@ function mockSession(userId: string | null) {
 
 beforeEach(() => vi.clearAllMocks())
 
-describe('getOpsStats', () => {
-  it('returns counts for each stat', async () => {
-    mockedSupabase.from.mockImplementation((table: unknown) => {
-      if (table === 'packages') {
-        const inMock = vi.fn().mockResolvedValue({ count: 3, error: null })
-        return { select: vi.fn().mockReturnValue({ in: inMock }) } as never
-      }
-      if (table === 'consolidations') {
-        const eq = vi.fn().mockResolvedValue({ count: 2, error: null })
-        return { select: vi.fn().mockReturnValue({ eq }) } as never
-      }
-      if (table === 'expected_packages') {
-        const eq = vi.fn().mockResolvedValue({ count: 1, error: null })
-        return { select: vi.fn().mockReturnValue({ eq }) } as never
-      }
-      throw new Error(`unexpected table ${String(table)}`)
-    })
-
-    const stats = await adminService.getOpsStats()
-
-    expect(stats).toEqual({ awaitingReview: 3, pendingConsolidations: 2, openPreAlerts: 1 })
-  })
-
-  it('defaults missing counts to zero', async () => {
-    mockedSupabase.from.mockImplementation(() => {
-      const chain = { in: vi.fn().mockResolvedValue({ count: null, error: null }) }
-      return { select: vi.fn().mockReturnValue({ ...chain, eq: vi.fn().mockResolvedValue({ count: null, error: null }) }) } as never
-    })
-
-    const stats = await adminService.getOpsStats()
-
-    expect(stats).toEqual({ awaitingReview: 0, pendingConsolidations: 0, openPreAlerts: 0 })
-  })
-
-  it('throws when any count query fails', async () => {
-    mockedSupabase.from.mockImplementation((table: unknown) => {
-      if (table === 'packages') {
-        const inMock = vi.fn().mockResolvedValue({ count: null, error: { message: 'boom' } })
-        return { select: vi.fn().mockReturnValue({ in: inMock }) } as never
-      }
-      const eq = vi.fn().mockResolvedValue({ count: 0, error: null })
-      return { select: vi.fn().mockReturnValue({ eq }) } as never
-    })
-
-    await expect(adminService.getOpsStats()).rejects.toThrow('boom')
-  })
-})
-
 describe('getPackagesNeedingReview', () => {
   it('returns mapped packages with customer name and suite (object-shaped embeds)', async () => {
     const rows = [
