@@ -477,7 +477,15 @@
         "label": "Support hours (EST)"
       }
     ],
-    "cta": "Create your free account"
+    "cta": "Create your free account",
+    "product": {
+      "title": "Product information",
+      "versionLabel": "Version",
+      "commitLabel": "Commit",
+      "buildDateLabel": "Build date",
+      "developerLabel": "Developer",
+      "developerName": "Celso Bufano"
+    }
   },
   "terms": {
     "title": "Terms of Use",

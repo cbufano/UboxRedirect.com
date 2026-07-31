@@ -477,7 +477,15 @@
         "label": "Horario de soporte (EST)"
       }
     ],
-    "cta": "Crear mi cuenta gratis"
+    "cta": "Crear mi cuenta gratis",
+    "product": {
+      "title": "Información del producto",
+      "versionLabel": "Versión",
+      "commitLabel": "Commit",
+      "buildDateLabel": "Fecha de compilación",
+      "developerLabel": "Desarrollador",
+      "developerName": "Celso Bufano"
+    }
   },
   "terms": {
     "title": "Términos de Uso",

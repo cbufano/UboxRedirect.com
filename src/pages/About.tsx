@@ -77,6 +77,46 @@ export default function About() {
         </div>
       </section>
 
+      {/* Product info: version generated per commit at build time (see vite.config.ts) */}
+      <Section muted>
+        <div className="mx-auto max-w-3xl">
+          <Card>
+            <h2 className="text-lg font-semibold text-navy">{t('about.product.title')}</h2>
+            <dl className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-slate/70">
+                  {t('about.product.versionLabel')}
+                </dt>
+                <dd className="mt-1 text-sm font-semibold text-navy">{__APP_VERSION__}</dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-slate/70">
+                  {t('about.product.commitLabel')}
+                </dt>
+                <dd className="mt-1 font-mono text-sm text-navy">{__APP_COMMIT__}</dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-slate/70">
+                  {t('about.product.buildDateLabel')}
+                </dt>
+                <dd className="mt-1 text-sm text-navy">{__APP_BUILD_DATE__}</dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-slate/70">
+                  {t('about.product.developerLabel')}
+                </dt>
+                <dd className="mt-1 text-sm font-semibold text-navy">
+                  {t('about.product.developerName')}
+                </dd>
+              </div>
+            </dl>
+            <p className="mt-6 border-t border-navy/10 pt-4 text-sm text-slate">
+              © {new Date().getFullYear()} {t('brand')}
+            </p>
+          </Card>
+        </div>
+      </Section>
+
       {/* CTA */}
       <Section>
         <div className="mx-auto max-w-3xl text-center">
