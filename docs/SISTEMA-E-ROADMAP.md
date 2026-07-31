@@ -260,7 +260,7 @@ Todos alimentados por dados mock (`src/mocks/`):
 Tudo abaixo é o que **só você** pode fazer — ou porque exige uma credencial/conta real que não existe neste ambiente, ou porque é uma ação irreversível/de custo real que não deve ser automatizada sem sua aprovação explícita. Todo o resto (schema, RLS, código de UI, Edge Functions) já está pronto e revisado; isto é só o que falta *ligar*.
 
 ### Deploy e CI (Fase 1/2)
-- [ ] Fazer `git push` da branch para o GitHub (repositório remoto) se ainda não fez.
+- [x] ~~Fazer `git push` da branch para o GitHub~~ — feito; `master` está no GitHub com todas as fases mescladas (30/07/2026).
 - [ ] Cadastrar os secrets do GitHub Actions em Settings → Secrets and variables → Actions: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD` (deploy do site na Hostinger) e `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (build do frontend com o Supabase real).
 
 ### Supabase (Fase 2/3/4/5)
@@ -294,7 +294,7 @@ Tudo abaixo é o que **só você** pode fazer — ou porque exige uma credencial
 - [ ] Revisar com um advogado (Termos de Uso, Política de Privacidade, compliance de exportação dos EUA) — item já listado nas "Decisões em aberto" acima.
 
 ### Antes de ir ao ar de verdade
-- [ ] Fazer merge das branches `feat/fase2-supabase-backend` → `feat/fase3-packages-admin` → `master` (ou abrir PRs) quando todas as fases estiverem revisadas — nenhuma foi mesclada ainda.
+- [x] ~~Fazer merge das branches em `master`~~ — feito; todas as fases (2–7) revisadas, mescladas e enviadas ao GitHub (30/07/2026).
 - [ ] Decidir domínio do admin (mesmo domínio `/admin` vs. subdomínio `admin.uboxredirect.com`).
 - [ ] Definir dias grátis de armazenagem e preço da diária (regra de negócio usada em `rate_tables`/cobrança futura de armazenagem).
 
