@@ -6,6 +6,12 @@ dist/
 .superpowers/
 .DS_Store
 
+# imagens geradas por IA para documentação (locais, não versionadas)
+docs/Imagens/
+
+# artefatos temporários do CLI do Supabase (functions deploy etc.)
+supabase/.temp/
+
 # mobile (Expo)
 mobile/node_modules
 mobile/.expo
