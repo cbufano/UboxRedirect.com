@@ -585,6 +585,11 @@
     },
     "signOut": "Sign out",
     "loading": "Loading…",
+    "suspended": {
+      "title": "Account suspended",
+      "message": "Your account has been suspended and access to the dashboard is blocked. If you believe this is a mistake, please contact our support team through the contact page.",
+      "signOut": "Sign out"
+    },
     "overview": {
       "title": "Overview",
       "welcome": "Welcome back, {{name}}!",
@@ -795,10 +800,23 @@
       "payNow": "Pay now",
       "payingNow": "Redirecting to checkout…",
       "payError": "We couldn't start checkout. Please try again.",
+      "approxEstimate": "Estimate at today's exchange rate — you always pay in USD.",
       "banner": {
         "success": "Payment received! Your shipment is now being prepared.",
         "cancelled": "Checkout was cancelled — you can try paying again whenever you're ready.",
         "dismiss": "Dismiss"
+      },
+      "tracking": {
+        "toggle": "Tracking history",
+        "empty": "No tracking events yet — check back soon.",
+        "loadError": "We couldn't load the tracking history. Try again in a moment.",
+        "status": {
+          "in_transit": "In transit",
+          "customs": "In customs",
+          "out_for_delivery": "Out for delivery",
+          "delivered": "Delivered",
+          "exception": "Delivery exception"
+        }
       }
     },
     "shopper": {
@@ -931,17 +949,55 @@
       "overview": "Overview",
       "packages": "Packages",
       "consolidations": "Consolidations",
-      "dataRequests": "Data requests"
+      "warehouse": "Warehouse",
+      "payments": "Payments",
+      "rates": "Rates & fees",
+      "customers": "Customers",
+      "staff": "Staff",
+      "dataRequests": "Data requests",
+      "settings": "Settings"
     },
     "overview": {
-      "title": "Ops overview",
-      "subtitle": "Snapshot of what needs attention right now.",
-      "stats": {
-        "awaitingReview": "Awaiting review",
-        "pendingConsolidations": "Pending consolidations",
-        "openPreAlerts": "Open pre-alerts"
+      "title": "Pending actions",
+      "subtitle": "Everything that needs an operator's attention right now, in one place.",
+      "allClear": {
+        "title": "All caught up",
+        "subtitle": "No pending actions right now. New items will show up here as they arrive."
       },
-      "loadError": "We couldn't load the stats. Refresh the page to try again."
+      "cards": {
+        "awaitingReview": {
+          "title": "Awaiting review",
+          "link": "Go to the packages queue"
+        },
+        "paidUnshipped": {
+          "title": "Paid, not shipped",
+          "item": "{{city}}, {{country}} — paid on {{date}}",
+          "link": "Go to the shipping queue"
+        },
+        "dataRequests": {
+          "title": "Open privacy requests",
+          "link": "Go to data requests"
+        },
+        "storageOverdue": {
+          "title": "Storage overdue",
+          "item": "{{store}} — suite {{suite}} — received on {{date}}"
+        },
+        "reconciliation": {
+          "title": "Reconciliation",
+          "hint": "Consolidations marked as shipped without a successful payment on record. Confirm the payment or investigate the mismatch.",
+          "item": "{{city}}, {{country}} — shipped on {{date}}"
+        },
+        "trackingExceptions": {
+          "title": "Tracking exceptions",
+          "hint": "Exception events reported by the carrier in the last two weeks. The raw status shows exactly what the carrier said.",
+          "item": "{{city}}, {{country}} — {{status}} — {{date}}"
+        },
+        "failedEmails": {
+          "title": "Failed emails",
+          "link": "Go to the email outbox"
+        }
+      },
+      "loadError": "We couldn't load the pending actions. Refresh the page to try again."
     },
     "packages": {
       "title": "Packages queue",
@@ -971,19 +1027,82 @@
         "looking": "Looking up…",
         "notFound": "No customer found for that suite number.",
         "found": "Receiving for {{name}} (suite {{suite}})",
+        "viewCustomer": "View customer",
         "storeLabel": "Store",
         "descriptionLabel": "Description",
         "weightLabel": "Weight (kg)",
+        "lengthLabel": "Length (cm)",
+        "widthLabel": "Width (cm)",
+        "heightLabel": "Height (cm)",
+        "declaredValueLabel": "Declared value (USD)",
+        "photoLabel": "Photo (optional)",
         "submit": "Receive package",
         "submitting": "Saving…",
         "success": "Package received.",
         "error": "We couldn't save this package. Please try again.",
+        "photoFailed": "Package received, but the photo upload failed. You can add it later from the package page.",
         "errors": {
           "suiteRequired": "Enter the customer's suite number.",
           "storeRequired": "Enter the store name.",
           "descriptionRequired": "Describe the item.",
-          "weightPositive": "Enter a weight greater than zero."
+          "weightPositive": "Enter a weight greater than zero.",
+          "dimensionPositive": "Enter a number greater than zero.",
+          "valueNonNegative": "Enter a value of zero or more."
         }
+      },
+      "preAlerts": {
+        "title": "Pending pre-alerts",
+        "loading": "Loading pre-alerts…",
+        "loadError": "We couldn't load the pre-alerts. You can still receive without one.",
+        "empty": "No pending pre-alerts for this customer.",
+        "hint": "Click a pre-alert to match it to this package.",
+        "declaredValue": "Declared: ${{value}}",
+        "selected": "Matched to pre-alert: {{store}} — {{tracking}}",
+        "clear": "Receive without pre-alert"
+      },
+      "position": {
+        "title": "Warehouse position",
+        "loading": "Finding a free position…",
+        "loadError": "We couldn't load a position. The package will be received without one.",
+        "none": "No free position available — the package will be received without one.",
+        "changeLabel": "Change position",
+        "noneOption": "No position"
+      },
+      "label": {
+        "title": "Stock label",
+        "qrAlt": "Package QR code",
+        "noLocation": "NO LOC",
+        "print": "Print label",
+        "close": "Close"
+      }
+    },
+    "customers": {
+      "title": "Customers",
+      "subtitle": "Search customer accounts and open the full profile: compliance, suspension, internal notes and activity.",
+      "search": {
+        "label": "Name, email or suite",
+        "placeholder": "e.g. Ana, ana@email.com or BUF-10001",
+        "submit": "Search",
+        "searching": "Searching…",
+        "hint": "Search by name, email or suite number to find a customer.",
+        "empty": "No customers found for that search.",
+        "error": "We couldn't run the search. Please try again."
+      },
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "suite": "Suite",
+        "country": "Country",
+        "flags": "Flags"
+      },
+      "badges": {
+        "suspended": "Suspended",
+        "kyc": "KYC: {{status}}",
+        "ofac": "OFAC: {{status}}"
+      },
+      "detail": {
+        "loadError": "We couldn't load this customer. They may not exist, or the link is wrong.",
+        "noSuite": "No suite assigned"
       },
       "compliance": {
         "title": "Compliance status",
@@ -1003,18 +1122,233 @@
         "saving": "Saving…",
         "error": "We couldn't update the compliance status. Please try again.",
         "updated": "Compliance status updated."
+      },
+      "suspension": {
+        "title": "Account suspension",
+        "activeHint": "This account is active.",
+        "suspendedHint": "This account is suspended — the customer cannot use the dashboard.",
+        "suspend": "Suspend account",
+        "reactivate": "Reactivate account",
+        "confirmSuspend": "Suspend this account? The customer will lose access until it is reactivated.",
+        "confirmReactivate": "Reactivate this account? The customer will regain access immediately.",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "working": "Saving…",
+        "error": "We couldn't update this account. Please try again."
+      },
+      "notes": {
+        "title": "Internal notes",
+        "visibilityHint": "Visible to staff only — the customer never sees these notes.",
+        "empty": "No notes yet.",
+        "addLabel": "Add a note",
+        "placeholder": "Write an internal note about this customer…",
+        "submit": "Add note",
+        "submitting": "Saving…",
+        "error": "We couldn't save this note. Please try again."
+      },
+      "summaries": {
+        "packages": {
+          "title": "Live packages",
+          "empty": "No live packages."
+        },
+        "consolidations": {
+          "title": "Consolidations",
+          "empty": "No consolidations yet."
+        },
+        "payments": {
+          "title": "Payments",
+          "empty": "No payments yet."
+        },
+        "dataRequests": {
+          "title": "Privacy requests",
+          "empty": "No privacy requests."
+        }
+      }
+    },
+    "staff": {
+      "title": "Staff",
+      "subtitle": "User roles and the audit trail. Every user keeps the customer base role plus at most one staff role.",
+      "adminsOnly": "Only administrators can manage roles and see the audit log.",
+      "usersTitle": "Users & roles",
+      "loadError": "We couldn't load the users. Refresh the page to try again.",
+      "search": {
+        "label": "Filter by name or email",
+        "placeholder": "e.g. Ana or ana@email.com",
+        "empty": "No users match this filter."
+      },
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "roles": "Roles",
+        "changeRole": "Change role"
+      },
+      "roles": {
+        "customer": "Customer",
+        "ops": "Ops",
+        "support": "Support",
+        "admin": "Admin",
+        "super_admin": "Super admin"
+      },
+      "role": {
+        "selectLabel": "New role for {{name}}",
+        "apply": "Apply",
+        "applying": "Applying…",
+        "confirmHint": "This change involves an admin role. Apply anyway?",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "success": "Role updated.",
+        "error": "We couldn't update this role. Please try again."
+      },
+      "audit": {
+        "title": "Audit log",
+        "hint": "Last 100 events, written by database triggers — this trail cannot be edited or deleted.",
+        "loadError": "We couldn't load the audit log. Refresh the page to try again.",
+        "empty": "No audit events yet.",
+        "table": {
+          "when": "When",
+          "actor": "Who",
+          "action": "Action",
+          "entity": "Entity",
+          "detail": "Detail"
+        }
+      }
+    },
+    "packageDetail": {
+      "title": "Package details",
+      "subtitle": "Everything about this package: data, photos, warehouse position and movement history.",
+      "loadError": "We couldn't load this package. It may not exist, or the link is wrong.",
+      "fields": {
+        "store": "Store",
+        "description": "Description",
+        "weight": "Weight",
+        "dimensions": "Dimensions (cm)",
+        "declaredValue": "Declared value",
+        "customer": "Customer",
+        "receivedAt": "Received"
+      },
+      "status": {
+        "received": "Received",
+        "in_review": "In review",
+        "ready": "Ready to ship",
+        "consolidating": "Consolidating",
+        "shipped": "Shipped",
+        "discarded": "Discarded"
+      },
+      "photos": {
+        "title": "Photos",
+        "empty": "No photos for this package.",
+        "alt": "Package photo {{index}}"
+      },
+      "position": {
+        "title": "Warehouse position",
+        "none": "No position assigned.",
+        "move": "Move",
+        "cancel": "Cancel",
+        "selectLabel": "New position",
+        "slotsLoading": "Loading free positions…",
+        "slotsError": "We couldn't load the free positions. Please try again.",
+        "noFreeSlots": "No free positions available.",
+        "confirm": "Confirm move",
+        "moving": "Moving…",
+        "moveSuccess": "Package moved.",
+        "moveError": "We couldn't move this package. Please try again."
+      },
+      "history": {
+        "title": "Movement history",
+        "empty": "No movements recorded yet.",
+        "from": "From",
+        "to": "To",
+        "by": "By",
+        "when": "When"
+      },
+      "actions": {
+        "markReady": "Mark ready",
+        "discard": "Discard",
+        "working": "Updating…",
+        "success": "Package updated.",
+        "error": "We couldn't update this package. Please try again.",
+        "reprint": "Reprint label"
+      }
+    },
+    "warehouse": {
+      "title": "Warehouse",
+      "subtitle": "Physical map of the warehouse: generate the position grid and see what is free, occupied or inactive.",
+      "loadError": "We couldn't load the warehouse map. Refresh the page to try again.",
+      "generator": {
+        "title": "Generate grid",
+        "hint": "Creates positions zone-aisle-rack-level-bin in bulk. Existing positions are kept.",
+        "zoneLabel": "Zone",
+        "aislesLabel": "Aisles (comma-separated)",
+        "aislesPlaceholder": "A or A,B",
+        "racksLabel": "Racks (1-99)",
+        "levelsLabel": "Levels (1-9)",
+        "binsLabel": "Bins (1-99)",
+        "submit": "Generate positions",
+        "submitting": "Generating…",
+        "success": "{{total}} positions created.",
+        "error": "We couldn't generate the grid. Check the values — only admins can do this.",
+        "errors": {
+          "zoneRequired": "Enter the zone.",
+          "aislesRequired": "Enter at least one aisle.",
+          "racksRange": "Enter a whole number between 1 and 99.",
+          "levelsRange": "Enter a whole number between 1 and 9.",
+          "binsRange": "Enter a whole number between 1 and 99."
+        }
+      },
+      "map": {
+        "title": "Occupancy map",
+        "emptyAdmin": "No positions registered yet — generate the grid above.",
+        "emptyOps": "No positions registered yet.",
+        "aisle": "Aisle {{aisle}}",
+        "rack": "Rack {{rack}}",
+        "legend": {
+          "free": "Free",
+          "occupied": "Occupied",
+          "inactive": "Inactive"
+        },
+        "cellFree": "{{code}} — free",
+        "cellOccupied": "{{code}} — suite {{suite}}",
+        "cellInactive": "{{code}} — inactive"
+      },
+      "toggle": {
+        "freeHint": "This position is free. Deactivating hides it from the free-position suggestions.",
+        "inactiveHint": "This position is inactive. Reactivate it to make it available again.",
+        "deactivate": "Deactivate",
+        "reactivate": "Reactivate",
+        "working": "Saving…",
+        "success": "Position updated.",
+        "error": "We couldn't update this position. Please try again.",
+        "close": "Close"
       }
     },
     "consolidations": {
-      "title": "Consolidations queue",
-      "subtitle": "Consolidations waiting for payment or shipping.",
-      "empty": "No pending consolidations right now.",
+      "title": "Packing queue",
+      "subtitle": "Paid consolidations, ready to pack: walk the pick list in location order, check each package, then mark it shipped.",
+      "empty": "No paid consolidations waiting to be packed.",
       "loadError": "We couldn't load the queue. Refresh the page to try again.",
-      "table": {
-        "customer": "Customer",
-        "destination": "Destination",
-        "declaredValue": "Declared value",
-        "shipping": "Shipping",
+      "destination": "Destination: {{city}}, {{country}}",
+      "declaredValue": "Declared value: ${{value}}",
+      "progress": "{{checked}} of {{total}} packages checked",
+      "pickList": {
+        "title": "Pick list",
+        "empty": "This consolidation has no packages.",
+        "noLocation": "No location",
+        "checkboxLabel": "Mark {{store}} — {{description}} as checked",
+        "checkedBadge": "Checked"
+      },
+      "scan": {
+        "label": "Scan the package QR or type its id",
+        "placeholder": "Scan QR or paste the package id",
+        "submit": "Check package",
+        "invalid": "No package id found in the scanned text.",
+        "notFound": "This package does not belong to this consolidation.",
+        "matched": "Package checked: {{store}}"
+      },
+      "override": {
+        "label": "Ship without checking",
+        "warning": "Shipping without checking every package — only do this when the scanner is unavailable."
+      },
+      "form": {
         "carrierLabel": "Carrier",
         "carrierPlaceholder": "Carrier",
         "trackingLabel": "Tracking code",
@@ -1045,6 +1379,274 @@
         "markCompleted": "Mark completed",
         "reject": "Reject",
         "error": "We couldn't update that request. Please try again."
+      }
+    },
+    "payments": {
+      "title": "Payments",
+      "subtitle": "Payment history, manual payment registration and refund tracking.",
+      "list": {
+        "title": "Payment history",
+        "loadError": "We couldn't load the payments. Refresh the page to try again.",
+        "empty": "No payments match the current filters.",
+        "filters": {
+          "statusLabel": "Filter by status",
+          "providerLabel": "Filter by provider",
+          "all": "All"
+        },
+        "table": {
+          "date": "Date",
+          "customer": "Customer",
+          "destination": "Destination",
+          "amount": "Amount (USD)",
+          "provider": "Provider",
+          "status": "Status",
+          "actions": "Actions"
+        }
+      },
+      "status": {
+        "pending": "Pending",
+        "succeeded": "Succeeded",
+        "failed": "Failed",
+        "refunded": "Refunded"
+      },
+      "provider": {
+        "stripe": "Stripe",
+        "manual_pix": "Manual PIX",
+        "manual_transfer": "Bank transfer",
+        "manual_other": "Other (manual)"
+      },
+      "manual": {
+        "title": "Register a manual payment",
+        "hint": "For payments received outside Stripe (direct PIX, bank transfer). The consolidation is marked as paid.",
+        "suiteLabel": "Customer suite number",
+        "suitePlaceholder": "BUF-10001",
+        "lookup": "Find customer",
+        "looking": "Looking up…",
+        "notFound": "No customer found for that suite number.",
+        "found": "Registering for {{name}} (suite {{suite}})",
+        "consolidationLabel": "Pending consolidation",
+        "consolidationsLoading": "Loading pending consolidations…",
+        "consolidationsError": "We couldn't load this customer's pending consolidations. Please try again.",
+        "consolidationsEmpty": "This customer has no pending consolidations to pay.",
+        "consolidationPlaceholder": "Choose a consolidation",
+        "consolidationOption": "{{city}}, {{country}} — quoted ${{value}}",
+        "consolidationOptionNoQuote": "{{city}}, {{country}} — no quote",
+        "amountLabel": "Amount received (USD)",
+        "providerLabel": "Payment method",
+        "notesLabel": "Notes (optional)",
+        "notesPlaceholder": "e.g. PIX received in BRL — record the original amount and currency here",
+        "submit": "Register payment",
+        "submitting": "Saving…",
+        "success": "Payment registered and consolidation marked as paid.",
+        "error": "We couldn't register this payment. Please try again.",
+        "inconsistency": "The payment WAS recorded, but the consolidation was no longer pending — review the consolidation manually to resolve the inconsistency.",
+        "errors": {
+          "suiteRequired": "Enter the customer's suite number.",
+          "amountPositive": "Enter an amount greater than zero.",
+          "consolidationRequired": "Choose the pending consolidation this payment settles."
+        }
+      },
+      "refund": {
+        "button": "Refund",
+        "formTitle": "Request a refund",
+        "amountLabel": "Refund amount (USD)",
+        "reasonLabel": "Reason",
+        "reasonPlaceholder": "Why this payment is being refunded",
+        "submit": "Request refund",
+        "submitting": "Saving…",
+        "cancel": "Cancel",
+        "success": "Refund request recorded.",
+        "error": "We couldn't record this refund request. Please try again.",
+        "errors": {
+          "reasonRequired": "Enter the reason for the refund.",
+          "amountRange": "Enter an amount above zero and no higher than the payment amount.",
+          "duplicateRequested": "There is already an open refund request for this payment — resolve it (processed/failed) before opening another."
+        }
+      },
+      "refunds": {
+        "title": "Refunds",
+        "stripeNotice": "Real Stripe refunds are issued in the Stripe dashboard — this list is the decision trail and reconciliation record only.",
+        "loadError": "We couldn't load the refunds. Refresh the page to try again.",
+        "empty": "No refunds recorded yet.",
+        "table": {
+          "date": "Date",
+          "customer": "Customer",
+          "amount": "Amount (USD)",
+          "reason": "Reason",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "status": {
+          "requested": "Requested",
+          "processed": "Processed",
+          "failed": "Failed"
+        },
+        "markProcessed": "Mark processed",
+        "markFailed": "Mark failed",
+        "working": "Updating…",
+        "actionError": "We couldn't update that refund. Please try again."
+      }
+    },
+    "rates": {
+      "title": "Rates & fees",
+      "subtitle": "Shipping rate table, service fees and a live simulator that runs the exact calculation customers see.",
+      "table": {
+        "title": "Shipping rates",
+        "add": "Add rate",
+        "loadError": "We couldn't load the shipping rates. Refresh the page to try again.",
+        "empty": "No shipping rates configured yet.",
+        "zone": "Zone",
+        "carrier": "Carrier",
+        "eta": "ETA (days)",
+        "base": "Base fee (USD)",
+        "perKg": "Per kg (USD)",
+        "multiplier": "Multiplier",
+        "actions": "Actions",
+        "edit": "Edit",
+        "delete": "Delete",
+        "confirmDelete": "Delete the {{zone}} — {{carrier}} rate?",
+        "confirmYes": "Yes, delete",
+        "confirmNo": "Cancel",
+        "deleting": "Deleting…",
+        "deleteError": "We couldn't delete this rate. Please try again.",
+        "created": "Rate created.",
+        "updated": "Rate updated.",
+        "deleted": "Rate deleted."
+      },
+      "form": {
+        "createTitle": "New rate",
+        "editTitle": "Edit rate",
+        "zoneLabel": "Destination zone",
+        "zonePlaceholder": "BR, US or DEFAULT",
+        "carrierLabel": "Carrier",
+        "etaLabel": "ETA (days)",
+        "etaPlaceholder": "8-14",
+        "baseLabel": "Base fee (USD)",
+        "perKgLabel": "Rate per kg (USD)",
+        "multiplierLabel": "Multiplier",
+        "submitCreate": "Create rate",
+        "submitEdit": "Save changes",
+        "submitting": "Saving…",
+        "cancel": "Cancel",
+        "error": "We couldn't save this rate. Please try again.",
+        "errors": {
+          "zoneRequired": "Enter the destination zone.",
+          "carrierRequired": "Enter the carrier name.",
+          "etaRequired": "Enter the estimated delivery time.",
+          "baseNonNegative": "Enter a base fee of zero or more.",
+          "perKgNonNegative": "Enter a per-kg rate of zero or more.",
+          "multiplierPositive": "Enter a multiplier greater than zero."
+        }
+      },
+      "fees": {
+        "title": "Service fees",
+        "hint": "The five fee keys are fixed — the site reads them by key. Edit the label, values and status here.",
+        "loadError": "We couldn't load the service fees. Refresh the page to try again.",
+        "table": {
+          "fee": "Fee",
+          "amount": "Amount (USD)",
+          "percent": "Percent (%)",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "active": "Active",
+        "inactive": "Inactive",
+        "edit": "Edit",
+        "labelLabel": "Label",
+        "amountLabel": "Amount (USD)",
+        "percentLabel": "Percent (%)",
+        "activeLabel": "Active",
+        "save": "Save fee",
+        "saving": "Saving…",
+        "cancel": "Cancel",
+        "success": "Fee updated.",
+        "error": "We couldn't update this fee. Please try again.",
+        "errors": {
+          "labelRequired": "Enter the fee label.",
+          "valueRequired": "Enter a valid amount or percent (at least one of the two)."
+        }
+      },
+      "simulator": {
+        "title": "Shipping simulator",
+        "hint": "Runs the exact same live calculation as the customer calculator — edit a rate above and simulate to see the effect.",
+        "weightLabel": "Weight (kg)",
+        "lengthLabel": "Length (cm)",
+        "widthLabel": "Width (cm)",
+        "heightLabel": "Height (cm)",
+        "zoneLabel": "Destination zone",
+        "submit": "Simulate",
+        "simulating": "Calculating…",
+        "resultTitle": "What the customer sees",
+        "chargeable": "Chargeable weight: {{weight}} kg",
+        "carrier": "Carrier",
+        "eta": "Estimated time (days)",
+        "cost": "Estimated cost",
+        "noRates": "No shipping rates are configured for this destination — add a row for the zone or a DEFAULT row above.",
+        "error": "We couldn't run the simulation. Please try again.",
+        "errors": {
+          "weightPositive": "Enter a weight greater than zero.",
+          "dimensionPositive": "Enter a dimension greater than zero."
+        }
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Operational parameters and the status of the daily exchange-rate refresh.",
+      "paramsTitle": "Operational parameters",
+      "readOnly": "You have read-only access — only admins can change these values.",
+      "loadError": "We couldn't load the settings. Refresh the page to try again.",
+      "fields": {
+        "freeStorageDays": {
+          "label": "Free storage (days)",
+          "hint": "How many days a package can sit in the warehouse before it shows up as \"storage overdue\" on the pending-actions panel."
+        },
+        "paidUnshippedAlertDays": {
+          "label": "Paid-but-unshipped alert (days)",
+          "hint": "How many days a paid consolidation can wait without shipping before it is flagged in red on the pending-actions panel."
+        }
+      },
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Setting saved.",
+      "invalid": "Enter a whole number of zero or more.",
+      "saveError": "We couldn't save this setting. Please try again.",
+      "exchange": {
+        "title": "Exchange rates",
+        "hint": "Display-only quotes used to show customers an approximate local value — all payments stay in USD. Rates are written once a day by the refresh-exchange-rates function; nothing is editable here.",
+        "loadError": "We couldn't load the exchange rates. Refresh the page to try again.",
+        "empty": "No exchange rates yet — the daily refresh function still needs to be deployed. Customers simply won't see local estimates until then.",
+        "perUsd": "{{rate}} per 1 USD",
+        "quotedAt": "Quoted on {{date}}",
+        "stale": "Stale — last quote is more than 48 hours old."
+      },
+      "outbox": {
+        "title": "Email outbox",
+        "hint": "Every lifecycle email the system queued — written by database triggers and processed by the send-emails function. Read-only.",
+        "loadError": "We couldn't load the email outbox. Refresh the page to try again.",
+        "empty": "No emails in the outbox yet.",
+        "filterLabel": "Filter by status",
+        "filterAll": "All statuses",
+        "skippedWarning": "Emails are being skipped — configure the RESEND_API_KEY secret so they actually go out (see the deploy checklist).",
+        "columns": {
+          "date": "Date",
+          "customer": "Customer",
+          "template": "Email",
+          "status": "Status",
+          "error": "Error"
+        },
+        "status": {
+          "pending": "Pending",
+          "sent": "Sent",
+          "failed": "Failed",
+          "skipped": "Skipped"
+        },
+        "templates": {
+          "packageReceived": "Package received",
+          "packageReady": "Package ready to ship",
+          "paymentConfirmed": "Payment confirmed",
+          "shipped": "Shipment on the way",
+          "storageWarning": "Storage warning"
+        }
       }
     }
   },

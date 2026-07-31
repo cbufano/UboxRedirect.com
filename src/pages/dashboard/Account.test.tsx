@@ -20,6 +20,7 @@ beforeEach(() => {
     country: 'BR',
     preferredLanguage: 'pt',
     suiteNumber: 'BUF-10482',
+    suspendedAt: null,
   })
 })
 
@@ -82,6 +83,7 @@ it('does not overwrite in-progress edits if the profile resolves after typing st
     country: 'BR',
     preferredLanguage: 'pt',
     suiteNumber: 'BUF-10482',
+    suspendedAt: null,
   })
 
   await new Promise((r) => setTimeout(r, 0))

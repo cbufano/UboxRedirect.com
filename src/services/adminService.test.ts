@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { adminService } from './adminService'
 import { supabase } from '../lib/supabase'
 
@@ -6,11 +6,13 @@ vi.mock('../lib/supabase', () => ({
   supabase: {
     auth: { getSession: vi.fn() },
     from: vi.fn(),
+    storage: { from: vi.fn() },
   },
 }))
 
 const mockedSupabase = vi.mocked(supabase, { partial: true })
 const mockedAuth = vi.mocked(supabase.auth)
+const mockedStorage = vi.mocked(supabase.storage, { partial: true })
 
 function mockSession(userId: string | null) {
   mockedAuth.getSession.mockResolvedValue({
@@ -20,54 +22,6 @@ function mockSession(userId: string | null) {
 }
 
 beforeEach(() => vi.clearAllMocks())
-
-describe('getOpsStats', () => {
-  it('returns counts for each stat', async () => {
-    mockedSupabase.from.mockImplementation((table: unknown) => {
-      if (table === 'packages') {
-        const inMock = vi.fn().mockResolvedValue({ count: 3, error: null })
-        return { select: vi.fn().mockReturnValue({ in: inMock }) } as never
-      }
-      if (table === 'consolidations') {
-        const eq = vi.fn().mockResolvedValue({ count: 2, error: null })
-        return { select: vi.fn().mockReturnValue({ eq }) } as never
-      }
-      if (table === 'expected_packages') {
-        const eq = vi.fn().mockResolvedValue({ count: 1, error: null })
-        return { select: vi.fn().mockReturnValue({ eq }) } as never
-      }
-      throw new Error(`unexpected table ${String(table)}`)
-    })
-
-    const stats = await adminService.getOpsStats()
-
-    expect(stats).toEqual({ awaitingReview: 3, pendingConsolidations: 2, openPreAlerts: 1 })
-  })
-
-  it('defaults missing counts to zero', async () => {
-    mockedSupabase.from.mockImplementation(() => {
-      const chain = { in: vi.fn().mockResolvedValue({ count: null, error: null }) }
-      return { select: vi.fn().mockReturnValue({ ...chain, eq: vi.fn().mockResolvedValue({ count: null, error: null }) }) } as never
-    })
-
-    const stats = await adminService.getOpsStats()
-
-    expect(stats).toEqual({ awaitingReview: 0, pendingConsolidations: 0, openPreAlerts: 0 })
-  })
-
-  it('throws when any count query fails', async () => {
-    mockedSupabase.from.mockImplementation((table: unknown) => {
-      if (table === 'packages') {
-        const inMock = vi.fn().mockResolvedValue({ count: null, error: { message: 'boom' } })
-        return { select: vi.fn().mockReturnValue({ in: inMock }) } as never
-      }
-      const eq = vi.fn().mockResolvedValue({ count: 0, error: null })
-      return { select: vi.fn().mockReturnValue({ eq }) } as never
-    })
-
-    await expect(adminService.getOpsStats()).rejects.toThrow('boom')
-  })
-})
 
 describe('getPackagesNeedingReview', () => {
   it('returns mapped packages with customer name and suite (object-shaped embeds)', async () => {
@@ -143,17 +97,26 @@ describe('getPackagesNeedingReview', () => {
 })
 
 describe('markPackageReady', () => {
-  it('updates the package status to ready', async () => {
-    mockSession('staff-1')
-    const eq = vi.fn().mockResolvedValue({ data: null, error: null })
+  function mockReadyChain(result: { data: unknown; error: { message: string } | null }) {
+    const select = vi.fn().mockResolvedValue(result)
+    const inStatus = vi.fn().mockReturnValue({ select })
+    const eq = vi.fn().mockReturnValue({ in: inStatus })
     const update = vi.fn().mockReturnValue({ eq })
     mockedSupabase.from.mockReturnValue({ update } as never)
+    return { update, eq, inStatus, select }
+  }
+
+  it('updates the package status to ready, scoped to received/in_review', async () => {
+    mockSession('staff-1')
+    const { update, eq, inStatus, select } = mockReadyChain({ data: [{ id: 'pkg1' }], error: null })
 
     await adminService.markPackageReady('pkg1')
 
     expect(mockedSupabase.from).toHaveBeenCalledWith('packages')
     expect(update).toHaveBeenCalledWith({ status: 'ready' })
     expect(eq).toHaveBeenCalledWith('id', 'pkg1')
+    expect(inStatus).toHaveBeenCalledWith('status', ['received', 'in_review'])
+    expect(select).toHaveBeenCalledWith('id')
   })
 
   it('throws when signed out', async () => {
@@ -164,11 +127,64 @@ describe('markPackageReady', () => {
 
   it('throws when the update fails', async () => {
     mockSession('staff-1')
-    const eq = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
-    const update = vi.fn().mockReturnValue({ eq })
-    mockedSupabase.from.mockReturnValue({ update } as never)
+    mockReadyChain({ data: null, error: { message: 'boom' } })
 
     await expect(adminService.markPackageReady('pkg1')).rejects.toThrow('boom')
+  })
+
+  it('throws when no rows are affected (wrong status or missing id)', async () => {
+    mockSession('staff-1')
+    mockReadyChain({ data: [], error: null })
+
+    await expect(adminService.markPackageReady('pkg1')).rejects.toThrow(
+      'Package is not awaiting review or was not found',
+    )
+  })
+})
+
+describe('discardPackage', () => {
+  function mockUpdateChain(result: { data: unknown; error: { message: string } | null }) {
+    const select = vi.fn().mockResolvedValue(result)
+    const eqStatus = vi.fn().mockReturnValue({ select })
+    const eqId = vi.fn().mockReturnValue({ eq: eqStatus })
+    const update = vi.fn().mockReturnValue({ eq: eqId })
+    mockedSupabase.from.mockReturnValue({ update } as never)
+    return { update, eqId, eqStatus, select }
+  }
+
+  it('discards only packages that are still in review', async () => {
+    mockSession('staff-1')
+    const { update, eqId, eqStatus, select } = mockUpdateChain({ data: [{ id: 'pkg1' }], error: null })
+
+    await adminService.discardPackage('pkg1')
+
+    expect(mockedSupabase.from).toHaveBeenCalledWith('packages')
+    expect(update).toHaveBeenCalledWith({ status: 'discarded' })
+    expect(eqId).toHaveBeenCalledWith('id', 'pkg1')
+    expect(eqStatus).toHaveBeenCalledWith('status', 'in_review')
+    expect(select).toHaveBeenCalledWith('id')
+  })
+
+  it('throws when no row is affected (package not in review)', async () => {
+    mockSession('staff-1')
+    mockUpdateChain({ data: [], error: null })
+
+    await expect(adminService.discardPackage('pkg1')).rejects.toThrow(
+      'Package is not in review or was not found',
+    )
+  })
+
+  it('throws when signed out', async () => {
+    mockSession(null)
+    await expect(adminService.discardPackage('pkg1')).rejects.toThrow('Not authenticated')
+    expect(mockedSupabase.from).not.toHaveBeenCalled()
+  })
+
+  it('throws when the update fails', async () => {
+    mockSession('staff-1')
+    mockUpdateChain({ data: null, error: { message: 'boom' } })
+
+    await expect(adminService.discardPackage('pkg1')).rejects.toThrow('boom')
   })
 })
 
@@ -219,12 +235,19 @@ describe('findUserBySuite', () => {
 describe('receivePackage', () => {
   const input = { userId: 'cust-1', store: 'Amazon', description: 'Shoes', weightKg: 1.1 }
 
-  it('inserts a new package for the target customer', async () => {
-    mockSession('staff-1')
-    const insert = vi.fn().mockResolvedValue({ data: null, error: null })
+  function mockInsertChain(result: { data: unknown; error: { message: string } | null }) {
+    const single = vi.fn().mockResolvedValue(result)
+    const select = vi.fn().mockReturnValue({ single })
+    const insert = vi.fn().mockReturnValue({ select })
     mockedSupabase.from.mockReturnValue({ insert } as never)
+    return { insert, select, single }
+  }
 
-    await adminService.receivePackage(input)
+  it('inserts a new package for the target customer and returns the created id', async () => {
+    mockSession('staff-1')
+    const { insert, select } = mockInsertChain({ data: { id: 'pkg-new' }, error: null })
+
+    const id = await adminService.receivePackage(input)
 
     expect(mockedSupabase.from).toHaveBeenCalledWith('packages')
     expect(insert).toHaveBeenCalledWith({
@@ -232,6 +255,36 @@ describe('receivePackage', () => {
       store: 'Amazon',
       description: 'Shoes',
       weight_kg: 1.1,
+    })
+    expect(select).toHaveBeenCalledWith('id')
+    expect(id).toBe('pkg-new')
+  })
+
+  it('maps the optional fields to snake_case columns when provided', async () => {
+    mockSession('staff-1')
+    const { insert } = mockInsertChain({ data: { id: 'pkg-new' }, error: null })
+
+    await adminService.receivePackage({
+      ...input,
+      expectedPackageId: 'exp-1',
+      lengthCm: 30,
+      widthCm: 20,
+      heightCm: 10,
+      declaredValueUsd: 99.9,
+      locationId: 'loc-1',
+    })
+
+    expect(insert).toHaveBeenCalledWith({
+      user_id: 'cust-1',
+      store: 'Amazon',
+      description: 'Shoes',
+      weight_kg: 1.1,
+      expected_package_id: 'exp-1',
+      length_cm: 30,
+      width_cm: 20,
+      height_cm: 10,
+      declared_value_usd: 99.9,
+      location_id: 'loc-1',
     })
   })
 
@@ -243,24 +296,346 @@ describe('receivePackage', () => {
 
   it('throws when the insert fails', async () => {
     mockSession('staff-1')
-    const insert = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
-    mockedSupabase.from.mockReturnValue({ insert } as never)
+    mockInsertChain({ data: null, error: { message: 'boom' } })
 
     await expect(adminService.receivePackage(input)).rejects.toThrow('boom')
   })
 })
 
-describe('getPendingConsolidations', () => {
-  it('returns mapped pending consolidations', async () => {
+describe('getPendingPreAlerts', () => {
+  it('returns pending pre-alerts for the customer, newest first', async () => {
+    const rows = [
+      {
+        id: 'exp-1',
+        store: 'Amazon',
+        tracking_number: 'TRK1',
+        description: 'Shoes',
+        declared_value_usd: 50,
+        status: 'pending',
+        created_at: '2026-07-29T00:00:00Z',
+      },
+    ]
+    const order = vi.fn().mockResolvedValue({ data: rows, error: null })
+    const eqStatus = vi.fn().mockReturnValue({ order })
+    const eqUser = vi.fn().mockReturnValue({ eq: eqStatus })
+    const select = vi.fn().mockReturnValue({ eq: eqUser })
+    mockedSupabase.from.mockReturnValue({ select } as never)
+
+    const result = await adminService.getPendingPreAlerts('cust-1')
+
+    expect(mockedSupabase.from).toHaveBeenCalledWith('expected_packages')
+    expect(eqUser).toHaveBeenCalledWith('user_id', 'cust-1')
+    expect(eqStatus).toHaveBeenCalledWith('status', 'pending')
+    expect(order).toHaveBeenCalledWith('created_at', { ascending: false })
+    expect(result).toEqual([
+      {
+        id: 'exp-1',
+        store: 'Amazon',
+        trackingNumber: 'TRK1',
+        description: 'Shoes',
+        declaredValueUsd: 50,
+        status: 'pending',
+        createdAt: '2026-07-29T00:00:00Z',
+      },
+    ])
+  })
+
+  it('throws when the query fails', async () => {
+    const order = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
+    const eqStatus = vi.fn().mockReturnValue({ order })
+    const eqUser = vi.fn().mockReturnValue({ eq: eqStatus })
+    const select = vi.fn().mockReturnValue({ eq: eqUser })
+    mockedSupabase.from.mockReturnValue({ select } as never)
+
+    await expect(adminService.getPendingPreAlerts('cust-1')).rejects.toThrow('boom')
+  })
+})
+
+describe('getPendingConsolidationsForUser', () => {
+  it('returns pending consolidations for the customer, newest first', async () => {
+    const rows = [
+      {
+        id: 'con-1',
+        city: 'São Paulo',
+        country: 'BR',
+        cost_usd: 55.9,
+        created_at: '2026-07-29T00:00:00Z',
+      },
+      {
+        id: 'con-2',
+        city: 'Lisboa',
+        country: 'PT',
+        cost_usd: null,
+        created_at: '2026-07-28T00:00:00Z',
+      },
+    ]
+    const order = vi.fn().mockResolvedValue({ data: rows, error: null })
+    const eqStatus = vi.fn().mockReturnValue({ order })
+    const eqUser = vi.fn().mockReturnValue({ eq: eqStatus })
+    const select = vi.fn().mockReturnValue({ eq: eqUser })
+    mockedSupabase.from.mockReturnValue({ select } as never)
+
+    const result = await adminService.getPendingConsolidationsForUser('cust-1')
+
+    expect(mockedSupabase.from).toHaveBeenCalledWith('consolidations')
+    expect(select).toHaveBeenCalledWith('id, city, country, cost_usd, created_at')
+    expect(eqUser).toHaveBeenCalledWith('user_id', 'cust-1')
+    expect(eqStatus).toHaveBeenCalledWith('status', 'pending')
+    expect(order).toHaveBeenCalledWith('created_at', { ascending: false })
+    expect(result).toEqual([
+      { id: 'con-1', city: 'São Paulo', country: 'BR', costUsd: 55.9, createdAt: '2026-07-29T00:00:00Z' },
+      { id: 'con-2', city: 'Lisboa', country: 'PT', costUsd: null, createdAt: '2026-07-28T00:00:00Z' },
+    ])
+  })
+
+  it('throws when the query fails', async () => {
+    const order = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
+    const eqStatus = vi.fn().mockReturnValue({ order })
+    const eqUser = vi.fn().mockReturnValue({ eq: eqStatus })
+    const select = vi.fn().mockReturnValue({ eq: eqUser })
+    mockedSupabase.from.mockReturnValue({ select } as never)
+
+    await expect(adminService.getPendingConsolidationsForUser('cust-1')).rejects.toThrow('boom')
+  })
+})
+
+describe('uploadPackagePhoto', () => {
+  const file = new File(['img'], 'photo.jpg', { type: 'image/jpeg' })
+
+  function mockTables(overrides?: {
+    ownerError?: { message: string }
+    photoInsertError?: { message: string }
+  }) {
+    const single = vi.fn().mockResolvedValue(
+      overrides?.ownerError
+        ? { data: null, error: overrides.ownerError }
+        : { data: { user_id: 'cust-1' }, error: null },
+    )
+    const eq = vi.fn().mockReturnValue({ single })
+    const select = vi.fn().mockReturnValue({ eq })
+    const insert = vi.fn().mockResolvedValue({ data: null, error: overrides?.photoInsertError ?? null })
+    mockedSupabase.from.mockImplementation((table: unknown) => {
+      if (table === 'packages') return { select } as never
+      if (table === 'package_photos') return { insert } as never
+      throw new Error(`unexpected table ${String(table)}`)
+    })
+    return { select, eq, insert }
+  }
+
+  it('uploads the file under user/package path and records it in package_photos', async () => {
+    mockSession('staff-1')
+    const { eq, insert } = mockTables()
+    const upload = vi.fn().mockResolvedValue({ data: { path: 'x' }, error: null })
+    mockedStorage.from.mockReturnValue({ upload } as never)
+
+    await adminService.uploadPackagePhoto('pkg-1', file)
+
+    expect(eq).toHaveBeenCalledWith('id', 'pkg-1')
+    expect(mockedStorage.from).toHaveBeenCalledWith('package-photos')
+    expect(upload).toHaveBeenCalledWith('cust-1/pkg-1/photo.jpg', file)
+    expect(insert).toHaveBeenCalledWith({ package_id: 'pkg-1', storage_path: 'cust-1/pkg-1/photo.jpg' })
+  })
+
+  it('throws when signed out', async () => {
+    mockSession(null)
+    await expect(adminService.uploadPackagePhoto('pkg-1', file)).rejects.toThrow('Not authenticated')
+    expect(mockedSupabase.from).not.toHaveBeenCalled()
+  })
+
+  it('throws when the package owner lookup fails', async () => {
+    mockSession('staff-1')
+    mockTables({ ownerError: { message: 'not found' } })
+
+    await expect(adminService.uploadPackagePhoto('pkg-1', file)).rejects.toThrow('not found')
+    expect(mockedStorage.from).not.toHaveBeenCalled()
+  })
+
+  it('throws when the storage upload fails and does not insert the row', async () => {
+    mockSession('staff-1')
+    const { insert } = mockTables()
+    const upload = vi.fn().mockResolvedValue({ data: null, error: { message: 'storage boom' } })
+    mockedStorage.from.mockReturnValue({ upload } as never)
+
+    await expect(adminService.uploadPackagePhoto('pkg-1', file)).rejects.toThrow('storage boom')
+    expect(insert).not.toHaveBeenCalled()
+  })
+
+  it('throws when the package_photos insert fails', async () => {
+    mockSession('staff-1')
+    mockTables({ photoInsertError: { message: 'boom' } })
+    const upload = vi.fn().mockResolvedValue({ data: { path: 'x' }, error: null })
+    mockedStorage.from.mockReturnValue({ upload } as never)
+
+    await expect(adminService.uploadPackagePhoto('pkg-1', file)).rejects.toThrow('boom')
+  })
+})
+
+describe('getPackageDetail', () => {
+  const pkgRow = {
+    id: 'pkg-1',
+    store: 'Amazon',
+    description: 'Shoes',
+    weight_kg: 1.2,
+    length_cm: 30,
+    width_cm: 20,
+    height_cm: 10,
+    declared_value_usd: 99.9,
+    status: 'received',
+    received_at: '2026-07-29T00:00:00Z',
+    user_id: 'cust-1',
+    location_id: 'loc-1',
+    warehouse_locations: { code: 'G-A-01-1-01' },
+    profiles: { name: 'Ana', suites: { suite_number: 'BUF-10001' } },
+  }
+
+  function mockDetailTables(overrides?: {
+    pkg?: unknown
+    pkgError?: { message: string }
+    photosError?: { message: string }
+    historyError?: { message: string }
+    photos?: unknown[]
+    history?: unknown[]
+  }) {
+    mockedSupabase.from.mockImplementation((table: unknown) => {
+      if (table === 'packages') {
+        const single = vi.fn().mockResolvedValue({
+          data: overrides?.pkgError ? null : (overrides?.pkg ?? pkgRow),
+          error: overrides?.pkgError ?? null,
+        })
+        const eq = vi.fn().mockReturnValue({ single })
+        return { select: vi.fn().mockReturnValue({ eq }) } as never
+      }
+      if (table === 'package_photos') {
+        const order = vi.fn().mockResolvedValue({
+          data: overrides?.photosError ? null : (overrides?.photos ?? []),
+          error: overrides?.photosError ?? null,
+        })
+        const eq = vi.fn().mockReturnValue({ order })
+        return { select: vi.fn().mockReturnValue({ eq }) } as never
+      }
+      if (table === 'package_location_history') {
+        const order = vi.fn().mockResolvedValue({
+          data: overrides?.historyError ? null : (overrides?.history ?? []),
+          error: overrides?.historyError ?? null,
+        })
+        const eq = vi.fn().mockReturnValue({ order })
+        return { select: vi.fn().mockReturnValue({ eq }) } as never
+      }
+      throw new Error(`unexpected table ${String(table)}`)
+    })
+  }
+
+  it('returns the package with customer, location code, signed photos and history', async () => {
+    mockDetailTables({
+      photos: [{ id: 'ph-1', storage_path: 'cust-1/pkg-1/photo.jpg' }],
+      history: [
+        {
+          id: 'h-1',
+          moved_at: '2026-07-29T01:00:00Z',
+          from_location: null,
+          to_location: { code: 'G-A-01-1-01' },
+          profiles: { name: 'Op Staff' },
+        },
+      ],
+    })
+    const createSignedUrl = vi.fn().mockResolvedValue({ data: { signedUrl: 'https://signed/photo.jpg' }, error: null })
+    mockedStorage.from.mockReturnValue({ createSignedUrl } as never)
+
+    const result = await adminService.getPackageDetail('pkg-1')
+
+    expect(mockedSupabase.from).toHaveBeenCalledWith('packages')
+    expect(mockedSupabase.from).toHaveBeenCalledWith('package_photos')
+    expect(mockedSupabase.from).toHaveBeenCalledWith('package_location_history')
+    expect(createSignedUrl).toHaveBeenCalledWith('cust-1/pkg-1/photo.jpg', 3600)
+    expect(result).toEqual({
+      id: 'pkg-1',
+      store: 'Amazon',
+      description: 'Shoes',
+      weightKg: 1.2,
+      lengthCm: 30,
+      widthCm: 20,
+      heightCm: 10,
+      declaredValueUsd: 99.9,
+      status: 'received',
+      receivedAt: '2026-07-29T00:00:00Z',
+      userId: 'cust-1',
+      customerName: 'Ana',
+      customerSuite: 'BUF-10001',
+      locationId: 'loc-1',
+      locationCode: 'G-A-01-1-01',
+      photos: [{ id: 'ph-1', url: 'https://signed/photo.jpg' }],
+      history: [
+        {
+          id: 'h-1',
+          fromCode: null,
+          toCode: 'G-A-01-1-01',
+          movedByName: 'Op Staff',
+          movedAt: '2026-07-29T01:00:00Z',
+        },
+      ],
+    })
+  })
+
+  it('handles a package without location, photos or history', async () => {
+    mockDetailTables({
+      pkg: { ...pkgRow, location_id: null, warehouse_locations: null },
+    })
+
+    const result = await adminService.getPackageDetail('pkg-1')
+
+    expect(result.locationId).toBeNull()
+    expect(result.locationCode).toBeNull()
+    expect(result.photos).toEqual([])
+    expect(result.history).toEqual([])
+  })
+
+  it('throws when the package query fails', async () => {
+    mockDetailTables({ pkgError: { message: 'boom' } })
+    await expect(adminService.getPackageDetail('pkg-1')).rejects.toThrow('boom')
+  })
+
+  it('throws when a signed URL cannot be created', async () => {
+    mockDetailTables({ photos: [{ id: 'ph-1', storage_path: 'cust-1/pkg-1/photo.jpg' }] })
+    const createSignedUrl = vi.fn().mockResolvedValue({ data: null, error: { message: 'sign boom' } })
+    mockedStorage.from.mockReturnValue({ createSignedUrl } as never)
+
+    await expect(adminService.getPackageDetail('pkg-1')).rejects.toThrow('sign boom')
+  })
+})
+
+describe('getPaidConsolidations', () => {
+  it('returns paid consolidations with their pick-list items and location codes', async () => {
     const rows = [
       {
         id: 'c1',
         city: 'Springfield',
         country: 'US',
         declared_value_usd: 100,
-        carrier: null,
+        carrier: 'DHL',
         tracking_code: null,
         profiles: { name: 'Ana' },
+        consolidation_items: [
+          {
+            packages: {
+              id: 'pkg-1',
+              store: 'Amazon',
+              description: 'Shoes',
+              weight_kg: 1.2,
+              location_id: 'loc-1',
+              warehouse_locations: { code: 'G-A-01-1-01' },
+            },
+          },
+          {
+            packages: {
+              id: 'pkg-2',
+              store: 'Nike',
+              description: 'Jacket',
+              weight_kg: 0.8,
+              location_id: null,
+              warehouse_locations: null,
+            },
+          },
+        ],
       },
     ]
     const order = vi.fn().mockResolvedValue({ data: rows, error: null })
@@ -268,10 +643,10 @@ describe('getPendingConsolidations', () => {
     const select = vi.fn().mockReturnValue({ eq })
     mockedSupabase.from.mockReturnValue({ select } as never)
 
-    const result = await adminService.getPendingConsolidations()
+    const result = await adminService.getPaidConsolidations()
 
     expect(mockedSupabase.from).toHaveBeenCalledWith('consolidations')
-    expect(eq).toHaveBeenCalledWith('status', 'pending')
+    expect(eq).toHaveBeenCalledWith('status', 'paid')
     expect(result).toEqual([
       {
         id: 'c1',
@@ -279,10 +654,52 @@ describe('getPendingConsolidations', () => {
         city: 'Springfield',
         country: 'US',
         declaredValueUsd: 100,
-        carrier: null,
+        carrier: 'DHL',
         trackingCode: null,
+        items: [
+          {
+            packageId: 'pkg-1',
+            store: 'Amazon',
+            description: 'Shoes',
+            weightKg: 1.2,
+            locationId: 'loc-1',
+            locationCode: 'G-A-01-1-01',
+          },
+          {
+            packageId: 'pkg-2',
+            store: 'Nike',
+            description: 'Jacket',
+            weightKg: 0.8,
+            locationId: null,
+            locationCode: null,
+          },
+        ],
       },
     ])
+  })
+
+  it('returns an empty items list when the consolidation has no items embed', async () => {
+    const rows = [
+      {
+        id: 'c2',
+        city: 'Rio',
+        country: 'BR',
+        declared_value_usd: 40,
+        carrier: null,
+        tracking_code: null,
+        profiles: [{ name: 'Bia' }],
+        consolidation_items: null,
+      },
+    ]
+    const order = vi.fn().mockResolvedValue({ data: rows, error: null })
+    const eq = vi.fn().mockReturnValue({ order })
+    const select = vi.fn().mockReturnValue({ eq })
+    mockedSupabase.from.mockReturnValue({ select } as never)
+
+    const result = await adminService.getPaidConsolidations()
+
+    expect(result[0].customerName).toBe('Bia')
+    expect(result[0].items).toEqual([])
   })
 
   it('throws when the query fails', async () => {
@@ -291,16 +708,23 @@ describe('getPendingConsolidations', () => {
     const select = vi.fn().mockReturnValue({ eq })
     mockedSupabase.from.mockReturnValue({ select } as never)
 
-    await expect(adminService.getPendingConsolidations()).rejects.toThrow('boom')
+    await expect(adminService.getPaidConsolidations()).rejects.toThrow('boom')
   })
 })
 
 describe('markConsolidationShipped', () => {
-  it('sets carrier, tracking code, status and shipped_at', async () => {
-    mockSession('staff-1')
-    const eq = vi.fn().mockResolvedValue({ data: null, error: null })
-    const update = vi.fn().mockReturnValue({ eq })
+  function mockUpdateChain(result: { data: unknown; error: { message: string } | null }) {
+    const select = vi.fn().mockResolvedValue(result)
+    const eqStatus = vi.fn().mockReturnValue({ select })
+    const eqId = vi.fn().mockReturnValue({ eq: eqStatus })
+    const update = vi.fn().mockReturnValue({ eq: eqId })
     mockedSupabase.from.mockReturnValue({ update } as never)
+    return { update, eqId, eqStatus, select }
+  }
+
+  it('sets carrier, tracking code, status and shipped_at only for paid consolidations', async () => {
+    mockSession('staff-1')
+    const { update, eqId, eqStatus, select } = mockUpdateChain({ data: [{ id: 'c1' }], error: null })
 
     await adminService.markConsolidationShipped('c1', { carrier: 'DHL', trackingCode: 'TRK123' })
 
@@ -310,7 +734,18 @@ describe('markConsolidationShipped', () => {
     )
     const updateArg = update.mock.calls[0][0] as { shipped_at: string }
     expect(typeof updateArg.shipped_at).toBe('string')
-    expect(eq).toHaveBeenCalledWith('id', 'c1')
+    expect(eqId).toHaveBeenCalledWith('id', 'c1')
+    expect(eqStatus).toHaveBeenCalledWith('status', 'paid')
+    expect(select).toHaveBeenCalledWith('id')
+  })
+
+  it('throws when no row is affected (consolidation not paid)', async () => {
+    mockSession('staff-1')
+    mockUpdateChain({ data: [], error: null })
+
+    await expect(
+      adminService.markConsolidationShipped('c1', { carrier: 'DHL', trackingCode: 'TRK123' }),
+    ).rejects.toThrow('Consolidation is not paid or was not found')
   })
 
   it('throws when signed out', async () => {
@@ -323,9 +758,7 @@ describe('markConsolidationShipped', () => {
 
   it('throws when the update fails', async () => {
     mockSession('staff-1')
-    const eq = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
-    const update = vi.fn().mockReturnValue({ eq })
-    mockedSupabase.from.mockReturnValue({ update } as never)
+    mockUpdateChain({ data: null, error: { message: 'boom' } })
 
     await expect(
       adminService.markConsolidationShipped('c1', { carrier: 'DHL', trackingCode: 'TRK123' }),
@@ -476,3 +909,303 @@ describe('setOfacStatus', () => {
     await expect(adminService.setOfacStatus('cust-1', 'flagged')).rejects.toThrow('boom')
   })
 })
+
+describe('getPendingActions', () => {
+  afterEach(() => vi.useRealTimers())
+
+  interface PendingActionsState {
+    settings: { data: unknown; error: { message: string } | null }
+    packagesCount: { count: number | null; error: { message: string } | null }
+    paidUnshipped: { data: unknown; error: { message: string } | null }
+    dataRequestsCount: { count: number | null; error: { message: string } | null }
+    storageOverdue: { data: unknown; error: { message: string } | null }
+    shipped: { data: unknown; error: { message: string } | null }
+    payments: { data: unknown; error: { message: string } | null }
+    trackingExceptions: { data: unknown; error: { message: string } | null }
+    failedEmailsCount: { count: number | null; error: { message: string } | null }
+  }
+
+  function mockPendingActions(overrides: Partial<PendingActionsState> = {}) {
+    const state: PendingActionsState = {
+      settings: {
+        data: [
+          { key: 'free_storage_days', value: '30' },
+          { key: 'paid_unshipped_alert_days', value: '2' },
+        ],
+        error: null,
+      },
+      packagesCount: { count: 0, error: null },
+      paidUnshipped: { data: [], error: null },
+      dataRequestsCount: { count: 0, error: null },
+      storageOverdue: { data: [], error: null },
+      shipped: { data: [], error: null },
+      payments: { data: [], error: null },
+      trackingExceptions: { data: [], error: null },
+      failedEmailsCount: { count: 0, error: null },
+      ...overrides,
+    }
+
+    const paidLt = vi.fn().mockReturnValue({ order: vi.fn().mockResolvedValue(state.paidUnshipped) })
+    const storageLt = vi.fn().mockReturnValue({ order: vi.fn().mockResolvedValue(state.storageOverdue) })
+    const paymentsIn = vi.fn().mockResolvedValue(state.payments)
+    const paymentsEq = vi.fn().mockReturnValue({ in: paymentsIn })
+    const exceptionsLimit = vi.fn().mockResolvedValue(state.trackingExceptions)
+    const exceptionsOrder = vi.fn().mockReturnValue({ limit: exceptionsLimit })
+    const exceptionsGte = vi.fn().mockReturnValue({ order: exceptionsOrder })
+    const exceptionsEq = vi.fn().mockReturnValue({ gte: exceptionsGte })
+    const outboxEq = vi.fn().mockResolvedValue(state.failedEmailsCount)
+
+    mockedSupabase.from.mockImplementation((table: unknown) => {
+      if (table === 'settings') {
+        return { select: vi.fn().mockResolvedValue(state.settings) } as never
+      }
+      if (table === 'packages') {
+        const select = vi.fn().mockImplementation((_cols: string, opts?: { head?: boolean }) => {
+          if (opts?.head) return { in: vi.fn().mockResolvedValue(state.packagesCount) }
+          return { in: vi.fn().mockReturnValue({ lt: storageLt }) }
+        })
+        return { select } as never
+      }
+      if (table === 'data_requests') {
+        return { select: vi.fn().mockReturnValue({ in: vi.fn().mockResolvedValue(state.dataRequestsCount) }) } as never
+      }
+      if (table === 'consolidations') {
+        const select = vi.fn().mockImplementation((cols: string) => {
+          if (cols.includes('paid_at')) return { eq: vi.fn().mockReturnValue({ lt: paidLt }) }
+          return { eq: vi.fn().mockReturnValue({ order: vi.fn().mockResolvedValue(state.shipped) }) }
+        })
+        return { select } as never
+      }
+      if (table === 'payments') {
+        return { select: vi.fn().mockReturnValue({ eq: paymentsEq }) } as never
+      }
+      if (table === 'tracking_events') {
+        return { select: vi.fn().mockReturnValue({ eq: exceptionsEq }) } as never
+      }
+      if (table === 'email_outbox') {
+        return { select: vi.fn().mockReturnValue({ eq: outboxEq }) } as never
+      }
+      throw new Error(`unexpected table ${String(table)}`)
+    })
+
+    return { paidLt, storageLt, paymentsEq, paymentsIn, exceptionsEq, exceptionsGte, exceptionsOrder, exceptionsLimit, outboxEq }
+  }
+
+  it('returns counts, overdue lists and client-side reconciliation using settings-driven cutoffs', async () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-07-30T12:00:00Z'))
+    const { paidLt, storageLt, paymentsEq, paymentsIn, exceptionsEq, exceptionsGte, exceptionsOrder, exceptionsLimit, outboxEq } =
+      mockPendingActions({
+      settings: {
+        data: [
+          { key: 'free_storage_days', value: '10' },
+          { key: 'paid_unshipped_alert_days', value: '2' },
+        ],
+        error: null,
+      },
+      packagesCount: { count: 3, error: null },
+      paidUnshipped: {
+        data: [{ id: 'con-1', city: 'Lisboa', country: 'PT', paid_at: '2026-07-25T09:00:00Z' }],
+        error: null,
+      },
+      dataRequestsCount: { count: 2, error: null },
+      storageOverdue: {
+        data: [
+          {
+            id: 'pkg-1',
+            store: 'Amazon',
+            received_at: '2026-07-01T08:00:00Z',
+            profiles: { suites: { suite_number: 'BUF-10001' } },
+          },
+          { id: 'pkg-2', store: 'Nike', received_at: '2026-07-02T08:00:00Z', profiles: [{ suites: [] }] },
+        ],
+        error: null,
+      },
+      shipped: {
+        data: [
+          { id: 'con-A', city: 'Madrid', country: 'ES', shipped_at: '2026-07-20T10:00:00Z' },
+          { id: 'con-B', city: 'Porto', country: 'PT', shipped_at: '2026-07-21T10:00:00Z' },
+        ],
+        error: null,
+      },
+      payments: { data: [{ consolidation_id: 'con-A' }], error: null },
+      trackingExceptions: {
+        data: [
+          {
+            id: 'ev-1',
+            consolidation_id: 'con-B',
+            raw_status: 'Held at customs — missing invoice',
+            occurred_at: '2026-07-28T10:00:00Z',
+            consolidations: { city: 'Porto', country: 'PT' },
+          },
+          {
+            id: 'ev-2',
+            consolidation_id: 'con-C',
+            raw_status: 'Delivery attempt failed',
+            occurred_at: '2026-07-27T10:00:00Z',
+            consolidations: [{ city: 'Madrid', country: 'ES' }],
+          },
+        ],
+        error: null,
+      },
+      failedEmailsCount: { count: 4, error: null },
+    })
+
+    const result = await adminService.getPendingActions()
+
+    // Cortes de data derivados dos settings (2 e 10 dias antes de agora)
+    expect(paidLt).toHaveBeenCalledWith('paid_at', '2026-07-28T12:00:00.000Z')
+    expect(storageLt).toHaveBeenCalledWith('received_at', '2026-07-20T12:00:00.000Z')
+    // Conciliação: só payments 'succeeded' das consolidações shipped
+    expect(paymentsEq).toHaveBeenCalledWith('status', 'succeeded')
+    expect(paymentsIn).toHaveBeenCalledWith('consolidation_id', ['con-A', 'con-B'])
+    // Exceções de rastreio: janela fixa de 2 semanas, mais recentes primeiro, top 10
+    expect(exceptionsEq).toHaveBeenCalledWith('normalized_status', 'exception')
+    expect(exceptionsGte).toHaveBeenCalledWith('occurred_at', '2026-07-16T12:00:00.000Z')
+    expect(exceptionsOrder).toHaveBeenCalledWith('occurred_at', { ascending: false })
+    expect(exceptionsLimit).toHaveBeenCalledWith(10)
+    // E-mails falhados: count de email_outbox status 'failed'
+    expect(outboxEq).toHaveBeenCalledWith('status', 'failed')
+
+    expect(result).toEqual({
+      awaitingReview: 3,
+      paidUnshipped: [{ id: 'con-1', city: 'Lisboa', country: 'PT', paidAt: '2026-07-25T09:00:00Z' }],
+      openDataRequests: 2,
+      storageOverdue: [
+        { id: 'pkg-1', store: 'Amazon', suiteNumber: 'BUF-10001', receivedAt: '2026-07-01T08:00:00Z' },
+        { id: 'pkg-2', store: 'Nike', suiteNumber: null, receivedAt: '2026-07-02T08:00:00Z' },
+      ],
+      unreconciled: [{ id: 'con-B', city: 'Porto', country: 'PT', shippedAt: '2026-07-21T10:00:00Z' }],
+      trackingExceptions: [
+        {
+          id: 'ev-1',
+          consolidationId: 'con-B',
+          rawStatus: 'Held at customs — missing invoice',
+          occurredAt: '2026-07-28T10:00:00Z',
+          city: 'Porto',
+          country: 'PT',
+        },
+        {
+          id: 'ev-2',
+          consolidationId: 'con-C',
+          rawStatus: 'Delivery attempt failed',
+          occurredAt: '2026-07-27T10:00:00Z',
+          city: 'Madrid',
+          country: 'ES',
+        },
+      ],
+      failedEmails: 4,
+    })
+  })
+
+  it('falls back to the seed defaults (30/2 days) when setting keys are missing', async () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-07-30T12:00:00Z'))
+    const { paidLt, storageLt } = mockPendingActions({ settings: { data: [], error: null } })
+
+    await adminService.getPendingActions()
+
+    expect(paidLt).toHaveBeenCalledWith('paid_at', '2026-07-28T12:00:00.000Z')
+    expect(storageLt).toHaveBeenCalledWith('received_at', '2026-06-30T12:00:00.000Z')
+  })
+
+  it('skips the payments query when there is nothing shipped and defaults counts to zero', async () => {
+    const { paymentsIn } = mockPendingActions({
+      packagesCount: { count: null, error: null },
+      dataRequestsCount: { count: null, error: null },
+      failedEmailsCount: { count: null, error: null },
+    })
+
+    const result = await adminService.getPendingActions()
+
+    expect(paymentsIn).not.toHaveBeenCalled()
+    expect(mockedSupabase.from).not.toHaveBeenCalledWith('payments')
+    expect(result).toEqual({
+      awaitingReview: 0,
+      paidUnshipped: [],
+      openDataRequests: 0,
+      storageOverdue: [],
+      unreconciled: [],
+      trackingExceptions: [],
+      failedEmails: 0,
+    })
+  })
+
+  it('maps a tracking exception without a consolidations embed to empty city/country', async () => {
+    mockPendingActions({
+      trackingExceptions: {
+        data: [
+          {
+            id: 'ev-1',
+            consolidation_id: 'con-X',
+            raw_status: 'Lost in transit',
+            occurred_at: '2026-07-28T10:00:00Z',
+            consolidations: null,
+          },
+        ],
+        error: null,
+      },
+    })
+
+    const result = await adminService.getPendingActions()
+
+    expect(result.trackingExceptions).toEqual([
+      {
+        id: 'ev-1',
+        consolidationId: 'con-X',
+        rawStatus: 'Lost in transit',
+        occurredAt: '2026-07-28T10:00:00Z',
+        city: '',
+        country: '',
+      },
+    ])
+  })
+
+  it('marks all shipped consolidations as unreconciled when none has a succeeded payment', async () => {
+    mockPendingActions({
+      shipped: {
+        data: [{ id: 'con-A', city: 'Madrid', country: 'ES', shipped_at: null }],
+        error: null,
+      },
+      payments: { data: [], error: null },
+    })
+
+    const result = await adminService.getPendingActions()
+
+    expect(result.unreconciled).toEqual([{ id: 'con-A', city: 'Madrid', country: 'ES', shippedAt: null }])
+  })
+
+  it('throws when the settings query fails', async () => {
+    mockPendingActions({ settings: { data: null, error: { message: 'boom' } } })
+
+    await expect(adminService.getPendingActions()).rejects.toThrow('boom')
+  })
+
+  it('throws when any of the pending queries fails', async () => {
+    mockPendingActions({ paidUnshipped: { data: null, error: { message: 'boom' } } })
+
+    await expect(adminService.getPendingActions()).rejects.toThrow('boom')
+  })
+
+  it('throws when the reconciliation payments query fails', async () => {
+    mockPendingActions({
+      shipped: { data: [{ id: 'con-A', city: 'Madrid', country: 'ES', shipped_at: null }], error: null },
+      payments: { data: null, error: { message: 'boom' } },
+    })
+
+    await expect(adminService.getPendingActions()).rejects.toThrow('boom')
+  })
+
+  it('throws when the tracking exceptions query fails', async () => {
+    mockPendingActions({ trackingExceptions: { data: null, error: { message: 'tracking boom' } } })
+
+    await expect(adminService.getPendingActions()).rejects.toThrow('tracking boom')
+  })
+
+  it('throws when the failed emails count query fails', async () => {
+    mockPendingActions({ failedEmailsCount: { count: null, error: { message: 'outbox boom' } } })
+
+    await expect(adminService.getPendingActions()).rejects.toThrow('outbox boom')
+  })
+})
+

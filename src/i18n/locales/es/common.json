@@ -585,6 +585,11 @@
     },
     "signOut": "Cerrar sesión",
     "loading": "Cargando…",
+    "suspended": {
+      "title": "Cuenta suspendida",
+      "message": "Tu cuenta fue suspendida y el acceso al panel está bloqueado. Si crees que es un error, contacta a nuestro equipo de soporte desde la página de contacto.",
+      "signOut": "Cerrar sesión"
+    },
     "overview": {
       "title": "Resumen",
       "welcome": "¡Bienvenido(a) de nuevo, {{name}}!",
@@ -795,10 +800,23 @@
       "payNow": "Pagar ahora",
       "payingNow": "Redirigiendo al checkout…",
       "payError": "No pudimos iniciar el checkout. Inténtalo de nuevo.",
+      "approxEstimate": "Estimación según el tipo de cambio del día — el pago siempre es en USD.",
       "banner": {
         "success": "¡Pago recibido! Tu envío ya se está preparando.",
         "cancelled": "El checkout fue cancelado — puedes intentar pagar de nuevo cuando quieras.",
         "dismiss": "Descartar"
+      },
+      "tracking": {
+        "toggle": "Historial de rastreo",
+        "empty": "Aún no hay eventos de rastreo — vuelve pronto.",
+        "loadError": "No pudimos cargar el historial de rastreo. Inténtalo de nuevo en un momento.",
+        "status": {
+          "in_transit": "En tránsito",
+          "customs": "En aduana",
+          "out_for_delivery": "En reparto",
+          "delivered": "Entregado",
+          "exception": "Excepción en la entrega"
+        }
       }
     },
     "shopper": {
@@ -931,17 +949,55 @@
       "overview": "Resumen",
       "packages": "Paquetes",
       "consolidations": "Consolidaciones",
-      "dataRequests": "Solicitudes de datos"
+      "warehouse": "Almacén",
+      "payments": "Pagos",
+      "rates": "Tarifas y cargos",
+      "customers": "Clientes",
+      "staff": "Equipo",
+      "dataRequests": "Solicitudes de datos",
+      "settings": "Configuración"
     },
     "overview": {
-      "title": "Resumen de operaciones",
-      "subtitle": "Panorama de lo que necesita atención ahora mismo.",
-      "stats": {
-        "awaitingReview": "Pendientes de revisión",
-        "pendingConsolidations": "Consolidaciones pendientes",
-        "openPreAlerts": "Prealertas abiertas"
+      "title": "Panel de pendientes",
+      "subtitle": "Todo lo que necesita acción del operador ahora mismo, en un solo lugar.",
+      "allClear": {
+        "title": "Todo al día",
+        "subtitle": "No hay pendientes por ahora. Los nuevos elementos aparecerán aquí."
       },
-      "loadError": "No pudimos cargar los datos. Actualiza la página para intentarlo de nuevo."
+      "cards": {
+        "awaitingReview": {
+          "title": "Por revisar",
+          "link": "Ir a la cola de paquetes"
+        },
+        "paidUnshipped": {
+          "title": "Pagadas sin envío",
+          "item": "{{city}}, {{country}} — pagada el {{date}}",
+          "link": "Ir a la cola de envíos"
+        },
+        "dataRequests": {
+          "title": "Solicitudes de datos abiertas",
+          "link": "Ir a solicitudes de datos"
+        },
+        "storageOverdue": {
+          "title": "Almacenaje vencido",
+          "item": "{{store}} — suite {{suite}} — recibido el {{date}}"
+        },
+        "reconciliation": {
+          "title": "Conciliación",
+          "hint": "Consolidaciones marcadas como enviadas sin un pago aprobado registrado. Confirma el pago o investiga la discrepancia.",
+          "item": "{{city}}, {{country}} — enviada el {{date}}"
+        },
+        "trackingExceptions": {
+          "title": "Excepciones de rastreo",
+          "hint": "Eventos de excepción reportados por el transportista en las últimas dos semanas. El estado bruto muestra exactamente lo que dijo el transportista.",
+          "item": "{{city}}, {{country}} — {{status}} — {{date}}"
+        },
+        "failedEmails": {
+          "title": "Correos fallidos",
+          "link": "Ir al outbox de correos"
+        }
+      },
+      "loadError": "No pudimos cargar los pendientes. Actualiza la página para intentarlo de nuevo."
     },
     "packages": {
       "title": "Cola de paquetes",
@@ -971,19 +1027,82 @@
         "looking": "Buscando…",
         "notFound": "No se encontró ningún cliente con esa suite.",
         "found": "Recibiendo para {{name}} (suite {{suite}})",
+        "viewCustomer": "Ver cliente",
         "storeLabel": "Tienda",
         "descriptionLabel": "Descripción",
         "weightLabel": "Peso (kg)",
+        "lengthLabel": "Largo (cm)",
+        "widthLabel": "Ancho (cm)",
+        "heightLabel": "Alto (cm)",
+        "declaredValueLabel": "Valor declarado (USD)",
+        "photoLabel": "Foto (opcional)",
         "submit": "Recibir paquete",
         "submitting": "Guardando…",
         "success": "Paquete recibido.",
         "error": "No pudimos guardar este paquete. Inténtalo de nuevo.",
+        "photoFailed": "Paquete recibido, pero falló la subida de la foto. Puedes agregarla después desde la ficha del paquete.",
         "errors": {
           "suiteRequired": "Ingresa el número de suite del cliente.",
           "storeRequired": "Ingresa el nombre de la tienda.",
           "descriptionRequired": "Describe el artículo.",
-          "weightPositive": "Ingresa un peso mayor que cero."
+          "weightPositive": "Ingresa un peso mayor que cero.",
+          "dimensionPositive": "Ingresa un número mayor que cero.",
+          "valueNonNegative": "Ingresa un valor igual o mayor que cero."
         }
+      },
+      "preAlerts": {
+        "title": "Preavisos pendientes",
+        "loading": "Cargando preavisos…",
+        "loadError": "No pudimos cargar los preavisos. Puedes recibir sin vincular uno.",
+        "empty": "No hay preavisos pendientes para este cliente.",
+        "hint": "Haz clic en un preaviso para vincularlo a este paquete.",
+        "declaredValue": "Declarado: ${{value}}",
+        "selected": "Vinculado al preaviso: {{store}} — {{tracking}}",
+        "clear": "Recibir sin preaviso"
+      },
+      "position": {
+        "title": "Posición en el almacén",
+        "loading": "Buscando una posición libre…",
+        "loadError": "No pudimos cargar una posición. El paquete se recibirá sin posición.",
+        "none": "No hay posiciones libres — el paquete se recibirá sin posición.",
+        "changeLabel": "Cambiar posición",
+        "noneOption": "Sin posición"
+      },
+      "label": {
+        "title": "Etiqueta de stock",
+        "qrAlt": "Código QR del paquete",
+        "noLocation": "SIN POS",
+        "print": "Imprimir etiqueta",
+        "close": "Cerrar"
+      }
+    },
+    "customers": {
+      "title": "Clientes",
+      "subtitle": "Busca cuentas de clientes y abre el perfil completo: cumplimiento, suspensión, notas internas y actividad.",
+      "search": {
+        "label": "Nombre, correo o suite",
+        "placeholder": "p. ej. Ana, ana@email.com o BUF-10001",
+        "submit": "Buscar",
+        "searching": "Buscando…",
+        "hint": "Busca por nombre, correo o número de suite para encontrar un cliente.",
+        "empty": "No se encontraron clientes para esa búsqueda.",
+        "error": "No pudimos realizar la búsqueda. Inténtalo de nuevo."
+      },
+      "table": {
+        "name": "Nombre",
+        "email": "Correo",
+        "suite": "Suite",
+        "country": "País",
+        "flags": "Alertas"
+      },
+      "badges": {
+        "suspended": "Suspendido",
+        "kyc": "KYC: {{status}}",
+        "ofac": "OFAC: {{status}}"
+      },
+      "detail": {
+        "loadError": "No pudimos cargar este cliente. Puede que no exista o que el enlace sea incorrecto.",
+        "noSuite": "Sin suite asignada"
       },
       "compliance": {
         "title": "Estado de cumplimiento",
@@ -1003,18 +1122,233 @@
         "saving": "Guardando…",
         "error": "No pudimos actualizar el estado de cumplimiento. Inténtalo de nuevo.",
         "updated": "Estado de cumplimiento actualizado."
+      },
+      "suspension": {
+        "title": "Suspensión de la cuenta",
+        "activeHint": "Esta cuenta está activa.",
+        "suspendedHint": "Esta cuenta está suspendida — el cliente no puede usar el panel.",
+        "suspend": "Suspender cuenta",
+        "reactivate": "Reactivar cuenta",
+        "confirmSuspend": "¿Suspender esta cuenta? El cliente perderá el acceso hasta que se reactive.",
+        "confirmReactivate": "¿Reactivar esta cuenta? El cliente recuperará el acceso de inmediato.",
+        "confirm": "Confirmar",
+        "cancel": "Cancelar",
+        "working": "Guardando…",
+        "error": "No pudimos actualizar esta cuenta. Inténtalo de nuevo."
+      },
+      "notes": {
+        "title": "Notas internas",
+        "visibilityHint": "Visible solo para el equipo — el cliente nunca ve estas notas.",
+        "empty": "Aún no hay notas.",
+        "addLabel": "Agregar nota",
+        "placeholder": "Escribe una nota interna sobre este cliente…",
+        "submit": "Agregar nota",
+        "submitting": "Guardando…",
+        "error": "No pudimos guardar esta nota. Inténtalo de nuevo."
+      },
+      "summaries": {
+        "packages": {
+          "title": "Paquetes activos",
+          "empty": "No hay paquetes activos."
+        },
+        "consolidations": {
+          "title": "Consolidaciones",
+          "empty": "Aún no hay consolidaciones."
+        },
+        "payments": {
+          "title": "Pagos",
+          "empty": "Aún no hay pagos."
+        },
+        "dataRequests": {
+          "title": "Solicitudes de privacidad",
+          "empty": "No hay solicitudes de privacidad."
+        }
+      }
+    },
+    "staff": {
+      "title": "Equipo",
+      "subtitle": "Roles de usuario y registro de auditoría. Cada usuario mantiene el rol base de cliente y como máximo un rol de equipo.",
+      "adminsOnly": "Solo los administradores pueden gestionar roles y ver el registro de auditoría.",
+      "usersTitle": "Usuarios y roles",
+      "loadError": "No pudimos cargar los usuarios. Actualiza la página para intentarlo de nuevo.",
+      "search": {
+        "label": "Filtrar por nombre o email",
+        "placeholder": "p. ej. Ana o ana@email.com",
+        "empty": "Ningún usuario coincide con este filtro."
+      },
+      "table": {
+        "name": "Nombre",
+        "email": "Email",
+        "roles": "Roles",
+        "changeRole": "Cambiar rol"
+      },
+      "roles": {
+        "customer": "Cliente",
+        "ops": "Operaciones",
+        "support": "Soporte",
+        "admin": "Admin",
+        "super_admin": "Súper admin"
+      },
+      "role": {
+        "selectLabel": "Nuevo rol para {{name}}",
+        "apply": "Aplicar",
+        "applying": "Aplicando…",
+        "confirmHint": "Este cambio involucra un rol de admin. ¿Aplicar de todos modos?",
+        "confirm": "Confirmar",
+        "cancel": "Cancelar",
+        "success": "Rol actualizado.",
+        "error": "No pudimos actualizar este rol. Inténtalo de nuevo."
+      },
+      "audit": {
+        "title": "Registro de auditoría",
+        "hint": "Últimos 100 eventos, escritos por triggers en la base de datos — este registro no se puede editar ni borrar.",
+        "loadError": "No pudimos cargar el registro de auditoría. Actualiza la página para intentarlo de nuevo.",
+        "empty": "Aún no hay eventos de auditoría.",
+        "table": {
+          "when": "Cuándo",
+          "actor": "Quién",
+          "action": "Acción",
+          "entity": "Entidad",
+          "detail": "Detalle"
+        }
+      }
+    },
+    "packageDetail": {
+      "title": "Ficha del paquete",
+      "subtitle": "Todo sobre este paquete: datos, fotos, posición en el almacén e historial de movimientos.",
+      "loadError": "No pudimos cargar este paquete. Puede que no exista o que el enlace sea incorrecto.",
+      "fields": {
+        "store": "Tienda",
+        "description": "Descripción",
+        "weight": "Peso",
+        "dimensions": "Dimensiones (cm)",
+        "declaredValue": "Valor declarado",
+        "customer": "Cliente",
+        "receivedAt": "Recibido"
+      },
+      "status": {
+        "received": "Recibido",
+        "in_review": "En revisión",
+        "ready": "Listo para enviar",
+        "consolidating": "Consolidando",
+        "shipped": "Enviado",
+        "discarded": "Descartado"
+      },
+      "photos": {
+        "title": "Fotos",
+        "empty": "Sin fotos para este paquete.",
+        "alt": "Foto {{index}} del paquete"
+      },
+      "position": {
+        "title": "Posición en el almacén",
+        "none": "Sin posición asignada.",
+        "move": "Mover",
+        "cancel": "Cancelar",
+        "selectLabel": "Nueva posición",
+        "slotsLoading": "Cargando posiciones libres…",
+        "slotsError": "No pudimos cargar las posiciones libres. Inténtalo de nuevo.",
+        "noFreeSlots": "No hay posiciones libres disponibles.",
+        "confirm": "Confirmar movimiento",
+        "moving": "Moviendo…",
+        "moveSuccess": "Paquete movido.",
+        "moveError": "No pudimos mover este paquete. Inténtalo de nuevo."
+      },
+      "history": {
+        "title": "Historial de movimientos",
+        "empty": "Aún no hay movimientos registrados.",
+        "from": "Desde",
+        "to": "Hacia",
+        "by": "Por",
+        "when": "Cuándo"
+      },
+      "actions": {
+        "markReady": "Marcar listo",
+        "discard": "Descartar",
+        "working": "Actualizando…",
+        "success": "Paquete actualizado.",
+        "error": "No pudimos actualizar este paquete. Inténtalo de nuevo.",
+        "reprint": "Reimprimir etiqueta"
+      }
+    },
+    "warehouse": {
+      "title": "Almacén",
+      "subtitle": "Mapa físico del almacén: genera la cuadrícula de posiciones y ve qué está libre, ocupado o inactivo.",
+      "loadError": "No pudimos cargar el mapa del almacén. Actualiza la página para intentarlo de nuevo.",
+      "generator": {
+        "title": "Generar cuadrícula",
+        "hint": "Crea posiciones zona-pasillo-estante-nivel-posición en masa. Las posiciones existentes se conservan.",
+        "zoneLabel": "Zona",
+        "aislesLabel": "Pasillos (separados por comas)",
+        "aislesPlaceholder": "A o A,B",
+        "racksLabel": "Estantes (1-99)",
+        "levelsLabel": "Niveles (1-9)",
+        "binsLabel": "Posiciones (1-99)",
+        "submit": "Generar posiciones",
+        "submitting": "Generando…",
+        "success": "{{total}} posiciones creadas.",
+        "error": "No pudimos generar la cuadrícula. Revisa los valores — solo los admins pueden hacerlo.",
+        "errors": {
+          "zoneRequired": "Ingresa la zona.",
+          "aislesRequired": "Ingresa al menos un pasillo.",
+          "racksRange": "Ingresa un número entero entre 1 y 99.",
+          "levelsRange": "Ingresa un número entero entre 1 y 9.",
+          "binsRange": "Ingresa un número entero entre 1 y 99."
+        }
+      },
+      "map": {
+        "title": "Mapa de ocupación",
+        "emptyAdmin": "Aún no hay posiciones registradas — genera la cuadrícula arriba.",
+        "emptyOps": "Aún no hay posiciones registradas.",
+        "aisle": "Pasillo {{aisle}}",
+        "rack": "Estante {{rack}}",
+        "legend": {
+          "free": "Libre",
+          "occupied": "Ocupada",
+          "inactive": "Inactiva"
+        },
+        "cellFree": "{{code}} — libre",
+        "cellOccupied": "{{code}} — suite {{suite}}",
+        "cellInactive": "{{code}} — inactiva"
+      },
+      "toggle": {
+        "freeHint": "Esta posición está libre. Desactivarla la quita de las sugerencias de posición libre.",
+        "inactiveHint": "Esta posición está inactiva. Reactívala para que vuelva a estar disponible.",
+        "deactivate": "Desactivar",
+        "reactivate": "Reactivar",
+        "working": "Guardando…",
+        "success": "Posición actualizada.",
+        "error": "No pudimos actualizar esta posición. Inténtalo de nuevo.",
+        "close": "Cerrar"
       }
     },
     "consolidations": {
-      "title": "Cola de consolidaciones",
-      "subtitle": "Consolidaciones a la espera de pago o envío.",
-      "empty": "No hay consolidaciones pendientes por ahora.",
+      "title": "Cola de embalaje",
+      "subtitle": "Consolidaciones pagadas, listas para embalar: recorre la lista de recogida en el orden de las posiciones, verifica cada paquete y márcala como enviada.",
+      "empty": "No hay consolidaciones pagadas a la espera de embalaje.",
       "loadError": "No pudimos cargar la cola. Actualiza la página para intentarlo de nuevo.",
-      "table": {
-        "customer": "Cliente",
-        "destination": "Destino",
-        "declaredValue": "Valor declarado",
-        "shipping": "Envío",
+      "destination": "Destino: {{city}}, {{country}}",
+      "declaredValue": "Valor declarado: ${{value}}",
+      "progress": "{{checked}} de {{total}} paquetes verificados",
+      "pickList": {
+        "title": "Lista de recogida",
+        "empty": "Esta consolidación no tiene paquetes.",
+        "noLocation": "Sin posición",
+        "checkboxLabel": "Marcar {{store}} — {{description}} como verificado",
+        "checkedBadge": "Verificado"
+      },
+      "scan": {
+        "label": "Escanea el QR del paquete o escribe su id",
+        "placeholder": "Escanea el QR o pega el id del paquete",
+        "submit": "Verificar paquete",
+        "invalid": "No se encontró ningún id de paquete en el texto escaneado.",
+        "notFound": "Este paquete no pertenece a esta consolidación.",
+        "matched": "Paquete verificado: {{store}}"
+      },
+      "override": {
+        "label": "Enviar sin verificar",
+        "warning": "Enviando sin verificar todos los paquetes — úsalo solo cuando el escáner no esté disponible."
+      },
+      "form": {
         "carrierLabel": "Transportista",
         "carrierPlaceholder": "Transportista",
         "trackingLabel": "Código de seguimiento",
@@ -1045,6 +1379,274 @@
         "markCompleted": "Marcar como completado",
         "reject": "Rechazar",
         "error": "No pudimos actualizar esa solicitud. Inténtalo de nuevo."
+      }
+    },
+    "payments": {
+      "title": "Pagos",
+      "subtitle": "Historial de pagos, registro de pagos manuales y seguimiento de reembolsos.",
+      "list": {
+        "title": "Historial de pagos",
+        "loadError": "No pudimos cargar los pagos. Actualiza la página para intentarlo de nuevo.",
+        "empty": "Ningún pago coincide con los filtros actuales.",
+        "filters": {
+          "statusLabel": "Filtrar por estado",
+          "providerLabel": "Filtrar por medio",
+          "all": "Todos"
+        },
+        "table": {
+          "date": "Fecha",
+          "customer": "Cliente",
+          "destination": "Destino",
+          "amount": "Importe (USD)",
+          "provider": "Medio",
+          "status": "Estado",
+          "actions": "Acciones"
+        }
+      },
+      "status": {
+        "pending": "Pendiente",
+        "succeeded": "Aprobado",
+        "failed": "Fallido",
+        "refunded": "Reembolsado"
+      },
+      "provider": {
+        "stripe": "Stripe",
+        "manual_pix": "PIX manual",
+        "manual_transfer": "Transferencia bancaria",
+        "manual_other": "Otro (manual)"
+      },
+      "manual": {
+        "title": "Registrar un pago manual",
+        "hint": "Para pagos recibidos fuera de Stripe (PIX directo, transferencia). La consolidación se marca como pagada.",
+        "suiteLabel": "Suite del cliente",
+        "suitePlaceholder": "BUF-10001",
+        "lookup": "Buscar cliente",
+        "looking": "Buscando…",
+        "notFound": "No se encontró ningún cliente para esa suite.",
+        "found": "Registrando para {{name}} (suite {{suite}})",
+        "consolidationLabel": "Consolidación pendiente",
+        "consolidationsLoading": "Cargando consolidaciones pendientes…",
+        "consolidationsError": "No pudimos cargar las consolidaciones pendientes de este cliente. Inténtalo de nuevo.",
+        "consolidationsEmpty": "Este cliente no tiene consolidaciones pendientes de pago.",
+        "consolidationPlaceholder": "Elige una consolidación",
+        "consolidationOption": "{{city}}, {{country}} — cotizado ${{value}}",
+        "consolidationOptionNoQuote": "{{city}}, {{country}} — sin cotización",
+        "amountLabel": "Importe recibido (USD)",
+        "providerLabel": "Medio de pago",
+        "notesLabel": "Notas (opcional)",
+        "notesPlaceholder": "p. ej. PIX recibido en BRL — registra aquí el importe y la moneda originales",
+        "submit": "Registrar pago",
+        "submitting": "Guardando…",
+        "success": "Pago registrado y consolidación marcada como pagada.",
+        "error": "No pudimos registrar este pago. Inténtalo de nuevo.",
+        "inconsistency": "El pago SÍ quedó registrado, pero la consolidación ya no estaba pendiente — revisa la consolidación manualmente para resolver la inconsistencia.",
+        "errors": {
+          "suiteRequired": "Introduce la suite del cliente.",
+          "amountPositive": "Introduce un importe mayor que cero.",
+          "consolidationRequired": "Elige la consolidación pendiente que salda este pago."
+        }
+      },
+      "refund": {
+        "button": "Reembolsar",
+        "formTitle": "Solicitar un reembolso",
+        "amountLabel": "Importe del reembolso (USD)",
+        "reasonLabel": "Motivo",
+        "reasonPlaceholder": "Por qué se reembolsa este pago",
+        "submit": "Solicitar reembolso",
+        "submitting": "Guardando…",
+        "cancel": "Cancelar",
+        "success": "Solicitud de reembolso registrada.",
+        "error": "No pudimos registrar esta solicitud de reembolso. Inténtalo de nuevo.",
+        "errors": {
+          "reasonRequired": "Introduce el motivo del reembolso.",
+          "amountRange": "Ingresa un monto mayor que cero y no superior al monto del pago.",
+          "duplicateRequested": "Ya existe una solicitud de reembolso abierta para este pago — resuélvela (procesado/fallido) antes de abrir otra."
+        }
+      },
+      "refunds": {
+        "title": "Reembolsos",
+        "stripeNotice": "El reembolso REAL de Stripe se hace en el panel de Stripe — esta lista es solo el registro de decisión y conciliación.",
+        "loadError": "No pudimos cargar los reembolsos. Actualiza la página para intentarlo de nuevo.",
+        "empty": "Todavía no hay reembolsos registrados.",
+        "table": {
+          "date": "Fecha",
+          "customer": "Cliente",
+          "amount": "Importe (USD)",
+          "reason": "Motivo",
+          "status": "Estado",
+          "actions": "Acciones"
+        },
+        "status": {
+          "requested": "Solicitado",
+          "processed": "Procesado",
+          "failed": "Fallido"
+        },
+        "markProcessed": "Marcar procesado",
+        "markFailed": "Marcar fallido",
+        "working": "Actualizando…",
+        "actionError": "No pudimos actualizar ese reembolso. Inténtalo de nuevo."
+      }
+    },
+    "rates": {
+      "title": "Tarifas y cargos",
+      "subtitle": "Tabla de tarifas de envío, cargos de servicio y un simulador en vivo que ejecuta el mismo cálculo que ve el cliente.",
+      "table": {
+        "title": "Tarifas de envío",
+        "add": "Nueva tarifa",
+        "loadError": "No pudimos cargar las tarifas. Actualiza la página para intentarlo de nuevo.",
+        "empty": "Todavía no hay tarifas configuradas.",
+        "zone": "Zona",
+        "carrier": "Transportista",
+        "eta": "Plazo (días)",
+        "base": "Tarifa base (USD)",
+        "perKg": "Por kg (USD)",
+        "multiplier": "Multiplicador",
+        "actions": "Acciones",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "confirmDelete": "¿Eliminar la tarifa {{zone}} — {{carrier}}?",
+        "confirmYes": "Sí, eliminar",
+        "confirmNo": "Cancelar",
+        "deleting": "Eliminando…",
+        "deleteError": "No pudimos eliminar esta tarifa. Inténtalo de nuevo.",
+        "created": "Tarifa creada.",
+        "updated": "Tarifa actualizada.",
+        "deleted": "Tarifa eliminada."
+      },
+      "form": {
+        "createTitle": "Nueva tarifa",
+        "editTitle": "Editar tarifa",
+        "zoneLabel": "Zona de destino",
+        "zonePlaceholder": "BR, US o DEFAULT",
+        "carrierLabel": "Transportista",
+        "etaLabel": "Plazo (días)",
+        "etaPlaceholder": "8-14",
+        "baseLabel": "Tarifa base (USD)",
+        "perKgLabel": "Tarifa por kg (USD)",
+        "multiplierLabel": "Multiplicador",
+        "submitCreate": "Crear tarifa",
+        "submitEdit": "Guardar cambios",
+        "submitting": "Guardando…",
+        "cancel": "Cancelar",
+        "error": "No pudimos guardar esta tarifa. Inténtalo de nuevo.",
+        "errors": {
+          "zoneRequired": "Introduce la zona de destino.",
+          "carrierRequired": "Introduce el transportista.",
+          "etaRequired": "Introduce el plazo estimado.",
+          "baseNonNegative": "Introduce una tarifa base de cero o más.",
+          "perKgNonNegative": "Introduce una tarifa por kg de cero o más.",
+          "multiplierPositive": "Introduce un multiplicador mayor que cero."
+        }
+      },
+      "fees": {
+        "title": "Cargos de servicio",
+        "hint": "Las cinco claves de cargo son fijas — el sitio las lee por clave. Edita aquí la etiqueta, los valores y el estado.",
+        "loadError": "No pudimos cargar los cargos de servicio. Actualiza la página para intentarlo de nuevo.",
+        "table": {
+          "fee": "Cargo",
+          "amount": "Importe (USD)",
+          "percent": "Porcentaje (%)",
+          "status": "Estado",
+          "actions": "Acciones"
+        },
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "edit": "Editar",
+        "labelLabel": "Etiqueta",
+        "amountLabel": "Importe (USD)",
+        "percentLabel": "Porcentaje (%)",
+        "activeLabel": "Activo",
+        "save": "Guardar cargo",
+        "saving": "Guardando…",
+        "cancel": "Cancelar",
+        "success": "Cargo actualizado.",
+        "error": "No pudimos actualizar este cargo. Inténtalo de nuevo.",
+        "errors": {
+          "labelRequired": "Introduce la etiqueta del cargo.",
+          "valueRequired": "Introduce un importe o porcentaje válido (al menos uno de los dos)."
+        }
+      },
+      "simulator": {
+        "title": "Simulador de envío",
+        "hint": "Ejecuta exactamente el mismo cálculo en vivo que la calculadora del cliente — edita una tarifa arriba y simula para ver el efecto.",
+        "weightLabel": "Peso (kg)",
+        "lengthLabel": "Largo (cm)",
+        "widthLabel": "Ancho (cm)",
+        "heightLabel": "Alto (cm)",
+        "zoneLabel": "Zona de destino",
+        "submit": "Simular",
+        "simulating": "Calculando…",
+        "resultTitle": "Lo que ve el cliente",
+        "chargeable": "Peso facturable: {{weight}} kg",
+        "carrier": "Transportista",
+        "eta": "Plazo estimado (días)",
+        "cost": "Costo estimado",
+        "noRates": "No hay tarifas configuradas para este destino — agrega arriba una fila de la zona o una fila DEFAULT.",
+        "error": "No pudimos ejecutar la simulación. Inténtalo de nuevo.",
+        "errors": {
+          "weightPositive": "Introduce un peso mayor que cero.",
+          "dimensionPositive": "Introduce una dimensión mayor que cero."
+        }
+      }
+    },
+    "settings": {
+      "title": "Configuración",
+      "subtitle": "Parámetros operativos y el estado de la actualización diaria del tipo de cambio.",
+      "paramsTitle": "Parámetros operativos",
+      "readOnly": "Tienes acceso de solo lectura — solo los admins pueden cambiar estos valores.",
+      "loadError": "No pudimos cargar la configuración. Actualiza la página para intentarlo de nuevo.",
+      "fields": {
+        "freeStorageDays": {
+          "label": "Almacenamiento gratis (días)",
+          "hint": "Cuántos días puede quedarse un paquete en el almacén antes de aparecer como \"almacenamiento vencido\" en el panel de pendientes."
+        },
+        "paidUnshippedAlertDays": {
+          "label": "Alerta de pagado sin envío (días)",
+          "hint": "Cuántos días puede esperar una consolidación pagada sin enviarse antes de destacarse en rojo en el panel de pendientes."
+        }
+      },
+      "save": "Guardar",
+      "saving": "Guardando…",
+      "saved": "Configuración guardada.",
+      "invalid": "Introduce un número entero de cero o más.",
+      "saveError": "No pudimos guardar esta configuración. Inténtalo de nuevo.",
+      "exchange": {
+        "title": "Tipos de cambio",
+        "hint": "Cotizaciones solo de exhibición, usadas para mostrar al cliente un valor local aproximado — todos los pagos son en USD. Las cotizaciones las graba una vez al día la función refresh-exchange-rates; aquí no se edita nada.",
+        "loadError": "No pudimos cargar las cotizaciones. Actualiza la página para intentarlo de nuevo.",
+        "empty": "Aún no hay cotizaciones — la función de actualización diaria todavía debe implementarse. Hasta entonces, los clientes simplemente no ven estimaciones locales.",
+        "perUsd": "{{rate}} por 1 USD",
+        "quotedAt": "Cotizado el {{date}}",
+        "stale": "Desactualizada — la última cotización tiene más de 48 horas."
+      },
+      "outbox": {
+        "title": "Outbox de correos",
+        "hint": "Todos los correos del ciclo de vida que el sistema puso en cola — escritos por triggers de la base de datos y procesados por la función send-emails. Solo lectura.",
+        "loadError": "No pudimos cargar el outbox de correos. Actualiza la página para intentarlo de nuevo.",
+        "empty": "Aún no hay correos en el outbox.",
+        "filterLabel": "Filtrar por estado",
+        "filterAll": "Todos los estados",
+        "skippedWarning": "Los correos se están omitiendo — configura el secret RESEND_API_KEY para que realmente se envíen (ver el checklist de deploy).",
+        "columns": {
+          "date": "Fecha",
+          "customer": "Cliente",
+          "template": "Correo",
+          "status": "Estado",
+          "error": "Error"
+        },
+        "status": {
+          "pending": "Pendiente",
+          "sent": "Enviado",
+          "failed": "Falló",
+          "skipped": "Omitido"
+        },
+        "templates": {
+          "packageReceived": "Paquete recibido",
+          "packageReady": "Paquete listo para enviar",
+          "paymentConfirmed": "Pago confirmado",
+          "shipped": "Envío en camino",
+          "storageWarning": "Aviso de almacenaje"
+        }
       }
     }
   },

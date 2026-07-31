@@ -18,6 +18,7 @@ const profileRow = {
   email: 'ana@example.com',
   country: 'BR',
   preferred_language: 'pt',
+  suspended_at: null,
   suites: [{ suite_number: 'BUF-10482' }],
 }
 
@@ -49,7 +50,24 @@ describe('getMyProfile', () => {
       country: 'BR',
       preferredLanguage: 'pt',
       suiteNumber: 'BUF-10482',
+      suspendedAt: null,
     })
+  })
+
+  it('exposes suspendedAt when the account is suspended', async () => {
+    mockSession('uuid-1')
+    const single = vi.fn().mockResolvedValue({
+      data: { ...profileRow, suspended_at: '2026-07-30T12:00:00Z' },
+      error: null,
+    })
+    const eq = vi.fn().mockReturnValue({ single })
+    const select = vi.fn().mockReturnValue({ eq })
+    mockedSupabase.from.mockReturnValue({ select } as never)
+
+    const profile = await profileService.getMyProfile()
+
+    expect(select).toHaveBeenCalledWith('id, name, email, country, preferred_language, suspended_at, suites (suite_number)')
+    expect(profile?.suspendedAt).toBe('2026-07-30T12:00:00Z')
   })
 
   it('returns null when signed out', async () => {

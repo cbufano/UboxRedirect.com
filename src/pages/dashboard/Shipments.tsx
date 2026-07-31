@@ -1,9 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
-import { Truck, CheckCircle2, Clock, PackageCheck, XCircle, X } from 'lucide-react'
+import { Truck, CheckCircle2, ChevronDown, ChevronUp, Clock, PackageCheck, XCircle, X } from 'lucide-react'
 import { packageService, type Consolidation } from '../../services/packageService'
 import { paymentService } from '../../services/paymentService'
+import { currencyService, COUNTRY_CURRENCY, type DisplayRate } from '../../services/currencyService'
+import {
+  trackingService,
+  type TrackingEvent,
+  type NormalizedTrackingStatus,
+} from '../../services/trackingService'
+import { useAuth } from '../../contexts/AuthContext'
 import { Card } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
 import { CopyButton } from '../../components/ui/CopyButton'
@@ -24,14 +31,34 @@ const STATUS_ICONS: Record<Consolidation['status'], typeof Clock> = {
   cancelled: XCircle,
 }
 
+// Badges da linha do tempo de rastreio: exceção em vermelho, entregue em
+// verde, alfândega em âmbar (pode pedir ação do cliente), trânsito em azul.
+const TRACKING_STATUS_CLASSES: Record<NormalizedTrackingStatus, string> = {
+  in_transit: 'bg-blue-100 text-blue-700',
+  customs: 'bg-amber-100 text-amber-700',
+  out_for_delivery: 'bg-blue-100 text-blue-700',
+  delivered: 'bg-success/10 text-success',
+  exception: 'bg-red-50 text-red-600',
+}
+
 export default function Shipments() {
   const { t } = useTranslation()
+  const { user } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const [consolidations, setConsolidations] = useState<Consolidation[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
   const [payingId, setPayingId] = useState<string | null>(null)
   const [payError, setPayError] = useState<string | null>(null)
+  const [rates, setRates] = useState<DisplayRate[]>([])
+
+  // Linha do tempo de rastreio, POR consolidação: aberta/fechada, eventos já
+  // carregados (cache — expandir de novo não refaz a chamada), loading e erro
+  // próprios. Carregamento é lazy: só na primeira expansão.
+  const [trackingOpen, setTrackingOpen] = useState<Record<string, boolean>>({})
+  const [trackingEvents, setTrackingEvents] = useState<Record<string, TrackingEvent[]>>({})
+  const [trackingLoading, setTrackingLoading] = useState<Record<string, boolean>>({})
+  const [trackingError, setTrackingError] = useState<Record<string, boolean>>({})
 
   const paymentBanner = searchParams.get('payment')
 
@@ -48,15 +75,50 @@ export default function Shipments() {
       .finally(() => {
         if (active) setLoading(false)
       })
+    // Cotação de exibição, carregada UMA vez. Falha é silenciosa de propósito:
+    // a estimativa em moeda local é um extra — sem cotação, simplesmente não
+    // aparece; nunca quebra nem bloqueia a tela de envios.
+    currencyService
+      .getLatestRates()
+      .then((data) => {
+        if (active) setRates(data)
+      })
+      .catch(() => {
+        /* sem cotação → sem estimativa */
+      })
     return () => {
       active = false
     }
   }, [])
 
+  // Moeda de exibição do país do perfil: só converte quando o país está
+  // mapeado, a moeda é diferente de USD e há cotação carregada.
+  const displayCurrency = user ? COUNTRY_CURRENCY[user.country] : undefined
+  const displayRate =
+    displayCurrency && displayCurrency !== 'USD'
+      ? (rates.find((rate) => rate.code === displayCurrency) ?? null)
+      : null
+
   const dismissBanner = () => {
     const next = new URLSearchParams(searchParams)
     next.delete('payment')
     setSearchParams(next, { replace: true })
+  }
+
+  const toggleTracking = (id: string) => {
+    const willOpen = !trackingOpen[id]
+    setTrackingOpen((current) => ({ ...current, [id]: willOpen }))
+    // Só busca na primeira abertura (ou depois de um erro — o cache de
+    // eventos fica vazio nesse caso, então reabrir tenta de novo).
+    if (!willOpen || trackingEvents[id] !== undefined || trackingLoading[id]) return
+
+    setTrackingError((current) => ({ ...current, [id]: false }))
+    setTrackingLoading((current) => ({ ...current, [id]: true }))
+    trackingService
+      .getTrackingEvents(id)
+      .then((events) => setTrackingEvents((current) => ({ ...current, [id]: events })))
+      .catch(() => setTrackingError((current) => ({ ...current, [id]: true })))
+      .finally(() => setTrackingLoading((current) => ({ ...current, [id]: false })))
   }
 
   const handlePayNow = async (id: string) => {
@@ -160,6 +222,13 @@ export default function Shipments() {
                           {t('dashboard.shipments.table.cost')}
                         </p>
                         <p className="font-medium text-navy">${consolidation.costUsd.toFixed(2)}</p>
+                        {displayRate && (
+                          <p className="text-xs text-slate/60" title={t('dashboard.shipments.approxEstimate')}>
+                            ≈ {displayRate.symbol}{' '}
+                            {currencyService.approximate(consolidation.costUsd, displayRate.ratePerUsd).toFixed(2)}
+                            <span className="sr-only"> ({t('dashboard.shipments.approxEstimate')})</span>
+                          </p>
+                        )}
                       </div>
                     )}
                   </div>
@@ -219,6 +288,49 @@ export default function Shipments() {
                     </Button>
                   )}
                 </div>
+
+                {(consolidation.status === 'shipped' || consolidation.status === 'delivered') && (
+                  <div className="mt-4 border-t border-slate/10 pt-4">
+                    <button
+                      type="button"
+                      aria-expanded={trackingOpen[consolidation.id] ?? false}
+                      onClick={() => toggleTracking(consolidation.id)}
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                    >
+                      {trackingOpen[consolidation.id] ? (
+                        <ChevronUp className="h-4 w-4" aria-hidden="true" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4" aria-hidden="true" />
+                      )}
+                      {t('dashboard.shipments.tracking.toggle')}
+                    </button>
+
+                    {trackingOpen[consolidation.id] &&
+                      (trackingLoading[consolidation.id] ? (
+                        <p className="mt-3 text-sm text-slate/60">{t('dashboard.loading')}</p>
+                      ) : trackingError[consolidation.id] ? (
+                        <p role="alert" className="mt-3 text-sm font-medium text-red-600">
+                          {t('dashboard.shipments.tracking.loadError')}
+                        </p>
+                      ) : (trackingEvents[consolidation.id] ?? []).length === 0 ? (
+                        <p className="mt-3 text-sm text-slate/60">{t('dashboard.shipments.tracking.empty')}</p>
+                      ) : (
+                        <ol className="mt-3 space-y-3">
+                          {(trackingEvents[consolidation.id] ?? []).map((event) => (
+                            <li key={event.id} className="flex flex-wrap items-center gap-3 text-sm">
+                              <span className="font-medium text-navy">{event.occurredAt.slice(0, 10)}</span>
+                              <span
+                                className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${TRACKING_STATUS_CLASSES[event.normalizedStatus]}`}
+                              >
+                                {t(`dashboard.shipments.tracking.status.${event.normalizedStatus}`)}
+                              </span>
+                              <span className="text-xs text-slate/60">{event.rawStatus}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      ))}
+                  </div>
+                )}
 
                 {payError === consolidation.id && (
                   <p role="alert" className="mt-3 text-sm font-medium text-red-600">

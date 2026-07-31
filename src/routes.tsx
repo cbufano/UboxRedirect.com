@@ -32,8 +32,16 @@ const Account = lazy(() => import('./pages/dashboard/Account'))
 const DashboardPrivacy = lazy(() => import('./pages/dashboard/Privacy'))
 const AdminOverview = lazy(() => import('./pages/admin/Overview'))
 const AdminPackagesQueue = lazy(() => import('./pages/admin/PackagesQueue'))
+const AdminPackageDetail = lazy(() => import('./pages/admin/PackageDetail'))
 const AdminConsolidationsQueue = lazy(() => import('./pages/admin/ConsolidationsQueue'))
+const AdminWarehouse = lazy(() => import('./pages/admin/Warehouse'))
+const AdminPayments = lazy(() => import('./pages/admin/Payments'))
+const AdminRates = lazy(() => import('./pages/admin/Rates'))
+const AdminCustomers = lazy(() => import('./pages/admin/Customers'))
+const AdminCustomerDetail = lazy(() => import('./pages/admin/CustomerDetail'))
+const AdminStaff = lazy(() => import('./pages/admin/Staff'))
 const AdminDataRequestsQueue = lazy(() => import('./pages/admin/DataRequestsQueue'))
+const AdminSettings = lazy(() => import('./pages/admin/Settings'))
 
 export function AppRoutes() {
   return (
@@ -72,8 +80,16 @@ export function AppRoutes() {
         <Route path="/admin" element={<StaffRoute><AdminLayout /></StaffRoute>}>
           <Route index element={<AdminOverview />} />
           <Route path="packages" element={<AdminPackagesQueue />} />
+          <Route path="packages/:id" element={<AdminPackageDetail />} />
           <Route path="consolidations" element={<AdminConsolidationsQueue />} />
+          <Route path="warehouse" element={<AdminWarehouse />} />
+          <Route path="payments" element={<AdminPayments />} />
+          <Route path="rates" element={<AdminRates />} />
+          <Route path="customers" element={<AdminCustomers />} />
+          <Route path="customers/:id" element={<AdminCustomerDetail />} />
+          <Route path="staff" element={<AdminStaff />} />
           <Route path="data-requests" element={<AdminDataRequestsQueue />} />
+          <Route path="settings" element={<AdminSettings />} />
           {/* /admin/* child routes added as their tasks complete */}
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
