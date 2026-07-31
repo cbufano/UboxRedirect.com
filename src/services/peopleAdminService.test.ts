@@ -371,30 +371,89 @@ describe('setSuspended', () => {
 })
 
 describe('listUsersWithRoles', () => {
+  // user_roles não tem FK para profiles (aponta para auth.users), então o
+  // serviço faz DUAS consultas (papéis + perfis por id) e junta no código.
+  function mockTables(rolesResult: QueryResult, profilesResult: QueryResult) {
+    const rolesSelect = vi.fn().mockResolvedValue(rolesResult)
+    const profilesIn = vi.fn().mockResolvedValue(profilesResult)
+    const profilesSelect = vi.fn().mockReturnValue({ in: profilesIn })
+    mockedSupabase.from.mockImplementation((table: unknown) => {
+      if (table === 'user_roles') return { select: rolesSelect } as never
+      if (table === 'profiles') return { select: profilesSelect } as never
+      throw new Error(`unexpected table ${String(table)}`)
+    })
+    return { rolesSelect, profilesSelect, profilesIn }
+  }
+
   it('aggregates one entry per user with all their roles, sorted by name', async () => {
-    const rows = [
-      { user_id: 'user-2', role: 'customer', profiles: { name: 'Beto', email: 'beto@example.com' } },
-      { user_id: 'user-1', role: 'customer', profiles: [{ name: 'Ana', email: 'ana@example.com' }] },
-      { user_id: 'user-1', role: 'ops', profiles: [{ name: 'Ana', email: 'ana@example.com' }] },
-    ]
-    const select = vi.fn().mockResolvedValue({ data: rows, error: null })
-    mockedSupabase.from.mockReturnValue({ select } as never)
+    const { rolesSelect, profilesSelect, profilesIn } = mockTables(
+      {
+        data: [
+          { user_id: 'user-2', role: 'customer' },
+          { user_id: 'user-1', role: 'customer' },
+          { user_id: 'user-1', role: 'ops' },
+        ],
+        error: null,
+      },
+      {
+        data: [
+          { id: 'user-1', name: 'Ana', email: 'ana@example.com' },
+          { id: 'user-2', name: 'Beto', email: 'beto@example.com' },
+        ],
+        error: null,
+      },
+    )
 
     const result = await peopleAdminService.listUsersWithRoles()
 
     expect(mockedSupabase.from).toHaveBeenCalledWith('user_roles')
-    expect(select).toHaveBeenCalledWith('user_id, role, profiles (name, email)')
+    expect(rolesSelect).toHaveBeenCalledWith('user_id, role')
+    expect(mockedSupabase.from).toHaveBeenCalledWith('profiles')
+    expect(profilesSelect).toHaveBeenCalledWith('id, name, email')
+    // ids deduplicados: user-1 aparece duas vezes em user_roles
+    expect(profilesIn).toHaveBeenCalledWith('id', ['user-2', 'user-1'])
     expect(result).toEqual([
       { userId: 'user-1', name: 'Ana', email: 'ana@example.com', roles: ['customer', 'ops'] },
       { userId: 'user-2', name: 'Beto', email: 'beto@example.com', roles: ['customer'] },
     ])
   })
 
-  it('throws when the query fails', async () => {
-    const select = vi.fn().mockResolvedValue({ data: null, error: { message: 'boom' } })
-    mockedSupabase.from.mockReturnValue({ select } as never)
+  it('falls back to empty name/email for a user_id without a matching profile', async () => {
+    const { profilesIn } = mockTables(
+      { data: [{ user_id: 'user-9', role: 'customer' }], error: null },
+      { data: [], error: null },
+    )
+
+    const result = await peopleAdminService.listUsersWithRoles()
+
+    expect(profilesIn).toHaveBeenCalledWith('id', ['user-9'])
+    expect(result).toEqual([{ userId: 'user-9', name: '', email: '', roles: ['customer'] }])
+  })
+
+  it('skips the profiles query entirely when there are no roles', async () => {
+    mockTables({ data: [], error: null }, { data: [], error: null })
+
+    const result = await peopleAdminService.listUsersWithRoles()
+
+    expect(result).toEqual([])
+    expect(mockedSupabase.from).toHaveBeenCalledTimes(1)
+    expect(mockedSupabase.from).toHaveBeenCalledWith('user_roles')
+  })
+
+  it('throws when the user_roles query fails without querying profiles', async () => {
+    mockTables({ data: null, error: { message: 'boom' } }, { data: [], error: null })
 
     await expect(peopleAdminService.listUsersWithRoles()).rejects.toThrow('boom')
+    expect(mockedSupabase.from).not.toHaveBeenCalledWith('profiles')
+  })
+
+  it('throws when the profiles query fails', async () => {
+    mockTables(
+      { data: [{ user_id: 'user-1', role: 'customer' }], error: null },
+      { data: null, error: { message: 'profiles down' } },
+    )
+
+    await expect(peopleAdminService.listUsersWithRoles()).rejects.toThrow('profiles down')
   })
 })
 

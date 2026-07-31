@@ -164,7 +164,7 @@ export const financeAdminService = {
     const { data, error } = await supabase
       .from('payments')
       .select(
-        'id, consolidation_id, user_id, provider, amount_usd, status, notes, created_at, profiles (name), consolidations (city, country)',
+        'id, consolidation_id, user_id, provider, amount_usd, status, notes, created_at, profiles!payments_user_id_fkey (name), consolidations (city, country)',
       )
       .order('created_at', { ascending: false })
     if (error) throw new Error(error.message)
@@ -255,7 +255,7 @@ export const financeAdminService = {
     const { data, error } = await supabase
       .from('refunds')
       .select(
-        'id, payment_id, amount_usd, reason, status, created_at, processed_at, payments (amount_usd, provider, profiles (name))',
+        'id, payment_id, amount_usd, reason, status, created_at, processed_at, payments (amount_usd, provider, profiles!payments_user_id_fkey (name))',
       )
       .order('created_at', { ascending: false })
     if (error) throw new Error(error.message)

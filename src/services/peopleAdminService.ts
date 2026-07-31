@@ -126,7 +126,6 @@ interface CustomerNoteRow {
 interface UserRoleRow {
   user_id: string
   role: AppRole
-  profiles: MaybeArray<{ name: string; email: string }>
 }
 
 interface AuditLogRow {
@@ -338,18 +337,37 @@ export const peopleAdminService = {
    * PostgREST devolve uma linha por papel). Todo usuário tem a base
    * 'customer'; staff tem no máximo um papel extra (modelo do set_user_role).
    * Ordenado por nome para a tela de staff.
+   *
+   * user_roles NÃO tem FK para profiles (a FK aponta para auth.users), então
+   * um embed `profiles (...)` é impossível (PostgREST 400/PGRST200) — nome e
+   * e-mail vêm de uma segunda consulta em profiles, juntada client-side.
    */
   async listUsersWithRoles(): Promise<UserWithRoles[]> {
-    const { data, error } = await supabase.from('user_roles').select('user_id, role, profiles (name, email)')
+    const { data, error } = await supabase.from('user_roles').select('user_id, role')
     if (error) throw new Error(error.message)
 
+    const roleRows = (data ?? []) as UserRoleRow[]
+    const ids = [...new Set(roleRows.map((row) => row.user_id))]
+
+    const profilesById = new Map<string, { name: string; email: string }>()
+    if (ids.length > 0) {
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, name, email')
+        .in('id', ids)
+      if (profilesError) throw new Error(profilesError.message)
+      for (const profile of (profilesData ?? []) as { id: string; name: string; email: string }[]) {
+        profilesById.set(profile.id, { name: profile.name, email: profile.email })
+      }
+    }
+
     const byUser = new Map<string, UserWithRoles>()
-    for (const row of (data ?? []) as UserRoleRow[]) {
+    for (const row of roleRows) {
       const existing = byUser.get(row.user_id)
       if (existing) {
         existing.roles.push(row.role)
       } else {
-        const profile = firstOf(row.profiles)
+        const profile = profilesById.get(row.user_id)
         byUser.set(row.user_id, {
           userId: row.user_id,
           name: profile?.name ?? '',

@@ -450,7 +450,7 @@ export const adminService = {
       supabase.from('data_requests').select('id', { count: 'exact', head: true }).in('status', ['pending', 'processing']),
       supabase
         .from('packages')
-        .select('id, store, received_at, profiles (suites (suite_number))')
+        .select('id, store, received_at, profiles!packages_user_id_fkey (suites (suite_number))')
         .in('status', ['received', 'in_review', 'ready', 'consolidating'])
         .lt('received_at', storageCutoff)
         .order('received_at', { ascending: true }),
@@ -531,7 +531,7 @@ export const adminService = {
   async getPackagesNeedingReview(): Promise<PackageNeedingReview[]> {
     const { data, error } = await supabase
       .from('packages')
-      .select('id, store, description, weight_kg, status, profiles (name, suites (suite_number))')
+      .select('id, store, description, weight_kg, status, profiles!packages_user_id_fkey (name, suites (suite_number))')
       .in('status', ['received', 'in_review'])
       .order('received_at', { ascending: true })
     if (error) throw new Error(error.message)
@@ -705,7 +705,7 @@ export const adminService = {
       supabase
         .from('packages')
         .select(
-          'id, store, description, weight_kg, length_cm, width_cm, height_cm, declared_value_usd, status, received_at, user_id, location_id, warehouse_locations (code), profiles (name, suites (suite_number))',
+          'id, store, description, weight_kg, length_cm, width_cm, height_cm, declared_value_usd, status, received_at, user_id, location_id, warehouse_locations (code), profiles!packages_user_id_fkey (name, suites (suite_number))',
         )
         .eq('id', id)
         .single(),
