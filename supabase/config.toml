@@ -18,6 +18,11 @@ project_id = "iyxgrvqvthuvvxautrgm"
 [functions.stripe-webhook]
 verify_jwt = false
 
+# send-emails fica com o default (verify_jwt = true) E ainda exige, dentro
+# da função, Authorization: Bearer <service_role_key> — a anon key pública
+# passa no gateway mas não nessa checagem. Só o cron (configurado com a
+# service_role key no header) consegue disparar envios.
+
 # tracking-webhook é chamada pelo fornecedor de rastreio (agregador ou
 # adaptador Correios), que não tem JWT do Supabase — autentica pelo header
 # x-webhook-secret validado dentro da função (fail-closed sem o secret).

@@ -1,17 +1,32 @@
 // Fase 7.4 — Processador do outbox de e-mails (cron).
 //
+// Autenticação: exige `Authorization: Bearer <service_role_key>` (comparação
+// por digest, timing-safe). O gateway (verify_jwt=true, default) já barra
+// requisições sem JWT válido, mas a anon key é pública e passaria — por isso
+// a checagem própria: só o cron (configurado com a service_role key no
+// header) pode disparar envios. Fail-closed.
+//
 // Duas responsabilidades, nesta ordem:
 // 1. Gerar avisos de armazenagem (storage_warning) para pacotes vivos além
 //    de free_storage_days — temporal, por isso vive aqui e não em trigger.
-//    Dedup: no máximo 1 aviso por pacote a cada 7 dias.
-// 2. Processar até 50 linhas 'pending': com RESEND_API_KEY envia via
-//    Resend e marca sent/failed; SEM a chave marca 'skipped' com
-//    explicação — nada se perde silenciosamente, o painel admin mostra.
+//    Dedup: no máximo 1 aviso por pacote a cada 7 dias. (Duas execuções
+//    exatamente simultâneas poderiam duplicar um aviso; com a função
+//    restrita ao cron de 15 min e terminando em segundos, o risco é
+//    aceito e documentado.)
+// 2. Processa até 50 linhas 'pending' com claim atômica ANTES do envio:
+//    pending → 'sending' (UPDATE com guarda `.eq('status','pending')` +
+//    `.select()`; 0 linhas = outra execução levou a linha, pula) → só a
+//    execução que reivindicou chama a Resend → 'sent'/'failed'. Sem
+//    RESEND_API_KEY marca 'skipped' com explicação — nada se perde
+//    silenciosamente, o painel admin mostra. Linhas presas em 'sending'
+//    há mais de 10 min (crash no meio) voltam a 'pending' no início da
+//    execução seguinte.
 //
 // Deploy/agendamento (checklist manual no roadmap):
 //   supabase functions deploy send-emails
 //   supabase secrets set RESEND_API_KEY=re_...   (opcional; sem ela = skipped)
-//   Agendar 1×/15min no Dashboard (Integrations → Cron).
+//   Agendar 1×/15min (Dashboard → Integrations → Cron) com o header
+//   Authorization: Bearer <service_role_key>.
 import { createClient } from 'npm:@supabase/supabase-js@2'
 
 const TEMPLATES: Record<string, { subject: string; body: (p: Record<string, unknown>) => string }> = {
@@ -37,6 +52,19 @@ const TEMPLATES: Record<string, { subject: string; body: (p: Record<string, unkn
   },
 }
 
+// Comparação sem short-circuit: compara digests SHA-256 de tamanho fixo.
+async function timingSafeEqual(a: string, b: string): Promise<boolean> {
+  const enc = new TextEncoder()
+  const [da, db] = await Promise.all([
+    crypto.subtle.digest('SHA-256', enc.encode(a)),
+    crypto.subtle.digest('SHA-256', enc.encode(b)),
+  ])
+  const va = new Uint8Array(da), vb = new Uint8Array(db)
+  let diff = 0
+  for (let i = 0; i < va.length; i++) diff |= va[i] ^ vb[i]
+  return diff === 0
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method !== 'POST' && req.method !== 'GET') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 })
@@ -48,8 +76,21 @@ Deno.serve(async (req: Request) => {
     console.error('send-emails: missing environment variables')
     return new Response(JSON.stringify({ error: 'Server misconfiguration' }), { status: 500 })
   }
+
+  const authHeader = req.headers.get('authorization') ?? ''
+  if (!(await timingSafeEqual(authHeader, `Bearer ${serviceRoleKey}`))) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 })
+  }
+
   const resendKey = Deno.env.get('RESEND_API_KEY') ?? null
   const admin = createClient(supabaseUrl, serviceRoleKey)
+
+  // ---- 0) Recupera claims órfãs (crash entre a claim e a marcação) -----
+  const staleCutoff = new Date(Date.now() - 10 * 60_000).toISOString()
+  await admin.from('email_outbox')
+    .update({ status: 'pending', claimed_at: null })
+    .eq('status', 'sending')
+    .lt('claimed_at', staleCutoff)
 
   // ---- 1) Avisos de armazenagem -------------------------------------
   let warningsCreated = 0
@@ -109,37 +150,37 @@ Deno.serve(async (req: Request) => {
 
   let sent = 0, skipped = 0, failed = 0
   for (const row of batch ?? []) {
-    // Reivindica a linha ANTES de enviar (pending → processing não existe no
-    // enum; usamos a transição direta com guarda de status): o .eq('status',
-    // 'pending') garante que duas execuções concorrentes não enviem 2× — só
-    // uma delas "ganha" a linha (0 linhas afetadas para a outra).
-    const nextStatus = resendKey ? 'sent' : 'skipped'
+    // Claim atômica ANTES de qualquer envio: só quem move pending→sending
+    // (1 linha afetada) processa a linha. Execuções concorrentes veem 0
+    // linhas e pulam — nenhum e-mail sai duas vezes.
+    const { data: claimed } = await admin.from('email_outbox')
+      .update({ status: 'sending', claimed_at: new Date().toISOString() })
+      .eq('id', row.id).eq('status', 'pending').select('id')
+    if (!claimed || claimed.length === 0) continue
+
     const template = TEMPLATES[row.template]
     if (!template) {
       await admin.from('email_outbox')
         .update({ status: 'failed', error: `Unknown template ${row.template}` })
-        .eq('id', row.id).eq('status', 'pending')
+        .eq('id', row.id).eq('status', 'sending')
       failed++
       continue
     }
 
     if (!resendKey) {
-      const { data: claimed } = await admin.from('email_outbox')
+      await admin.from('email_outbox')
         .update({ status: 'skipped', error: 'RESEND_API_KEY not configured — email not sent' })
-        .eq('id', row.id).eq('status', 'pending').select('id')
-      if (claimed && claimed.length > 0) skipped++
+        .eq('id', row.id).eq('status', 'sending')
+      skipped++
       continue
     }
 
-    // Reivindica marcando sent_at provisório só após envio OK; para manter a
-    // claim atômica sem estado intermediário, buscamos o e-mail primeiro e
-    // só marcamos após o resultado — com a guarda de status na escrita.
     const { data: profile } = await admin
       .from('profiles').select('email, name').eq('id', row.user_id).maybeSingle()
     if (!profile?.email) {
       await admin.from('email_outbox')
         .update({ status: 'failed', error: 'Recipient profile/email not found' })
-        .eq('id', row.id).eq('status', 'pending')
+        .eq('id', row.id).eq('status', 'sending')
       failed++
       continue
     }
@@ -156,15 +197,15 @@ Deno.serve(async (req: Request) => {
         }),
       })
       if (!res.ok) throw new Error(`Resend responded ${res.status}: ${await res.text()}`)
-      const { data: claimed } = await admin.from('email_outbox')
-        .update({ status: nextStatus, sent_at: new Date().toISOString(), error: '' })
-        .eq('id', row.id).eq('status', 'pending').select('id')
-      if (claimed && claimed.length > 0) sent++
+      await admin.from('email_outbox')
+        .update({ status: 'sent', sent_at: new Date().toISOString(), error: '' })
+        .eq('id', row.id).eq('status', 'sending')
+      sent++
     } catch (err) {
       console.error('send-emails: send failed for', row.id, err)
       await admin.from('email_outbox')
         .update({ status: 'failed', error: String(err).slice(0, 500) })
-        .eq('id', row.id).eq('status', 'pending')
+        .eq('id', row.id).eq('status', 'sending')
       failed++
     }
   }

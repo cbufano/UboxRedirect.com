@@ -38,6 +38,19 @@ const STATUS_MAP: Record<string, string> = {
   extraviado: 'exception',
 }
 
+// Comparação sem short-circuit: compara digests SHA-256 de tamanho fixo.
+async function timingSafeEqual(a: string, b: string): Promise<boolean> {
+  const enc = new TextEncoder()
+  const [da, db] = await Promise.all([
+    crypto.subtle.digest('SHA-256', enc.encode(a)),
+    crypto.subtle.digest('SHA-256', enc.encode(b)),
+  ])
+  const va = new Uint8Array(da), vb = new Uint8Array(db)
+  let diff = 0
+  for (let i = 0; i < va.length; i++) diff |= va[i] ^ vb[i]
+  return diff === 0
+}
+
 function normalize(status: string): string {
   const key = status.trim().toLowerCase().replace(/[-\s]+/g, '_')
   const plain = status.trim().toLowerCase()
@@ -56,7 +69,7 @@ Deno.serve(async (req: Request) => {
     console.error('tracking-webhook: TRACKING_WEBHOOK_SECRET not configured — rejecting')
     return new Response(JSON.stringify({ error: 'Webhook not configured' }), { status: 503 })
   }
-  if (req.headers.get('x-webhook-secret') !== secret) {
+  if (!(await timingSafeEqual(req.headers.get('x-webhook-secret') ?? '', secret))) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 })
   }
 
@@ -95,13 +108,22 @@ Deno.serve(async (req: Request) => {
     ? new Date(body.occurred_at).toISOString()
     : new Date().toISOString()
 
+  // Teto no payload bruto: fornecedor bugado/comprometido não infla a
+  // tabela — acima de 10 KB guardamos só a marca de truncamento.
+  let rawPayload: unknown = body.raw ?? {}
+  try {
+    if (JSON.stringify(rawPayload).length > 10_000) rawPayload = { truncated: true }
+  } catch {
+    rawPayload = { truncated: true }
+  }
+
   const { error: insertError } = await admin.from('tracking_events').insert({
     consolidation_id: consolidation.id,
     source: 'webhook',
     raw_status: String(body.status).slice(0, 200),
     normalized_status: normalize(String(body.status)),
     occurred_at: occurredAt,
-    payload: body.raw ?? {},
+    payload: rawPayload,
   })
   if (insertError) {
     console.error('tracking-webhook: insert failed', insertError)
