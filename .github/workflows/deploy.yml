@@ -39,6 +39,8 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           # Conteúdo compilado a enviar:
           local-dir: ./dist/
-          # Pasta de destino no servidor. Veja a NOTA no chat: pode ser
-          # ./public_html/ OU ./ dependendo de onde sua conta FTP "cai".
-          server-dir: ./public_html/
+          # A conta FTP da Hostinger já "cai" DENTRO de public_html —
+          # confirmado em 30/07/2026: com ./public_html/ aqui, os arquivos
+          # iam parar em public_html/public_html/ e o site servido ficava
+          # desatualizado. O destino correto é a raiz da conexão.
+          server-dir: ./
