@@ -261,17 +261,17 @@ Tudo abaixo é o que **só você** pode fazer — ou porque exige uma credencial
 
 ### Deploy e CI (Fase 1/2)
 - [x] ~~Fazer `git push` da branch para o GitHub~~ — feito; `master` está no GitHub com todas as fases mescladas (30/07/2026).
-- [ ] Cadastrar os secrets do GitHub Actions em Settings → Secrets and variables → Actions: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD` (deploy do site na Hostinger) e `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (build do frontend com o Supabase real).
+- [x] ~~Cadastrar os secrets do GitHub Actions~~ — feito (confirmado pelo usuário em 30/07/2026): `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`.
 
 ### Supabase (Fase 2/3/4/5)
 - [x] Projeto Supabase criado (`iyxgrvqvthuvvxautrgm`) e todas as migrations de Fase 2–5 aplicadas em produção.
 - [ ] Confirmar que o CLI do Supabase está de fato "linkado" a este projeto localmente (`supabase link`) se algum dia quiser rodar `supabase db push`/`supabase functions deploy` — hoje as migrations foram aplicadas manualmente pelo SQL Editor.
 
 ### Pagamentos — Stripe (Fase 4)
-- [ ] Criar/confirmar a conta Stripe da empresa (Miami/Doral, FL).
-- [ ] Implantar as Edge Functions: `supabase functions deploy create-checkout-session` e `supabase functions deploy stripe-webhook`.
-- [ ] Configurar os secrets das functions: `supabase secrets set STRIPE_SECRET_KEY=sk_...` e `supabase secrets set STRIPE_WEBHOOK_SECRET=whsec_...`.
-- [ ] Registrar o endpoint do webhook no Stripe Dashboard (URL da function `stripe-webhook`), assinado ao menos em `checkout.session.completed`.
+- [x] ~~Criar/confirmar a conta Stripe da empresa~~ — feito (confirmado pelo usuário em 30/07/2026).
+- [x] ~~Implantar as Edge Functions `create-checkout-session` e `stripe-webhook`~~ — feito (confirmado pelo usuário em 30/07/2026).
+- [x] ~~Configurar `STRIPE_SECRET_KEY` e `STRIPE_WEBHOOK_SECRET`~~ — feito (confirmado pelo usuário em 30/07/2026).
+- [x] ~~Registrar o endpoint do webhook no Stripe Dashboard~~ — feito (confirmado pelo usuário em 30/07/2026).
 - [ ] Testar o fluxo ponta a ponta com o Stripe CLI (`stripe listen` + `stripe trigger checkout.session.completed`) antes de liberar para clientes reais — o comentário no topo de `supabase/functions/stripe-webhook/index.ts` documenta uma incerteza pontual sobre a API do SDK em runtime Deno que precisa ser confirmada nesse teste.
 
 ### Cotações de câmbio para exibição (Fase 7.2)
